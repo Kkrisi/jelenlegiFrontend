@@ -33,7 +33,7 @@ export default function Login() {
     <div className="loginpage d-flex justify-content-center align-items-center vh-100 bg-light">
       {loading ? ( // Feltételes megjelenítés
         <div className="center">
-          <div class="loader"></div>
+          <span class="loader">Betöltés</span> 
         </div>
       ) : (
         <div className="login-container p-4 rounded shadow">
