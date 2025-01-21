@@ -5,6 +5,8 @@ import '../App.css';
 
 export default function AdminPage() {
 
+  
+
   const navigateToUploadDatabase = () => {
     window.location.href = 'http://localhost:8000/uploaddatabase';
   };

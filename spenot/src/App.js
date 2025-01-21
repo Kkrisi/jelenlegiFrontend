@@ -20,6 +20,7 @@ export default function App() {
         <Route path="/" element={<Login />} />
       
             <Route path="bejelentkezes" element={<Login />} />
+            
             <Route path="regisztracio" element={<Register />} />
             <Route path="elfelejtJelszo" element={<ForgotPassword />} />
 
