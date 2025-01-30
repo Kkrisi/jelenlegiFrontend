@@ -187,16 +187,17 @@
 
 
 
-/*-----------------------------------   emailoutsend page   -----------------------------------*/
+/*-----------------------------------   Emailsend page   -----------------------------------*/
 
-.emailoutsendpage * {
+.emailsendpage * {
   box-sizing: border-box;
   margin: 0;
   padding: 0;
-  font-family: Arial, sans-serif;
+  font-family: 'Arial', sans-serif;
+  color: white;
 }
 
-.emailoutsendpage {
+.emailsendpage {
   background: linear-gradient(-45deg, #ee7752, #e73c7e, #23a6d5, #23d5ab);
   background-size: 300% 300%;
   display: flex;
@@ -205,116 +206,57 @@
   height: 100vh;
 }
 
-.emailoutsendpage .container {
+.emailsendpage article {
   width: 1200px;
-  height: 600px;
-  background-color: rgb(213, 248, 248);
+  height: 610px;
+  /*background-color: rgb(213, 248, 248);*/
+  background-color: #3D3D3D;
   display: flex;
-  flex-direction: row;
+  flex-direction: column; /* Átállítjuk oszlopelrendezésre */
   border-radius: 10px;
   border: 3px solid gray;
-}
-
-.emailoutsendpage .email-section,
-.emailoutsendpage .error-log {
-  flex: 1;
+  box-shadow: 4px 4px 8px rgba(0, 0, 0, 0.3);
   padding: 20px;
-  border-right: 1px solid #000;
 }
 
-.emailoutsendpage .error-log {
-  border-right: none;
-  border-left: 2px solid gray;
-}
-
-.emailoutsendpage .email-section{
-  border-right: 2px solid gray;
-}
-
-.emailoutsendpage .elkuldottek {
-  height: 100%;
-  max-height: 400px;
-  overflow-y: auto;
-}
-
-.emailoutsendpage h2 {
-  text-align: center;
-  margin-bottom: 20px;
-}
-
-.emailoutsendpage .browse-btn,
-.emailoutsendpage .send-btn {
-  display: block;
-  width: 30%;
-  margin-bottom: 20px;
-  margin-top: 20px;
-  background-color: #ccc;
-  border: none;
-  cursor: pointer;
-}
-
-.emailoutsendpage .kuldes,
-.emailoutsendpage .tallozas {
-  background-color: cadetblue;
-  color: white;
+#kuldgomb, #athelyez, #myfile, #jsonCreate, #emailSend, #csakdisz, #abEllenorzes,
+ #torlesGomb, #pdftorles, #torolMailek, #fajlkivalasztas, #athelyezes, #kuldes {
+  background-color: #5f9ea0;
+  color: #ffffff;
   padding: 12px 15px;
   font-size: 16px;
-  border-radius: 5px;
+  border-radius: 8px;
   cursor: pointer;
   transition: all 0.3s ease;
+  margin: 10px;
+  box-shadow: 3px 3px 6px rgba(0, 0, 0, 0.15);
+  border: none;
+  font-weight: bold;
 }
 
-.emailoutsendpage .kuldes:hover,
-.emailoutsendpage .tallozas:hover {
-  background-color: orangered;
-  transform: scale(1.05);
+#kuldgomb:hover, #athelyez:hover, #myfile:hover, #jsonCreate:hover, #emailSend:hover,
+ #csakdisz:hover, #abEllenorzes:hover, #torlesGomb:hover, #pdftorles:hover, #torolMailek:hover,
+  #fajlkivalasztas:hover, #athelyezes:hover, #kuldes:hover {
+  background-color: #e74c3c; /* Orangered */
+  transform: translateY(-2px) scale(1.1);
+  box-shadow: 4px 4px 8px rgba(0, 0, 0, 0.2);
 }
 
-.emailoutsendpage .email-list {
-  border: 1px solid #ccc;
-  padding: 10px;
-  background-color: #e0e0e0;
-  height: 100%; /* Fill the available space of its parent */
-  max-height: 300px;
-  overflow-y: auto;
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+#kuldgomb:active, #athelyez:active, #myfile:active, #jsonCreate:active, #emailSend:active,
+ #csakdisz:active, #abEllenorzes:active, #torlesGomb:active, #pdftorles:active, #torolMailek:active,
+  #fajlkivalasztas:active, #athelyezes:active, #kuldes:active {
+  transform: scale(0.92); /* Gomb "összenyomása" */
 }
 
-.emailoutsendpage .email-entry {
-  margin-bottom: 10px;
-  padding: 10px;
-  background-color: #dcdcdc;
-  border: 1px solid #ccc;
+#torlesGomb {
+  width: 30%;
+  margin-left: 70%;
 }
 
-.emailoutsendpage .log-entry {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  border: 2px solid #000;
-  padding: 10px;
-  margin-bottom: 10px;
+.megjelenoAdatok {
+  font-weight: bold;
 }
 
-.emailoutsendpage .success {
-  background-color: #ccf5cc;
-}
-
-.emailoutsendpage .error {
-  background-color: #f5cccc;
-}
-
-.emailoutsendpage .status-icon {
-  font-size: 1.5rem;
-}
-
-.emailoutsendpage .success-icon {
-  color: green;
-}
-
-.emailoutsendpage .error-icon {  
-  color: red;
-}
 
 
 
@@ -659,7 +601,8 @@
 .uploaddatabasepage .container {
   width: 1200px;
   height: 600px;
-  background-color: rgb(213, 248, 248);
+  /*background-color: rgb(213, 248, 248);*/
+  background-color: #3D3D3D;
   display: flex;
   flex-direction: row;
   border-radius: 10px;

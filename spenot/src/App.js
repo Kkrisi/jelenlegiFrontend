@@ -25,14 +25,21 @@ export default function App() {
             <Route path="elfelejtJelszo" element={<ForgotPassword />} />
 
 
+
+            <Route path="adminOldal" element={<AdminPage />}/>
+            <Route path="emailKuldes" element={<EmailSend />}/>
+            <Route path="abFeltoltes" element={ <UploadDatabase />}/>
+            <Route path="kezdolap" element={<HomePage />}/>
+
+
             {/* csak a bejelentkezett felhasználók érhessék el azokat az oldalakat, 
             amelyekhez autentikáció szükséges (pl. adminoldal, főoldal). 
             Ezzel egy vendég automatikusan visszairányításra kerül a bejelentkezési oldalra, 
             ha próbál hozzáférni egy privát oldalhoz. */}
-            <Route path="adminOldal" element={<PrivateRoute> <AdminPage /> </PrivateRoute>} />
+            {/*<Route path="adminOldal" element={<PrivateRoute> <AdminPage /> </PrivateRoute>} />
             <Route path="emailKuldes" element={<PrivateRoute> <EmailSend /> </PrivateRoute>} />
             <Route path="abFeltoltes" element={<PrivateRoute> <UploadDatabase /> </PrivateRoute>} />
-            <Route path="kezdolap" element={<PrivateRoute> <HomePage /> </PrivateRoute>} />
+            <Route path="kezdolap" element={<PrivateRoute> <HomePage /> </PrivateRoute>} />*/}
 
     </Routes>
   );

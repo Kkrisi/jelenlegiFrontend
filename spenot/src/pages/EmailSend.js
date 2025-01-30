@@ -1,66 +1,104 @@
-import React from "react";
+import React, { useRef, useState } from "react";
+import '../App.css';
+
 
 
 export default function EmailSend() {
-  const recipients = [
-    { email: "olaj123@email.com", name: "Olajos Zsolt", role: "tanár" },
-    { email: "pity2009@email.com", name: "Kovács István Gábor", role: "diák" },
-    { email: "olaj123@email.com", name: "Olajos Zsolt", role: "tanár" },
-    { email: "olaj123@email.com", name: "Olajos Zsolt", role: "tanár" },
-  ];
 
-  const logs = [
-    { email: "MindenOK@gmail.com", status: "success", message: "Sikeresen elküldve" },
-    { email: "NemJo-ska@gmail.com", status: "error", message: "Hiba: nem jó emailcím" },
-    { email: "MarieCurie@gmail.com", status: "error", message: "Hiba: Error(53)" },
-  ];
+  // -------------------------------------------- Fájl kiválasztása kezdés --------------------------------------------
+  const fileInputRef = useRef(null);
+  const [fileCount,setFileCount] = useState(0);
+
+
+  const handleButtonClick = () => {
+    fileInputRef.current.value = ""; // Töröljük a korábbi fájlokat
+    fileInputRef.current.click(); // Fájlválasztó megnyitása
+  }
+
+
+  const handleFileChange = (event) => {
+    const files = event.target.files;
+    setFileCount(files.length); // Beállítjuk a kiválasztott fájlok számát
+    console.log(`${files.length} fájl lett kiválasztva.`);
+  }
+  // -------------------------------------------- Fájl kiválasztása vége --------------------------------------------
+
+
+
 
   return (
-    <div className="emailoutsendpage">
-      <div className="container">
-        {/* Email Section */}
-        <div className="email-section">
-          <h2>Email kiküldés</h2>
-          <button className="browse-btn tallozas">Tallózás</button>
+    <div className="emailsendpage">
 
-          <div className="email-list">
-            <h4>Címzett:</h4>
-            {recipients.map((recipient, index) => (
-              <div key={index} className="email-entry">
-                <p>{recipient.email}</p>
-                <p>Név: {recipient.name}</p>
-                <p>Rang: {recipient.role}</p>
-              </div>
-            ))}
+      <main>
+
+        <article>
+
+          <h1>Emailküldő</h1>
+
+          <div>
+
+            <button type="button" id="fajlkivalasztas" onClick={handleButtonClick} >Fájl kiválasztása</button>
+              <input type="file"
+              ref={fileInputRef}
+              style={{ display: "none" }}
+              accept="application/pdf" // Csak PDF fájlokat enged
+              multiple // Több fájl kiválasztása engedélyezve
+              onChange={handleFileChange} />
+
+            <button
+              type="button" id="athelyezes" onClick={() => handleButtonClick("")} >Áthelyezés</button>
+
+            <button
+              type="button" id="kuldes" onClick={() => handleButtonClick("")} >Küldés</button>
+            <br />
+
+            <button
+              type="button" id="jsonCreate"
+              onClick={() => handleButtonClick("createJson")} >Json fájl elkészítése</button>
+
+            <button
+              type="button" id="emailSend"
+              onClick={() => handleButtonClick("sendEmail")} >Email küldése</button>
+
+            <br />
+            <button
+              type="button" id="pdftorles"
+              onClick={() => handleButtonClick("deletePdf")} >Pdf-ek törlése</button>
+
+            <button
+              type="button" id="torolMailek"
+              onClick={() => handleButtonClick("deleteMails")} >Mail_senders tábla adatok törlése</button>
           </div>
 
-          <button className="send-btn kuldes">Küldés</button>
-        </div>
+          <br />
 
-        {/* Error Log Section */}
-        <div className="error-log">
-          <h2>Hibajegyzék</h2>
 
-          <div className="elkuldottek">
-            {logs.map((log, index) => (
-              <div
-                key={index}
-                className={`log-entry ${log.status === "success" ? "success" : "error"}`}
-              >
-                <p>{log.email}</p>
-                <p>{log.message}</p>
-                <div
-                  className={`status-icon ${
-                    log.status === "success" ? "success-icon" : "error-icon"
-                  }`}
-                >
-                  {log.status === "success" ? "✔" : "✖"}
-                </div>
-              </div>
-            ))}
+          <div>
+            <p>Fájl kiválasztása: </p>
+              <p className="megjelenoAdatok" id="fajlkivalasztasGomb">
+                {fileCount > 0 ? `${fileCount} fájlt sikeresen kiválasztottunk ✅` : "Nincs fájl kiválasztva"}
+              </p>
+
+            <p>Áthelyezés: </p>
+            <p className="megjelenoAdatok" id="athelyezesGomb"></p>
+            <p>Küldés: </p>
+            <p className="megjelenoAdatok" id="kuldesGomb"></p>
+
+
+            <p>Json fájl állapota: </p>
+            <p className="megjelenoAdatok" id="jsonAllapotGomb"></p>
+            <p>Emailek állapota: </p>
+            <p className="megjelenoAdatok" id="emailAllapotGomb"></p>
+
+
+            <p>Törölt pdf-ek: </p>
+            <p className="megjelenoAdatok" id="toroltpdfekGomb"></p>
+            <p>Törölt mail_senders tábla: </p>
+            <p className="megjelenoAdatok" id="toroltmailekGomb"></p>
           </div>
-        </div>
-      </div>
+          <br />
+        </article>
+      </main>
     </div>
   );
 }
