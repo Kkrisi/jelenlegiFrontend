@@ -6,7 +6,7 @@ import axios from "axios";
 
 // Létrehozunk egy új Axios példányt a create metódus segítségével.
 export const myAxios = axios.create({
-  baseURL: 'http://localhost:8001',
+  baseURL: 'http://localhost:8000',
   // Beállítjuk, hogy a kérések azonosítása cookie-k segítségével történik.
   withCredentials: true,
 });
