@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import { sendToServer } from "../api/sendToServer";
 
 
 
@@ -9,6 +10,8 @@ export default function UploadDatabase() {
   const [jsonOutput, setJsonOutput] = useState("");
   const [isLoading, setIsLoading] = useState(false);
 
+
+  
   // Fájl kezelése és JSON generálás
   const handleFileChange = (event) => {
     const file = event.target.files[0];
@@ -23,13 +26,16 @@ export default function UploadDatabase() {
       const modifiedJson = json.map((item) => ({
         nev: item["Név"],
         email: item["Email"],
-        student_id: item["BérlapKód"],
+        d_azon: item["BérlapKód"],
       }));
 
       setJsonOutput(JSON.stringify(modifiedJson, null, 2));
     };
     reader.readAsText(file);
   };
+
+
+
 
   // Adatok feltöltése 20-asával
   const handleSave = async () => {
@@ -46,23 +52,11 @@ export default function UploadDatabase() {
     alert("Sikeres mentés az adatbázisba!");
   };
 
-  // AJAX POST kérés küldése a szervernek
-  const sendToServer = (chunk) => {
-    return fetch("/save-json-to-database", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-        "X-CSRF-Token": document.querySelector('input[name="_token"]').value,
-      },
-      body: JSON.stringify({ json: chunk }),
-    })
-      .then((response) => {
-        if (!response.ok) throw new Error("Hiba történt az adatküldés során");
-        return response.json();
-      })
-      .then((data) => console.log("Sikeresen mentve:", data))
-      .catch((error) => console.error("Hiba:", error));
-  };
+
+
+
+
+
 
   // CSV szöveg JSON-ná konvertálása
   const csvToJson = (csv) => {
@@ -79,9 +73,15 @@ export default function UploadDatabase() {
     });
   };
 
+
+
+
+
+
   return (
     <div className="uploaddatabasepage">
       <div className="container">
+
         {/* Feltöltés szekció */}
         <div className="email-section">
           <h2>Adatbázisba feltöltés</h2>

@@ -5,9 +5,10 @@ import '../App.css';
 
 export default function EmailSend() {
 
-  // -------------------------------------------- Fájl kiválasztása kezdés --------------------------------------------
+
   const fileInputRef = useRef(null);
   const [fileCount,setFileCount] = useState(0);
+  const [selectedFiles, setSelectedFiles] = useState([]); // Kiválasztott fájlok tárolása
 
 
   const handleButtonClick = () => {
@@ -18,10 +19,33 @@ export default function EmailSend() {
 
   const handleFileChange = (event) => {
     const files = event.target.files;
+    setSelectedFiles(files); // Tároljuk a kiválasztott fájlokat
     setFileCount(files.length); // Beállítjuk a kiválasztott fájlok számát
     console.log(`${files.length} fájl lett kiválasztva.`);
   }
-  // -------------------------------------------- Fájl kiválasztása vége --------------------------------------------
+
+
+
+
+  // -------------------------------------------- Fájl áthelyezés kezdete --------------------------------------------
+  const handleMoveFiles = async () => {
+    if (selectedFiles.length > 0) {
+      try {
+        await getCsrfToken();  // CSRF token beállítása
+        // Fájlok feltöltése a backendre
+        const response = await relocateFiles(selectedFiles);
+        console.log(`${response.files.length} fájl sikeresen áthelyezve ✅`);
+      } catch (error) {
+        console.error("Hiba a fájlok áthelyezésekor:", error);
+      }
+    } else {
+      console.log("Nincs kiválasztott fájl.");
+    }
+  }
+  // -------------------------------------------- Fájl áthelyezés vége --------------------------------------------
+
+
+
 
 
 
