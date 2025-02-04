@@ -31,10 +31,11 @@ export default function EmailSend() {
   const handleMoveFiles = async () => {
     if (selectedFiles.length > 0) {
       try {
-        await getCsrfToken();  // CSRF token beállítása
+        //await getCsrfToken();  // CSRF token beállítása
         // Fájlok feltöltése a backendre
-        const response = await relocateFiles(selectedFiles);
-        console.log(`${response.files.length} fájl sikeresen áthelyezve ✅`);
+        // const response = await relocateFiles(selectedFiles);
+        //console.log(`${response.files.length} fájl sikeresen áthelyezve ✅`);
+        console.log("semmi");
       } catch (error) {
         console.error("Hiba a fájlok áthelyezésekor:", error);
       }

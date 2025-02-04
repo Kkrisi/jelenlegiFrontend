@@ -1,7 +1,7 @@
-import axios from 'axios';
+import { myAxios } from "./axios";
 
 
-export const sendToServer = async (chunk) => {
+/* export const sendToServer = async (chunk) => {
   try {
 
     await axios.get("http://localhost:8000/sanctum/csrf-cookie", { withCredentials: true });  // CSRF token lekérése
@@ -12,7 +12,7 @@ export const sendToServer = async (chunk) => {
       ?.split("=")[1];
 
     const response = await axios.post(
-      "http://localhost:8000/save-json-to-database",
+      "http://localhost:8000/api/save-json-to-database",
       { json: chunk },
         {
             headers: {
@@ -28,4 +28,29 @@ export const sendToServer = async (chunk) => {
     console.error("Hiba az adatküldés során:", error);
     throw error;
   }
-};
+}; */
+
+const csrf = () => myAxios.get("/sanctum/csrf-cookie");
+
+export const sendToServer = async (chunk) => {
+  await csrf();
+ 
+
+  try {
+    await myAxios.post("/api/save-json-to-database", { json: chunk });
+    console.log("siker");
+    
+   
+   
+    
+  } catch (error) {
+    console.error("Hiba:", error);
+    if (error.response.status === 422) {
+    
+      console.log("hiba a bej.nél, nem tud a kezdolapra ugorni")
+    } else {
+      console.error("Ismeretlen hiba történt.");
+    }
+  }
+
+}
