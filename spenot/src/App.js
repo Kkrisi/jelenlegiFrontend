@@ -25,7 +25,7 @@ export default function App() {
             <Route path="elfelejtJelszo" element={<ForgotPassword />} />
 
 
-
+            <Route path="password-reset/:token" element={<ResetPassword/>} />
             <Route path="adminOldal" element={<AdminPage />}/>
             <Route path="emailKuldes" element={<EmailSend />}/>
             <Route path="abFeltoltes" element={ <UploadDatabase />}/>
