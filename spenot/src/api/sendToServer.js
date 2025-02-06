@@ -10,9 +10,9 @@ export const sendToServer = async (chunk) => {
 
   try {
     await myAxios.post("/api/save-json-to-database", { json: JSON.stringify(chunk) });
-    console.log("siker");
+    console.log("sikeres feltöltés");
   } catch (error) {
-    console.error("Hiba:", error);
+    console.error("Hiba feltöltéskor:", error);
   }
 
 }

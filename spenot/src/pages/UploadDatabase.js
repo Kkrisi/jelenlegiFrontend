@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { sendToServer } from "../api/sendToServer";
-
+import "bootstrap/dist/css/bootstrap.min.css";
 
 
 
@@ -30,6 +30,7 @@ export default function UploadDatabase() {
       }));
 
       setJsonOutput(JSON.stringify(modifiedJson, null, 2));
+
     };
     reader.readAsText(file);
   };
@@ -38,7 +39,7 @@ export default function UploadDatabase() {
 
 
   // Adatok feltöltése 20-asával
-  const handleSave = async () => {
+  const handleSend = async () => {
     const jsonData = JSON.parse(jsonOutput);
     const chunkSize = 20;
     setIsLoading(true);
@@ -104,14 +105,14 @@ export default function UploadDatabase() {
               id="jsonOutput"
               rows="15"
               cols="80"
-              placeholder="A JSON itt fog megjelenni..."
+              placeholder="Írj ide JSON adatot..."
               value={jsonOutput}
-              readOnly
+              onChange={(e) => setJsonOutput(e.target.value)}
             ></textarea>
           </div>
 
           <br />
-          <button className="send-btn kuldes" onClick={handleSave} disabled={isLoading}>
+          <button className="send-btn kuldes" onClick={handleSend} disabled={isLoading}>
             Adatbázisba feltöltés
           </button>
 

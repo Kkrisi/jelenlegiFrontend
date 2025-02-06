@@ -10,6 +10,7 @@ import AdminPage from './pages/AdminPage';
 import EmailSend from './pages/EmailSend';
 import UploadDatabase from './pages/UploadDatabase';
 import PrivateRoute from './components/PrivateRoute';
+import ResetPassword from './pages/ResetPassword';
 
 
 
