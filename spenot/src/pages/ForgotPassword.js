@@ -1,9 +1,15 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { myAxios } from '../api/axios';
 
 export default function ForgotPassword() {
     const [email, setEmail] = useState('');
     const [message, setMessage] = useState('');
+
+    useEffect(() => {
+        // Laravel CSRF cookie inicializálása
+        myAxios.get('/sanctum/csrf-cookie')
+          
+    }, []);
 
     const handleSubmit = async (e) => {
         e.preventDefault();
@@ -11,7 +17,7 @@ export default function ForgotPassword() {
             const response = await myAxios.post('/api/forgot-password', { email });
             setMessage(response.data.message);
         } catch (error) {
-            setMessage(error.response.data.message);
+            setMessage(error.response?.data?.message || 'Hiba történt.');
         }
     };
 

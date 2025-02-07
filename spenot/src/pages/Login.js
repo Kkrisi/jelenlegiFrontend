@@ -100,7 +100,7 @@ export default function Login() {
 
             <p>Elfelejtetted a jelszavad?</p>
             <Link className="nav-link text-info" to="/elfelejtJelszo">
-              Forgotpassword
+              Forgot password
             </Link>
           </div>
         </div>
