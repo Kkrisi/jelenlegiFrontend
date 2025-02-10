@@ -6,11 +6,12 @@ import HomePage from './pages/HomePage';
 import Register from './pages/Register';
 import VendegLayout from './layouts/VendegLayout';
 import { Route, Routes } from "react-router-dom";
-import AdminPage from './pages/AdminPage';
 import EmailSend from './pages/EmailSend';
 import UploadDatabase from './pages/UploadDatabase';
 import PrivateRoute from './components/PrivateRoute';
 import ResetPassword from './pages/ResetPassword';
+import UsersManagement from './pages/UsersManagement';
+import StudentsManagement from './pages/StudentsManagement';
 
 
 
@@ -27,12 +28,15 @@ export default function App() {
 
 
             <Route path="password-reset/:token" element={<ResetPassword/>} />
+            <Route path="felhKezeles" element={<UsersManagement />}/>
+            <Route path="diakKezeles" element={<StudentsManagement />}/>
             <Route path="adminOldal" element={<AdminPage />}/>
             <Route path="emailKuldes" element={<EmailSend />}/>
             <Route path="abFeltoltes" element={ <UploadDatabase />}/>
             <Route path="kezdolap" element={<HomePage />}/>
 
 
+            {/* EZEKET NE TÖRÖLD KI!*/}
             {/* csak a bejelentkezett felhasználók érhessék el azokat az oldalakat, 
             amelyekhez autentikáció szükséges (pl. adminoldal, főoldal). 
             Ezzel egy vendég automatikusan visszairányításra kerül a bejelentkezési oldalra, 

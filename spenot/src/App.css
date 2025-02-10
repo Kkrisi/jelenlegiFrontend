@@ -915,3 +915,74 @@
 .registerpage .links a:hover {
   text-decoration: underline;
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+/*-----------------------------------   usersmanagement page   -----------------------------------*/
+.usersmanagement * {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+  font-family: 'Arial', sans-serif;
+  color: white;
+}
+
+.usersmanagement {
+  background: linear-gradient(-45deg, #ee7752, #e73c7e, #23a6d5, #23d5ab);
+  background-size: 300% 300%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+}
+
+.usersmanagement article {
+  width: 1200px;
+  height: 610px;
+  background-color: #3D3D3D;
+  display: flex;
+  flex-direction: column;
+  border-radius: 10px;
+  border: 3px solid gray;
+  box-shadow: 4px 4px 8px rgba(0, 0, 0, 0.3);
+  padding: 20px;
+  overflow: hidden; /* Prevent overflow on smaller screens */
+}
+
+
+
+
+#kuldes:active {
+  transform: scale(0.92);
+}
+
+
+
+/*
+.table-container {
+  overflow-x: auto;
+}
+  */
