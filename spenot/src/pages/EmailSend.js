@@ -4,6 +4,7 @@ import { relocateFiles } from "../api/relocateFiles";
 import { deletePdfs } from "../api/deletePdfs";
 import { myAxios } from "../api/axios";
 import { getEmails } from "../api/getEmails";
+import { Modal } from 'react-bootstrap';
 
 
 
@@ -15,6 +16,12 @@ export default function EmailSend() {
   const [selectedFiles, setSelectedFiles] = useState([]);   // ez FileList objektum, nem pedig tömb
   const [relocatedFileCount, setRelocatedFileCount] = useState(0);
   const [getEmailsCount, setGetEmailsCount] = useState(0);
+
+  const [showModal, setShowModal] = useState(false);
+  const [isSaving, setIsSaving] = useState(false);
+
+
+
 
 
   const handleButtonClick = () => {
@@ -37,16 +44,22 @@ export default function EmailSend() {
   // -------------------------------------------- Fájl áthelyezés kezdete -----------------------------------------
   const handleMoveFiles = async () => {
     if (selectedFiles.length > 0) {
-      // Minden fájl egyesével küldése
+      // fájlok egyesével küldése
       for (const file of selectedFiles) {
         console.log("Fájl a kérésben:", file.name);
   
         try {
+            setIsSaving(true);
+            setShowModal(true);
           await relocateFiles(file);
           console.log("Fájl sikeresen elküldve!");
-          setRelocatedFileCount(prevCount => prevCount + 1);    // Az állapot frissítése a korábbi értékhez hozzáadva 1-et
+          setRelocatedFileCount(prevCount => prevCount + 1);
+            setIsSaving(false);
+            setShowModal(false);
         } catch (error) {
           console.error("Hiba a fájl áthelyezésekor:", error);
+            setIsSaving(false);
+            setShowModal(false);
         }
       }
     } else { 
@@ -58,15 +71,10 @@ export default function EmailSend() {
   
   
 
-/*
-      - adatbázisba már leglevő diákok lekérdezése (duplikáció ellen)
-      - lekéri a feltöltött Pdf kódok alapján a hozzájuk tartozó email címeket
-      - json kreaálás
-      - email küldés
 
 
-        a "Hozzátartozó email keresés kezdete" paragrafus gyorsabb hogy itt hívom az axiost és nem kulon fájlban????
-    */
+
+
 
     // -------------------------------------------- Hozzátartozó email keresés kezdete -------------------------------
     const handleAttachEmail = async () => {
@@ -80,7 +88,7 @@ export default function EmailSend() {
           fileName: file.name
         };
       })
-      .filter(file => file.kod);  // Csak azokat a fájlokat tartjuk meg, amiknek van kódja
+      .filter(file => file.kod);  // csak azokat a fájlokat tartjuk meg, amiknek van kódja
 
 
       if (fileDetails.length === 0) {
@@ -89,11 +97,17 @@ export default function EmailSend() {
       }
       
       try {
+          setIsSaving(true);
+          setShowModal(true);
         await getEmails(fileDetails);
         //console.log("Sikeres email cím megszerzés!");
         setGetEmailsCount(prevCount => prevCount + 1);
+          setIsSaving(false);
+          setShowModal(false);
       } catch (error) {
         console.error("Hiba az email cím megszerzésekor:", error);
+          setIsSaving(false);
+          setShowModal(false);
       }
     };
     
@@ -129,12 +143,17 @@ export default function EmailSend() {
   // -------------------------------------------- Email küldése kezdete ------------------------------------------------
   const handleSendEmails = async () => {
       try {
+          setIsSaving(true);
+          setShowModal(true);
         const response = await myAxios.post("/api/send-email");
         console.log("Email küldés eredménye:", response.data);
-        alert(`Sikeres küldés: ${response.data.sent_count} email elküldve.`);
+          setIsSaving(false);
+          setShowModal(false);
     } catch (error) {
         console.error("Hiba történt az email küldésekor:", error);
         alert("Hiba történt az e-mailek küldésekor.");
+          setIsSaving(false);
+          setShowModal(false);
     }
   };
   // -------------------------------------------- Email küldése vége ---------------------------------------------------
@@ -146,10 +165,16 @@ export default function EmailSend() {
   // -------------------------------------------- Eltárolt Pdfk törlése kezdete -----------------------------------------
   const handleRemovePdfs = async () => {
       try {
+          setIsSaving(true);
+          setShowModal(true);
         await deletePdfs();
         console.log('Pdf fájlok sikeresen törölve!');
+          setIsSaving(false);
+          setShowModal(false);
       } catch (error) {
         console.error("Hiba törléskor:", error);
+          setIsSaving(false);
+          setShowModal(false);
       }
   };
   // -------------------------------------------- Eltárolt Pdfk törlése vége --------------------------------------------
@@ -170,6 +195,7 @@ export default function EmailSend() {
 
           <div>
 
+            {/*<button type="button" id="fajlkivalasztas" onClick={() => { handleButtonClick(); showPopup(); }} >Fájl kiválasztása</button>*/}
             <button type="button" id="fajlkivalasztas" onClick={handleButtonClick} >Fájl kiválasztása</button>
               <input type="file"
               ref={fileInputRef}
@@ -229,60 +255,20 @@ export default function EmailSend() {
           <br />
         </article>
       </main>
+      
+
+      <Modal show={showModal} onHide={() => setShowModal(false)}>
+          <Modal.Header closeButton>
+            <Modal.Title>Dolgozunk rajta... 🚀</Modal.Title>
+          </Modal.Header>
+          <Modal.Body>
+            <p>Az adatok feldolgozása folyamatban van. Kérlek, várj egy pillanatot.</p>
+          </Modal.Body>
+      </Modal>
+
+
     </div>
   );
 }
 
 
-
-
-
-
-
-/*
-
- const handleAttachEmail = async () => {
-      for (const file of selectedFiles) {
-
-          // Kivesszük a fájlból a kódot
-          const kod = feldolgozFajlNev(file);
-          if (!kod) {
-              console.warn(`Nem található kód ebben a fájlban: ${file}`);
-              continue; // Ha nincs kód, ugrik a következő fájlra
-          }
-
-          try {
-              const response = await myAxios.post("/get-emails", { kodok: [kod] });
-
-              if (response.data.emails.length > 0) {
-                  console.log(`Kód: ${kod} -> E-mail: ${response.data.emails[0]}`);
-              } else {
-                  console.log(`Kód: ${kod} -> Nincs találat az adatbázisban.`);
-              }
-          } catch (error) {
-              console.error(`Hiba történt a(z) ${kod} kódhoz tartozó e-mail lekérésekor:`, error);
-          }
-      }
-  };
-
-
-
-
-
-    
-
-  // A fájlnevet feldolgozó függvény
-  const feldolgozFajlNev = (file) => {
-    const feldolgozottFajl = file.split(' ');
-    let kod = "";
-
-    for (let index = 0; index < feldolgozottFajl.length; index++) {
-      if (feldolgozottFajl[index].includes("(")) {
-        kod += feldolgozottFajl[index].slice(1, -1); // Kivágjuk a zárójelek közötti részt
-      }
-    }
-    return kod;
-  };
-
-
-*/

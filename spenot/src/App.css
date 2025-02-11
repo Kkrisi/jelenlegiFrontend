@@ -101,7 +101,8 @@
   display: flex;
   flex-wrap: wrap;
   justify-content: space-between;
-  background-color: rgb(213, 248, 248);
+  /*background-color: rgb(213, 248, 248);*/
+  background-color: #3D3D3D;
   padding: 20px;
   border-radius: 10px;
   box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
@@ -115,7 +116,7 @@
 
 .adminpage .section {
   width: 30%;
-  background-color: rgb(213, 248, 248);
+  background-color: lightblue;
   padding: 20px;
   margin-bottom: 20px;
   border-radius: 8px;
@@ -319,12 +320,15 @@
 
 
 
-
-
-
-
-
-
+.emailsendpage h1 {
+  background-color: lightslategrey;
+  padding: 10px 20px; 
+  margin: 0 auto;
+  margin-bottom: 20px;
+  border-radius: 15px; 
+  color: white;
+  text-align: center;
+}
 
 
 
@@ -940,7 +944,6 @@
 
 
 
-
 /*-----------------------------------   usersmanagement page   -----------------------------------*/
 .usersmanagement * {
   box-sizing: border-box;
@@ -986,3 +989,81 @@
   overflow-x: auto;
 }
   */
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  /*-----------------------------------   studentsmanagement page   -----------------------------------*/
+.studentsmanagement * {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+  font-family: 'Arial', sans-serif;
+  color: white;
+}
+
+.studentsmanagement {
+  background: linear-gradient(-45deg, #ee7752, #e73c7e, #23a6d5, #23d5ab);
+  background-size: 300% 300%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+}
+
+.studentsmanagement article {
+  width: 1200px;
+  height: 610px;
+  background-color: #3D3D3D;
+  display: flex;
+  flex-direction: column;
+  border-radius: 10px;
+  border: 3px solid gray;
+  box-shadow: 4px 4px 8px rgba(0, 0, 0, 0.3);
+  padding: 20px;
+  overflow: hidden;
+}
+
+
+
+
+#kuldes:active {
+  transform: scale(0.92);
+}
+
+
+
+.studentsmanagement input {
+  color: black;
+}
+
+
+.studentsmanagement h1 {
+  background-color: lightslategrey;
+  padding: 10px 20px; 
+  margin: 0 auto;
+  margin-bottom: 20px;
+  border-radius: 15px; 
+  color: white;
+  text-align: center;
+}
+
+

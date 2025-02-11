@@ -30,7 +30,6 @@ export default function App() {
             <Route path="password-reset/:token" element={<ResetPassword/>} />
             <Route path="felhKezeles" element={<UsersManagement />}/>
             <Route path="diakKezeles" element={<StudentsManagement />}/>
-            <Route path="adminOldal" element={<AdminPage />}/>
             <Route path="emailKuldes" element={<EmailSend />}/>
             <Route path="abFeltoltes" element={ <UploadDatabase />}/>
             <Route path="kezdolap" element={<HomePage />}/>
