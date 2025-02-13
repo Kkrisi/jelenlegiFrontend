@@ -5,6 +5,7 @@ import { deletePdfs } from "../api/deletePdfs";
 import { myAxios } from "../api/axios";
 import { getEmails } from "../api/getEmails";
 import { Modal } from 'react-bootstrap';
+import useAuthContext from "../contexts/AuthContext";
 
 
 
@@ -19,6 +20,11 @@ export default function EmailSend() {
 
   const [showModal, setShowModal] = useState(false);
   const [isSaving, setIsSaving] = useState(false);
+
+
+
+
+
 
 
 
@@ -208,8 +214,6 @@ export default function EmailSend() {
 
             <button type="button" id="kuldes" onClick={handleAttachEmail} >Küldés /email párt keres</button>
             <br />
-
-            {/*<button type="button" id="jsonCreate" onClick={() => handleButtonClick("createJson")} >Json fájl elkészítése</button>*/}
 
             <button type="button" id="emailSend" onClick={handleSendEmails} >Email küldése</button>
 

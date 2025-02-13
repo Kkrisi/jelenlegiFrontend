@@ -3,11 +3,11 @@ import { Outlet } from "react-router-dom";
 import Navigation from "../pages/Navigation";
 
 
-export default function VendegLayout() {
+export default function Layout() {
     return (
         <>
             <Navigation />
             <Outlet />
         </>
     );
-}
+}   

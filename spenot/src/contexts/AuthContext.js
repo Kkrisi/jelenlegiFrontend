@@ -42,25 +42,24 @@ export const AuthProvider = ({ children }) => {
 
 
   const loginReg = async ({ ...adat }, vegpont) => {
-    //lekérjük a csrf tokent
     await csrf();
     console.log(adat,vegpont);
 
     try {
-      await myAxios.post(vegpont, adat);
-      console.log("siker");
-      //sikeres bejelentkezés/regisztráció esetén
-      //Lekérdezzük a usert
-      //await getUser();
-      //elmegyünk  a kezdőlapra
+      const response = await myAxios.post(vegpont, adat);
+
+      // ez segít kiiratni a felhasznalo jogosultsagat konzolba a 28. sorba itt
+      if (response.data.user) {
+        setUser(response.data.user);}
+
       await getUser()
-      navigate("/kezdolap");
+      navigate("/emailKuldes");
       
     } catch (error) {
       console.error("Hiba a bejelentkezés/regisztráció során:", error);
       if (error.response.status === 422) {
         setErrors(error.response.data.errors);
-        console.log("hiba a bej.nél, nem tud a kezdolapra ugorni")
+        console.log("hiba a bej.nél, nem tud a emailKuldes-re ugorni")
       } else {
         console.error("Ismeretlen hiba történt.");
       }

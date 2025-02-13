@@ -1067,3 +1067,66 @@
 }
 
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+/*-----------------------------------   logspage   -----------------------------------*/
+.logspage * {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+  font-family: 'Arial', sans-serif;
+  color: white;
+}
+
+.logspage {
+  background: linear-gradient(-45deg, #ee7752, #e73c7e, #23a6d5, #23d5ab);
+  background-size: 300% 300%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+}
+
+.logspage article {
+  width: 1200px;
+  height: 610px;
+  background-color: #3D3D3D;
+  display: flex;
+  flex-direction: column;
+  border-radius: 10px;
+  border: 3px solid gray;
+  box-shadow: 4px 4px 8px rgba(0, 0, 0, 0.3);
+  padding: 20px;
+  overflow: hidden;
+}
+
+.logspage h1 {
+  background-color: lightslategrey;
+  padding: 10px 20px; 
+  margin: 0 auto;
+  margin-bottom: 20px;
+  border-radius: 15px; 
+  color: white;
+  text-align: center;
+}
+
+
+
+
+
+

@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import useAuthContext from "../contexts/AuthContext";
-import { myAxios } from "../api/axios"; // Ha Axios-t használsz
+
 
 
 
@@ -100,7 +100,7 @@ export default function Login() {
 
             <p>Elfelejtetted a jelszavad?</p>
             <Link className="nav-link text-info" to="/elfelejtJelszo">
-              Forgot password
+              Elfelejtett jelszó
             </Link>
           </div>
         </div>
