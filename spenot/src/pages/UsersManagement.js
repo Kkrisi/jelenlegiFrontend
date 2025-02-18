@@ -47,7 +47,7 @@ export default function UsersManagement() {
 
 
 
-  
+
   const handleCheckboxChange = (userId, selectedRole) => {
     const updatedUser = users.map((user) =>
       user.id === userId ? { ...user, Jogosultság: selectedRole, jogosultsag_azon: selectedRole } : user
@@ -208,24 +208,28 @@ export default function UsersManagement() {
 
                       <td>
                         <Form.Check
-                          type="checkbox"
+                          type="radio"
                           label="Admin"
-                          checked={user.Jogosultság === 2}
-                          onChange={() => handleCheckboxChange(user.id, 1)}
-                        />
-                        <Form.Check
-                          type="checkbox"
-                          label="Felhasználó"
-                          checked={user.Jogosultság === 1}
+                          name={`user-${user.id}-role`}
+                          checked={user.jogosultsag_azon === 2}
                           onChange={() => handleCheckboxChange(user.id, 2)}
                         />
                         <Form.Check
-                          type="checkbox"
+                          type="radio"
+                          label="Felhasználó"
+                          name={`user-${user.id}-role`}
+                          checked={user.jogosultsag_azon === 1}
+                          onChange={() => handleCheckboxChange(user.id, 1)}
+                        />
+                        <Form.Check
+                          type="radio"
                           label="Nem engedélyezett"
-                          checked={user.Jogosultság === 4}
+                          name={`user-${user.id}-role`}
+                          checked={user.jogosultsag_azon === 4}
                           onChange={() => handleCheckboxChange(user.id, 4)}
                         />
                       </td>
+
                     </tr>
                   ))}
                 </tbody>
