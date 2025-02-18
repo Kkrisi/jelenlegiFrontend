@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Table, Button, Form, Modal } from 'react-bootstrap';
+import { Table, Button, Modal, DropdownButton, Dropdown, Form } from 'react-bootstrap';
 import '../App.css';
 import { myAxios } from '../api/axios';
 
@@ -10,7 +10,7 @@ import { myAxios } from '../api/axios';
 export default function UsersManagement() {
   const [users, setUsers] = useState([]);
   const [editingUser, setEditingUser] = useState(null);
-  const [editingField, setEditingField] = useState(""); 
+  const [editingField, setEditingField] = useState("");
   const [loading, setLoading] = useState(true);
 
   const [showModal, setShowModal] = useState(false);
@@ -39,16 +39,47 @@ export default function UsersManagement() {
 
 
 
-
-
-
-
-
-
-
   const handleEdit = (user, field) => {
     setEditingUser({ ...user });
     setEditingField(field);
+  };
+
+
+
+
+  
+  const handleCheckboxChange = (userId, selectedRole) => {
+    const updatedUser = users.map((user) =>
+      user.id === userId ? { ...user, Jogosultság: selectedRole, jogosultsag_azon: selectedRole } : user
+    );
+
+    setUsers(updatedUser);
+    setEditingUser(updatedUser.find((user) => user.id === userId));
+    setEditingField("Jogosultság");
+
+    const updatedUserData = {
+      ...updatedUser.find((user) => user.id === userId),
+      jogosultsag_azon: selectedRole,
+    };
+
+    console.log('Changes made:', updatedUserData);
+
+    setIsSaving(true);
+    setShowModal(true);
+
+    myAxios.put(`/api/felhasznalok/${userId}`, updatedUserData)
+      .then(() => {
+        setUsers(users.map(user => user.id === userId ? updatedUserData : user));
+        setEditingUser(null);
+        setEditingField("");
+        setIsSaving(false);
+        setShowModal(false);
+      })
+      .catch(error => {
+        console.error('Hiba a mentésnél:', error);
+        setIsSaving(false);
+        setShowModal(false);
+      });
   };
 
 
@@ -62,6 +93,28 @@ export default function UsersManagement() {
     }));
   };
 
+  const handleRoleChange = (userId, selectedRole) => {
+    const updatedUser = users.map((user) =>
+      user.id === userId ? { ...user, Jogosultság: selectedRole, jogosultsag_azon: selectedRole } : user
+    );
+    setUsers(updatedUser);
+    setEditingUser(updatedUser.find((user) => user.id === userId));
+    setEditingField("Jogosultság");
+  };
+
+
+  const getRoleText = (roleNumber) => {
+    switch (roleNumber) {
+      case 1:
+        return "Admin";
+      case 2:
+        return "Felhasználó";
+      case 4:
+        return "Nem engedélyezett";
+      default:
+        return "Ismeretlen";
+    }
+  };
 
 
 
@@ -82,23 +135,31 @@ export default function UsersManagement() {
 
 
   const handleSave = () => {
-    setIsSaving(true); 
-    setShowModal(true); 
+    const updatedUser = {
+      ...editingUser,
+      jogosultsag_azon: editingUser.jogosultsag_azon
+    };
 
-    myAxios.put(`/api/felhasznalok/${editingUser.id}`, editingUser)
+    console.log('Changes made:', updatedUser);
+
+    setIsSaving(true);
+    setShowModal(true);
+
+    myAxios.put(`/api/felhasznalok/${editingUser.id}`, updatedUser)
       .then(() => {
-        setUsers(users.map(user => user.id === editingUser.id ? editingUser : user));
+        setUsers(users.map(user => user.id === editingUser.id ? updatedUser : user));
         setEditingUser(null);
         setEditingField("");
-          setIsSaving(false); 
-          setShowModal(false);
+        setIsSaving(false);
+        setShowModal(false);
       })
       .catch(error => {
         console.error('Hiba a mentésnél:', error);
-          setIsSaving(false); 
-          setShowModal(false);
+        setIsSaving(false);
+        setShowModal(false);
       });
   };
+
 
 
 
@@ -109,64 +170,85 @@ export default function UsersManagement() {
         <article>
           <h1>Felhasználó kezelés</h1>
           <div className="table-container">
-          
             {loading ? (
               <h2>Az oldal még tölt...</h2>
             ) : (
-
-
-
               <Table striped bordered hover responsive variant="dark">
-              <thead>
-                <tr>
-                  <th>Id</th>
-                  <th>Név</th>
-                  <th>Email</th>
-                  <th>Jelszó</th>
-                  <th>Jogosultság</th>
-                </tr>
-              </thead>
-              <tbody>
-                {users.map((user) => (
-                  <tr key={user.id}>
-                    {Object.keys(user).map((field) => (
-                      <td key={field} onDoubleClick={() => handleEdit(user, field)}>
-                        {editingUser?.id === user.id && editingField === field ? (
-                          <input
-                          type="text"
-                          value={editingUser[editingField] || ""}
-                          onChange={handleChange}
-                          onKeyDown={handleKeyDown}
-                          autoFocus
-                        />                        
-                        ) : (
-                          user[field]
-                        )}
-                      </td>
-                    ))}
+                <thead>
+                  <tr>
+                    <th>Id</th>
+                    <th>Név</th>
+                    <th>Email</th>
+                    <th>Jelszó</th>
+                    <th>Jogosultság</th>
+                    <th>Jogosultság megváltoztatása</th>
                   </tr>
-                ))}
-              </tbody>
-            </Table>
+                </thead>
+                <tbody>
+                  {users.map((user) => (
+                    <tr key={user.id}>
+                      {/* Regular fields with double-click to edit */}
+                      {Object.keys(user).map((field) => (
+                        field !== "Jogosultság" && (
+                          <td key={field} onDoubleClick={() => handleEdit(user, field)}>
+                            {editingUser?.id === user.id && editingField === field ? (
+                              <input
+                                type="text"
+                                value={editingUser[editingField] || ""}
+                                onChange={handleChange}
+                                onKeyDown={handleKeyDown}
+                                autoFocus
+                              />
+                            ) : (
+                              user[field]
+                            )}
+                          </td>
+                        )
+                      ))}
+
+                      <td>
+                        <Form.Check
+                          type="checkbox"
+                          label="Admin"
+                          checked={user.Jogosultság === 2}
+                          onChange={() => handleCheckboxChange(user.id, 1)}
+                        />
+                        <Form.Check
+                          type="checkbox"
+                          label="Felhasználó"
+                          checked={user.Jogosultság === 1}
+                          onChange={() => handleCheckboxChange(user.id, 2)}
+                        />
+                        <Form.Check
+                          type="checkbox"
+                          label="Nem engedélyezett"
+                          checked={user.Jogosultság === 4}
+                          onChange={() => handleCheckboxChange(user.id, 4)}
+                        />
+                      </td>
+                    </tr>
+                  ))}
+                </tbody>
+              </Table>
+            )}
+          </div>
+        </article>
+      </main>
 
 
 
-          )}
-        </div>
-      </article>
-    </main>
 
 
-    <Modal show={showModal} onHide={() => setShowModal(false)}>
+      <Modal show={showModal} onHide={() => setShowModal(false)}>
         <Modal.Header closeButton>
           <Modal.Title>Mentés folyamatban... 🚀</Modal.Title>
         </Modal.Header>
         <Modal.Body>
           <p>Az adatok mentése folyamatban van. Kérlek, várj egy pillanatot.</p>
         </Modal.Body>
-    </Modal>
+      </Modal>
 
 
-  </div>
+    </div>
   );
 }
