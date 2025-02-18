@@ -43,6 +43,23 @@ export default function Logs() {
       <main>
         <article>
           <h1>Kiküldött levelek</h1>
+          <div className='szures'>
+            <div className="szuresek">
+                <button id="nemkaptaebbenahonapban">Nem kaptak ebben a hónapban</button>
+            </div>
+            <div className="szuresek">
+                <button id="legutoljarapenzugy">legutoljára pénzügyi dokumentum</button>
+            </div>
+            <div className="szuresek">
+                <button id="kimaradtkikuldesek">kimaradt a kiküldésből</button>
+            </div>
+            <div className="szuresek">
+                <button id="hanypdfkuldesegyevben">hány pdf kiküldés egy évben</button>
+            </div>
+            <div className="szuresek">
+                <button id="sohanemkapottpfdet">Soha nem kaptak pdf-et</button>
+            </div>
+          </div>
           <div className="table-container">
 
             {loading ? (
