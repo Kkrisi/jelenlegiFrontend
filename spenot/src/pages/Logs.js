@@ -59,7 +59,9 @@ export default function Logs() {
           </div>
           <div className="table-container">
             {loading ? (
-              <h2>Még tölt...</h2>
+                <div className="center">
+                <span class="loader">Még tölt...</span>
+              </div>
             ) : (
               <Table striped bordered hover responsive variant="dark">
                 <thead>

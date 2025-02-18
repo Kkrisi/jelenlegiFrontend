@@ -30,12 +30,15 @@ export default function Register() {
         const csrfToken = getCsrfToken();
 
         try {
-            await myAxios.post("/register", adat, {
+            const response = await myAxios.post("/register", adat, {
                 headers: {
                     'X-XSRF-TOKEN': csrfToken,  // Include CSRF token in header
                 }
             });
-            console.log(adat);
+            console.log("Lyúhúúú! Műgödig");  // Log this when the registration is successful
+            alert("Sikeres regisztráció!")
+            window.location.href = "/"        
+        
         } catch (error) {
             if (error.response && error.response.data.errors) {
                 setErrors(error.response.data.errors); // Save validation errors

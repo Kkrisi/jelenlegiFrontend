@@ -11,7 +11,7 @@ import { myAxios } from '../api/axios';
 export default function StudentsManagement() {
   const [users, setUsers] = useState([]);
   const [editingUser, setEditingUser] = useState(null);
-  const [editingField, setEditingField] = useState(""); 
+  const [editingField, setEditingField] = useState("");
   const [loading, setLoading] = useState(true);
 
   const [showModal, setShowModal] = useState(false);
@@ -96,13 +96,13 @@ export default function StudentsManagement() {
 
         setEditingUser(null);
         setEditingField("");
-          setIsSaving(false);
-          setShowModal(false); 
+        setIsSaving(false);
+        setShowModal(false);
       })
       .catch(error => {
         console.error('Hiba a mentésnél:', error);
-          setIsSaving(false);
-          setShowModal(false);
+        setIsSaving(false);
+        setShowModal(false);
       });
   };
 
@@ -120,86 +120,88 @@ export default function StudentsManagement() {
 
             {/* Ha még töltjük az adatokat, akkor jelenítse meg a "Még tölt" üzenetet */}
             {loading ? (
-              <h2>Még tölt...</h2>
+              <div className="center">
+                <span class="loader">Még tölt...</span>
+              </div>
             ) : (
 
 
 
               <Table striped bordered hover responsive variant="dark">
-              <thead>
-                <tr>
-                  <th>d_azon</th>
-                  <th>Név</th>
-                  <th>Email</th>
-                  <th>SzülNév</th>
-                  <th>SzülHely</th>
-                  <th>SzülIdő</th>
-                  <th>AnyjaNeve</th>
-                  <th>Tajszám</th>
-                  <th>Adószám</th>
-                  <th>GondviselőNeve</th>
-                  <th>Telefonszám</th>
-                  <th>IskolaAzon</th>
-                  <th>GyakhelyAzon</th>
-                  <th>Megjegyzés</th>
-                </tr>
-              </thead>
+                <thead>
+                  <tr>
+                    <th>d_azon</th>
+                    <th>Név</th>
+                    <th>Email</th>
+                    <th>SzülNév</th>
+                    <th>SzülHely</th>
+                    <th>SzülIdő</th>
+                    <th>AnyjaNeve</th>
+                    <th>Tajszám</th>
+                    <th>Adószám</th>
+                    <th>GondviselőNeve</th>
+                    <th>Telefonszám</th>
+                    <th>IskolaAzon</th>
+                    <th>GyakhelyAzon</th>
+                    <th>Megjegyzés</th>
+                  </tr>
+                </thead>
 
-              {/*Dinamikus táblázat generálása*/}
-              <tbody>
-                {users.map((user) => (  // a users tömbön végigmegy a map() függvény, és minden user objektumhoz létrehoz egy <tr> (sor) elemet
-                  <tr key={user.d_azon}>
+                {/*Dinamikus táblázat generálása*/}
+                <tbody>
+                  {users.map((user) => (  // a users tömbön végigmegy a map() függvény, és minden user objektumhoz létrehoz egy <tr> (sor) elemet
+                    <tr key={user.d_azon}>
 
-                    {/*Az aktuális user objektum összes kulcsán (nev, tajszam, stb.) végigmegy, és minden kulcsból egy <td> (cellát) hoz létre.
+                      {/*Az aktuális user objektum összes kulcsán (nev, tajszam, stb.) végigmegy, és minden kulcsból egy <td> (cellát) hoz létre.
                       A cella dupla kattintásra (onDoubleClick) meghívja a handleEdit(user, field) függvényt.*/}
-                    {Object.keys(user).map((field) => (   // a field egy string ami lehet a "nev", "tajszam", stb
-                      <td key={field} onDoubleClick={() => handleEdit(user, field)}>
+                      {Object.keys(user).map((field) => (   // a field egy string ami lehet a "nev", "tajszam", stb
+                        <td key={field} onDoubleClick={() => handleEdit(user, field)}>
 
-                        {/*Ez a rész azt ellenőrzi, hogy a cella szerkesztési módban van-e:
+                          {/*Ez a rész azt ellenőrzi, hogy a cella szerkesztési módban van-e:
                         Ha igen:
                         Egy <input> mezőt jelenít meg a cellában.
                         A beírt érték (value) az editingUser[editingField] (a szerkesztett adat).
                         onChange={handleChange} → frissíti az értéket a gépelés során.*/}
-                        {editingUser?.d_azon === user.d_azon && editingField === field ? (
-                          <input
-                          type="text"
-                          value={editingUser[editingField] || ""}  // Használj condition-t a value frissítésére
-                          onChange={handleChange}
-                          onKeyDown={handleKeyDown}
-                          autoFocus
-                        />                        
-                        ) : (
-                          // ha nem szerkesztünk akkor egyszerűen a user[field] értéket (pl. a név vagy TAJ-szám) jeleníti meg
-                          user[field]
-                        )}
-                      </td>
-                    ))}
-                  </tr>
-                ))}
-              </tbody>
+                          {editingUser?.d_azon === user.d_azon && editingField === field ? (
+                            <input
+                              type="text"
+                              value={editingUser[editingField] || ""}  // Használj condition-t a value frissítésére
+                              onChange={handleChange}
+                              onKeyDown={handleKeyDown}
+                              autoFocus
+                            />
+                          ) : (
+                            // ha nem szerkesztünk akkor egyszerűen a user[field] értéket (pl. a név vagy TAJ-szám) jeleníti meg
+                            user[field]
+                          )}
+                        </td>
+                      ))}
+                    </tr>
+                  ))}
+                </tbody>
 
 
-            </Table>
+              </Table>
 
 
 
-          )}
+            )}
 
-        </div>
-      </article>
-    </main>
+          </div>
+        </article>
+      </main>
 
 
-    <Modal show={showModal} onHide={() => setShowModal(false)}>
+      <Modal show={showModal} onHide={() => setShowModal(false)}>
         <Modal.Header closeButton>
           <Modal.Title>Mentés folyamatban... 🚀</Modal.Title>
         </Modal.Header>
         <Modal.Body>
           <p>Az adatok mentése folyamatban van. Kérlek, várj egy pillanatot.</p>
         </Modal.Body>
-    </Modal>
+      </Modal>
 
 
-  </div>
+    </div>
   );
 }
