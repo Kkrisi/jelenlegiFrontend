@@ -117,7 +117,9 @@ export default function UsersManagement() {
           <h1>Felhasználó kezelés</h1>
           <div className="table-container">
             {loading ? (
-              <h2>Az oldal még tölt...</h2>
+                      <div className="center">
+                      <span class="loader">Betöltés</span> 
+                    </div>
             ) : (
               <Table striped bordered hover responsive variant="dark">
                 <thead>
