@@ -7,9 +7,9 @@ export default function ProtectedRoute({ roleRequired }) {
 
   const { user } = useAuthContext();
 
-  if (!user) {
+  /*if (!user) {
       return <Navigate to="/bejelentkezes" />;
-  }
+  }*/
 
   if (roleRequired && user.jogosultsag_azon !== roleRequired) {
       return <Navigate to="/emailKuldes" />;
