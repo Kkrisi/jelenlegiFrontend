@@ -93,28 +93,7 @@ export default function UsersManagement() {
     }));
   };
 
-  const handleRoleChange = (userId, selectedRole) => {
-    const updatedUser = users.map((user) =>
-      user.id === userId ? { ...user, Jogosultság: selectedRole, jogosultsag_azon: selectedRole } : user
-    );
-    setUsers(updatedUser);
-    setEditingUser(updatedUser.find((user) => user.id === userId));
-    setEditingField("Jogosultság");
-  };
 
-
-  const getRoleText = (roleNumber) => {
-    switch (roleNumber) {
-      case 1:
-        return "Admin";
-      case 2:
-        return "Felhasználó";
-      case 4:
-        return "Nem engedélyezett";
-      default:
-        return "Ismeretlen";
-    }
-  };
 
 
 
@@ -187,7 +166,6 @@ export default function UsersManagement() {
                 <tbody>
                   {users.map((user) => (
                     <tr key={user.id}>
-                      {/* Regular fields with double-click to edit */}
                       {Object.keys(user).map((field) => (
                         field !== "Jogosultság" && (
                           <td key={field} onDoubleClick={() => handleEdit(user, field)}>
