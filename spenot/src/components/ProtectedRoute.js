@@ -1,19 +1,32 @@
 import { Navigate, Outlet } from "react-router-dom";
 import useAuthContext from "../contexts/AuthContext";
-
-
+import { useEffect } from "react";
 
 export default function ProtectedRoute({ roleRequired }) {
+  const { user, logout } = useAuthContext();
 
-  const { user } = useAuthContext();
+  useEffect(() => {
+    if (user && user.jogosultsag_azon === 4) {
+      // törli a felhasználo cookieját
+      logout();
+    }
+  }, [user, logout]);
 
-  /*if (!user) {
-      return <Navigate to="/bejelentkezes" />;
-  }*/
-
-  if (roleRequired && user.jogosultsag_azon !== roleRequired) {
-      return <Navigate to="/emailKuldes" />;
+  if (!user) {
+    return <Navigate to="/bejelentkezes" />;
   }
 
-  return <Outlet />; // a protectedroute-ban levo route-kat mutatja
+
+  console.log("User jogosultsag_azon:", user.jogosultsag_azon);
+
+
+  if (user.jogosultsag_azon === 4) {
+    return <Navigate to="/permissiondenied" />;
+  }
+
+  if (roleRequired && user.jogosultsag_azon !== roleRequired) {
+    return <Navigate to="/emailKuldes" />;
+  }
+
+  return <Outlet />;
 }

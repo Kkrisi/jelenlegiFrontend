@@ -2,10 +2,7 @@ import { createContext, useContext, useEffect, useState } from "react";
 import { myAxios } from "../api/axios";
 import { useNavigate } from "react-router-dom";
 
-
-
 const AuthContext = createContext();
-
 
 export const AuthProvider = ({ children }) => {
 
@@ -17,27 +14,32 @@ export const AuthProvider = ({ children }) => {
     password: "",
     password_confirmation: "",
   });
-
-  const csrf = () => myAxios.get("/sanctum/csrf-cookie");
-
-
+  const [isCsrfLoaded, setIsCsrfLoaded] = useState(false); 
+  const csrf = async () => {
+    try {
+      await myAxios.get("/sanctum/csrf-cookie");  
+      setIsCsrfLoaded(true); 
+    } catch (error) {
+      console.error("CSRF fetch error:", error);
+    }
+  };
 
   //bejelentkezett felhasználó adatainak lekérdezése
   const getUser = async () => {
-    const { data } = await myAxios.get("/api/user");
-    setUser(data);
+    try {
+      const { data } = await myAxios.get("/api/user");
+      setUser(data);
+    } catch (error) {
+      console.error("Error fetching user data:", error);
+    }
   };
-
 
   const logout = async () => {
     await csrf();
-
     myAxios.post("/logout").then((resp) => {
       setUser(null);
     });
   };
-
-
 
   const loginReg = async ({ ...adat }, vegpont) => {
     await csrf();
@@ -47,27 +49,31 @@ export const AuthProvider = ({ children }) => {
 
       // ez segít kiiratni a felhasznalo jogosultsagat konzolba a 28. sorba itt
       if (response.data.user) {
-        setUser(response.data.user);}
+        setUser(response.data.user);
+      }
 
-      await getUser()
+      await getUser();
       navigate("/emailKuldes");
       
     } catch (error) {
       console.error("Hiba a bejelentkezés/regisztráció során:", error);
       if (error.response.status === 422) {
         setErrors(error.response.data.errors);
-        console.log("hiba a bej.nél, nem tud a emailKuldes-re ugorni")
       } else {
         console.error("Ismeretlen hiba történt.");
       }
     }
   };
 
-  useEffect(()=>{
-    if(!user){
-      getUser()
-    } 
-  },[])
+  useEffect(() => {
+    if (!isCsrfLoaded) {
+      csrf(); 
+    } else {
+      if (user === null) {
+        getUser();  
+      }
+    }
+  }, [isCsrfLoaded, user]);
 
   return (
     <AuthContext.Provider value={{ logout, loginReg, errors, getUser, user }}>
@@ -75,7 +81,6 @@ export const AuthProvider = ({ children }) => {
     </AuthContext.Provider>
   );
 };
-
 
 export default function useAuthContext() {
   return useContext(AuthContext);
