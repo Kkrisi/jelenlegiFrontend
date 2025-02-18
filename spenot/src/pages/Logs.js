@@ -3,19 +3,11 @@ import { Table, Button, Form, Modal } from 'react-bootstrap';
 import '../App.css';
 import { myAxios } from '../api/axios';
 
-
-
-
 export default function Logs() {
   const [letters, setLetters] = useState([]);
   const [loading, setLoading] = useState(true);
 
   const [searchTerm, setSearchTerm] = useState("");
-
-
-
-
-
 
   useEffect(() => {
     myAxios.get("/api/levelek")
@@ -29,14 +21,18 @@ export default function Logs() {
       });
   }, []);
 
-
-
-
-
-
-
-
-
+  const handleClick = (endpoint) => {
+    setLoading(true);
+    myAxios.get(endpoint)
+      .then(response => {
+        setLetters(response.data);
+        setLoading(false);
+      })
+      .catch(error => {
+        console.error('Hiba az adatlekérés során:', error);
+        setLoading(false);
+      });
+  };
 
   return (
     <div className="logspage">
@@ -45,57 +41,47 @@ export default function Logs() {
           <h1>Kiküldött levelek</h1>
           <div className='szures'>
             <div className="szuresek">
-                <button id="nemkaptaebbenahonapban">Nem kaptak ebben a hónapban</button>
+              <button  id="nemkaptaebbenahonapban" onClick={() => handleClick("/api/nem-kaptak-ebben-a-honapban-pdf")}>
+                Nem kaptak ebben a hónapban
+              </button>
             </div>
             <div className="szuresek">
-                <button id="legutoljarapenzugy">legutoljára pénzügyi dokumentum</button>
+              <button  id="legutoljarapenzugy" onClick={() => handleClick("/api/ki-mikor-kapott-legutoljara-penzugyi-dokumentumot")}>
+                Legutoljára pénzügyi dokumentum
+              </button>
             </div>
             <div className="szuresek">
-                <button id="kimaradtkikuldesek">kimaradt a kiküldésből</button>
+              <button  id="kimaradtkikuldesek" onClick={() => handleClick("/api/aki-kimaradt-kikuldesbol")}>
+                Kimaradt a kiküldésből
+              </button>
             </div>
-            <div className="szuresek">
-                <button id="hanypdfkuldesegyevben">hány pdf kiküldés egy évben</button>
-            </div>
-            <div className="szuresek">
-                <button id="sohanemkapottpfdet">Soha nem kaptak pdf-et</button>
-            </div>
+            {/* Add more buttons as needed */}
           </div>
           <div className="table-container">
-
             {loading ? (
               <h2>Még tölt...</h2>
             ) : (
-
-
-
               <Table striped bordered hover responsive variant="dark">
-              <thead>
-                <tr>
-                  <th>Küldött Azon</th>
-                  <th>Dolgozó Azon</th>
-                  <th>PDF fájl neve</th>
-                  <th>Küldés dátuma</th>
-                </tr>
-              </thead>
-
-              <tbody>
-                {letters.map((letter) => (
-                  <tr key={letter.kikuldott_azon}>
-
-                    {Object.keys(letter).map((field) => (
-                      <td key={field}>{letter[field]}</td>
-                    ))}
-
+                <thead>
+                  <tr>
+                    <th>Küldött Azon</th>
+                    <th>Dolgozó Azon</th>
+                    <th>PDF fájl neve</th>
+                    <th>Küldés dátuma</th>
                   </tr>
-                ))}
-              </tbody>
-            </Table>
-
-
-
-          )}
-
-        </div>
+                </thead>
+                <tbody>
+                  {letters.map((letter) => (
+                    <tr key={letter.kikuldott_azon}>
+                      {Object.keys(letter).map((field) => (
+                        <td key={field}>{letter[field]}</td>
+                      ))}
+                    </tr>
+                  ))}
+                </tbody>
+              </Table>
+            )}
+          </div>
         </article>
       </main>
     </div>
