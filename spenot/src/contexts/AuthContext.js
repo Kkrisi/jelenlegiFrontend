@@ -66,7 +66,11 @@ export const AuthProvider = ({ children }) => {
     }
   };
 
-
+  useEffect(()=>{
+    if(!user){
+      getUser()
+    } 
+  },[])
 
   return (
     <AuthContext.Provider value={{ logout, loginReg, errors, getUser, user }}>
