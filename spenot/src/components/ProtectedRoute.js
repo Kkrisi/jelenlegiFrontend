@@ -10,7 +10,9 @@ export default function ProtectedRoute({ roleRequired }) {
   /*if (!user) {
       return <Navigate to="/bejelentkezes" />;
   }*/
-
+  if (user.jogosultsag_azon ===4){
+    return<Navigate to="/"/>
+  }
   if (roleRequired && user.jogosultsag_azon !== roleRequired) {
       return <Navigate to="/emailKuldes" />;
   }

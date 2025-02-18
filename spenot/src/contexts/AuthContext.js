@@ -25,7 +25,6 @@ export const AuthProvider = ({ children }) => {
   //bejelentkezett felhasználó adatainak lekérdezése
   const getUser = async () => {
     const { data } = await myAxios.get("/api/user");
-    console.log(data)
     setUser(data);
   };
 
@@ -35,7 +34,6 @@ export const AuthProvider = ({ children }) => {
 
     myAxios.post("/logout").then((resp) => {
       setUser(null);
-      console.log(resp);
     });
   };
 
@@ -43,7 +41,6 @@ export const AuthProvider = ({ children }) => {
 
   const loginReg = async ({ ...adat }, vegpont) => {
     await csrf();
-    console.log(adat,vegpont);
 
     try {
       const response = await myAxios.post(vegpont, adat);
