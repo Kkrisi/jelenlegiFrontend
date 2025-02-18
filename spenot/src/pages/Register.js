@@ -8,18 +8,33 @@ export default function Register() {
     const [confirmPassword, setPasswordConfirmation] = useState("");
     const [errors, setErrors] = useState(""); 
 
+    const getCsrfToken = () => {
+        // Extract the CSRF token from the cookie
+        return document.cookie.split(';')
+            .find(cookie => cookie.trim().startsWith('XSRF-TOKEN='))
+            ?.split('=')[1];
+    };
+
     const handleSubmit = async (e) => {
         e.preventDefault();
+        
         const adat = {
             name: name,
             email: email,
             password: password,
             password_confirmation: confirmPassword, 
-            jogosultsag_azon : 4,
+            jogosultsag_azon: 4,
         };
 
+        // Get CSRF token and set it in the request headers
+        const csrfToken = getCsrfToken();
+
         try {
-            await myAxios.post("/register", adat);
+            await myAxios.post("/register", adat, {
+                headers: {
+                    'X-XSRF-TOKEN': csrfToken,  // Include CSRF token in header
+                }
+            });
             console.log(adat);
         } catch (error) {
             if (error.response && error.response.data.errors) {

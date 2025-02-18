@@ -1,4 +1,4 @@
-import { createContext, useContext, useState } from "react";
+import { createContext, useContext, useEffect, useState } from "react";
 import { myAxios } from "../api/axios";
 import { useNavigate } from "react-router-dom";
 
@@ -66,7 +66,11 @@ export const AuthProvider = ({ children }) => {
     }
   };
 
-
+  useEffect(()=>{
+    if(!user){
+      getUser()
+    } 
+  },[])
 
   return (
     <AuthContext.Provider value={{ logout, loginReg, errors, getUser, user }}>
