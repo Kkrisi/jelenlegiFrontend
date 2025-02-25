@@ -66,6 +66,7 @@ export default function Logs() {
               <Table striped bordered hover responsive variant="dark">
                 <thead>
                   <tr>
+                    <th>Név</th>
                     <th>Küldött Azon</th>
                     <th>Dolgozó Azon</th>
                     <th>PDF fájl neve</th>
@@ -73,14 +74,16 @@ export default function Logs() {
                   </tr>
                 </thead>
                 <tbody>
-                  {letters.map((letter) => (
-                    <tr key={letter.kikuldott_azon}>
-                      {Object.keys(letter).map((field) => (
-                        <td key={field}>{letter[field]}</td>
-                      ))}
-                    </tr>
-                  ))}
-                </tbody>
+          {letters.map((letter) => (
+            <tr key={letter.kikuldott_azon}>
+              <td>{letter.nev}</td>
+              <td>{letter.kikuldott_azon}</td>
+              <td>{letter.dolgozo_azon}</td>
+              <td>{letter.pdf_fajl_neve}</td>
+              <td>{letter.kuldes_datuma}</td>
+            </tr>
+          ))}
+        </tbody>
               </Table>
             )}
           </div>
