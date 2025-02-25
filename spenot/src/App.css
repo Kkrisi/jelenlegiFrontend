@@ -1010,52 +1010,54 @@
 
 
   /*-----------------------------------   studentsmanagement page   -----------------------------------*/
-.studentsmanagement * {
-  box-sizing: border-box;
-  margin: 0;
-  padding: 0;
-  font-family: 'Arial', sans-serif;
-  color: white;
+  .studentsmanagement * {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+    font-family: 'Arial', sans-serif;
+    color: white;
+  }
+   
+  .studentsmanagement {
+    background: linear-gradient(-45deg, #ee7752, #e73c7e, #23a6d5, #23d5ab);
+    background-size: 300% 300%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+  }
+   
+  .studentsmanagement article {
+   
+    width: 1200px;
+    height: 610px;
+    background-color: #3D3D3D;
+    display: flex;
+    flex-direction: column;
+    border-radius: 10px;
+    border: 3px solid gray;
+    box-shadow: 4px 4px 8px rgba(0, 0, 0, 0.3);
+    padding: 20px;
+    overflow: hidden; /* Prevent overflow on smaller screens */
+  }
+   
+  .studentsmanagement .table-container {
+    overflow-x: auto; 
+    max-height: 500px; /* Maximális magasság beállítása */
+    margin: 0 auto; /* Középre igazítja a konténert */
 }
 
-.studentsmanagement {
-  background: linear-gradient(-45deg, #ee7752, #e73c7e, #23a6d5, #23d5ab);
-  background-size: 300% 300%;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  height: 100vh;
-}
-
-.studentsmanagement article {
- 
-  background-color: #3D3D3D;
-  display: flex;
-  flex-direction: column;
-  border-radius: 10px;
-  border: 3px solid gray;
-  box-shadow: 4px 4px 8px rgba(0, 0, 0, 0.3);
-  padding: 20px;
-  /* overflow: hidden; */
-}
-
-.studentsmanagement .table-container {
-  overflow-x: auto; /* Vízszintes görgetés engedélyezése */
-  -webkit-overflow-scrolling: touch; /* Az érintéses eszközökön simább görgetés */
-  margin: 0 auto; /* Középre igazítja a konténert */
-}
-
-
-#kuldes:active {
-  transform: scale(0.92);
-}
-
-
-
-.studentsmanagement input {
-  color: black;
-}
-
+   
+   
+  #kuldes:active {
+    transform: scale(0.92);
+  }
+   
+   
+   
+  .studentsmanagement input {
+    color: black;
+  }
 
 .studentsmanagement h1 {
   background-color: lightslategrey;

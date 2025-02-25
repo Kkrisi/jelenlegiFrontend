@@ -9,7 +9,6 @@ import ResetPassword from './pages/ResetPassword';
 import UsersManagement from './pages/UsersManagement';
 import StudentsManagement from './pages/StudentsManagement';
 import Logs from './pages/Logs';
-import AdminPage from './pages/AdminPage';
 import PermissionDenied from './pages/PermissionDenied';
 import Layout from './layouts/Layout';
 import ProtectedRoute from './components/ProtectedRoute';
@@ -37,7 +36,6 @@ export default function App() {
       {/* csak az admin */}
       <Route element={<ProtectedRoute roleRequired={2} />}>
         <Route element={<Layout />}>
-          <Route path="/admin" element={<AdminPage />} />
           <Route path="/felhKezeles" element={<UsersManagement />} />
         </Route>
       </Route>

@@ -65,7 +65,7 @@ export const AuthProvider = ({ children }) => {
     }
   };
 
-  useEffect(() => {
+  /*useEffect(() => {
     if (!isCsrfLoaded) {
       csrf(); 
     } else {
@@ -73,7 +73,14 @@ export const AuthProvider = ({ children }) => {
         getUser();  
       }
     }
-  }, [isCsrfLoaded, user]);
+  }, [isCsrfLoaded, user]);*/
+
+  useEffect(() => {
+    if(!user){
+      getUser()
+    }
+  }, [])
+
 
   return (
     <AuthContext.Provider value={{ logout, loginReg, errors, getUser, user }}>

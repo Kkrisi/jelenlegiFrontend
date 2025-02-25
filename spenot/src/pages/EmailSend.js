@@ -88,11 +88,8 @@ export default function EmailSend() {
       // 1. A kiválasztott fájlokat tömbbé alakítjuk
       const fileDetails = Array.from(selectedFiles)  // átalakítjuk a FileList-t egy tömbbé
       .map(file => {
-        const kod = feldolgozFajlNev(file); // kinyerjük a fájlból a kódot
-        return {
-          kod,
-          fileName: file.name
-        };
+        const kod = feldolgozFajlNev(file);
+        return {kod, fileName: file.name};
       })
       .filter(file => file.kod);  // csak azokat a fájlokat tartjuk meg, amiknek van kódja
 
@@ -130,7 +127,7 @@ export default function EmailSend() {
         for (let index = 0; index < feldolgozottFajl.length; index++) {
             if (feldolgozottFajl[index].includes("(")) {
                 kod = feldolgozottFajl[index].replace("(", "").replace(")", "");
-                break;  // Ha találtunk egy kódot, nem kell tovább menni
+                break;  /// ha megvan a kod akkor nem megyunk tovabb
             }
         }
     
@@ -163,6 +160,8 @@ export default function EmailSend() {
     }
   };
   // -------------------------------------------- Email küldése vége ---------------------------------------------------
+
+
 
 
 

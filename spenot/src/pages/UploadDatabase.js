@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { sendToServer } from "../api/sendToServer";
 import "bootstrap/dist/css/bootstrap.min.css";
+import { Modal } from 'react-bootstrap';
 
 
 
@@ -9,6 +10,9 @@ export default function UploadDatabase() {
 
   const [jsonOutput, setJsonOutput] = useState("");
   const [isLoading, setIsLoading] = useState(false);
+
+  const [showModal, setShowModal] = useState(false);
+  const [isSaving, setIsSaving] = useState(false);
 
 
   
@@ -40,6 +44,9 @@ export default function UploadDatabase() {
 
   // Adatok feltöltése 20-asával
   const handleSend = async () => {
+    setIsSaving(true);
+    setShowModal(true);
+
     const jsonData = JSON.parse(jsonOutput);
     const chunkSize = 20;
     setIsLoading(true);
@@ -48,6 +55,8 @@ export default function UploadDatabase() {
       const chunk = jsonData.slice(i, i + chunkSize);
       await sendToServer(chunk);
     }
+    setIsSaving(false);
+    setShowModal(false);
 
     setIsLoading(false);
     alert("Sikeres mentés az adatbázisba!");
@@ -133,6 +142,18 @@ export default function UploadDatabase() {
           <div className="elkuldottek"></div>
         </div>
       </div>
+
+
+
+      <Modal show={showModal} onHide={() => setShowModal(false)}>
+        <Modal.Header closeButton>
+          <Modal.Title>Feltöltés folyamatban... 🚀</Modal.Title>
+        </Modal.Header>
+        <Modal.Body>
+          <p>Az adatok feltöltése folyamatban van. Kérlek, várj egy pillanatot.</p>
+        </Modal.Body>
+      </Modal>
+          
     </div>
   );
 }

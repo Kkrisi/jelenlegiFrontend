@@ -33,26 +33,28 @@ const ResetPassword = () => {
     };
 
     return (
-        <div>
-            <h2>Jelszó visszaállítása</h2>
-            <form onSubmit={handleSubmit}>
-                <input
-                    type="password"
-                    placeholder="Új jelszó"
-                    value={newPassword}
-                    onChange={(e) => setNewPassword(e.target.value)}
-                    required
-                />
-                <input
-                    type="password"
-                    placeholder="Jelszó megerősítése"
-                    value={confirmPassword}
-                    onChange={(e) => setConfirmPassword(e.target.value)}
-                    required
-                />
-                <button type="submit">Jelszó visszaállítása</button>
-            </form>
-            {message && <p>{message}</p>}
+        <div className="studentsmanagement">
+            <article>
+                <h2>Jelszó visszaállítása</h2>
+                <form onSubmit={handleSubmit}>
+                    <input
+                        type="password"
+                        placeholder="Új jelszó"
+                        value={newPassword}
+                        onChange={(e) => setNewPassword(e.target.value)}
+                        required
+                    />
+                    <input
+                        type="password"
+                        placeholder="Jelszó megerősítése"
+                        value={confirmPassword}
+                        onChange={(e) => setConfirmPassword(e.target.value)}
+                        required
+                    />
+                    <button type="submit">Jelszó visszaállítása</button>
+                </form>
+                {message && <p>{message}</p>}
+            </article>
         </div>
     );
 };

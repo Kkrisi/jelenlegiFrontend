@@ -12,10 +12,10 @@ export const getEmails = async (fileDetails) => {
   try {
     const response = await myAxios.post("/api/get-emails", { fileDetails });
     
-    const dataList = response.data.data; // Ez egy tömb [{ d_azon, nev, email }]
+    const dataList = response.data.data; // az API válasza egy tömbben érkezik, és ez objektumokat tartalmaz
     
-    // Átalakítjuk objektummá
-    const dataMap = dataList.reduce((map, item) => {
+    /* A kiiratáshoz, írjam át hogy csak a lényeget odbja ki*/
+    const dataMap = dataList.reduce((map, item) => {       // a tomboket egy objektummá alakitjuk, a d_azon lesz kulcs, a belso objektum nem változik
         map[item.d_azon] = { nev: item.nev, email: item.email };
         return map;
     }, {});

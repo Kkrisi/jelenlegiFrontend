@@ -4,7 +4,7 @@ const PermissionDenied = () => {
   return (
     <div>
       <h1>
-        A gengsztergazda még nem engedett be a klubba, öcskös
+        A rendszergazda nem engedett be
       </h1>
     </div>
   )
