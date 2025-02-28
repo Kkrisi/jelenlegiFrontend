@@ -51,7 +51,7 @@ const ResetPassword = () => {
                         onChange={(e) => setConfirmPassword(e.target.value)}
                         required
                     />
-                    <button type="submit">Jelszó visszaállítása</button>
+                    <button id="resetBtn" type="submit">Jelszó visszaállítása</button>
                 </form>
                 {message && <p>{message}</p>}
             </article>

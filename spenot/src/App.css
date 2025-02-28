@@ -1078,9 +1078,22 @@
 
 
 
+/* ------------------------------------ reset password  -----------------------------*/
 
+#resetBtn{
+  background-color: #5f9ea0;
+  color: #ffffff;
+  padding: 12px 15px;
+  font-size: 16px;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  margin: 10px;
+  box-shadow: 3px 3px 6px rgba(0, 0, 0, 0.15);
+  border: none;
+  font-weight: bold;
 
-
+}
 
 
 

@@ -41,18 +41,8 @@ export default function Logs() {
           <h1>Kiküldött levelek</h1>
           <div className='szures'>
             <div className="szuresek">
-              <button  id="nemkaptaebbenahonapban" onClick={() => handleClick("/api/nem-kaptak-ebben-a-honapban-pdf")}>
-                Nem kaptak ebben a hónapban
-              </button>
-            </div>
-            <div className="szuresek">
               <button  id="legutoljarapenzugy" onClick={() => handleClick("/api/ki-mikor-kapott-legutoljara-penzugyi-dokumentumot")}>
                 Legutoljára pénzügyi dokumentum
-              </button>
-            </div>
-            <div className="szuresek">
-              <button  id="kimaradtkikuldesek" onClick={() => handleClick("/api/aki-kimaradt-kikuldesbol")}>
-                Kimaradt a kiküldésből
               </button>
             </div>
             {/* Add more buttons as needed */}
