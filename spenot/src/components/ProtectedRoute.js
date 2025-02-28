@@ -3,21 +3,25 @@ import useAuthContext from "../contexts/AuthContext";
 import { useEffect } from "react";
 
 export default function ProtectedRoute({ roleRequired }) {
-  const { user, logout } = useAuthContext();
+  const { user, loading } = useAuthContext();
 
-  useEffect(() => {
+  if (loading) {
+    return <div>Oldal frissítése...</div>; // ide egy kulon frissites oldalt beszurni css-el?
+  }
+
+  /*useEffect(() => {
     if (user && user.jogosultsag_azon === 4) {
       // törli a felhasználo cookieját
       logout();
     }
-  }, [user, logout]);
+  }, [user, logout]);*/
 
   if (!user) {
     return <Navigate to="/bejelentkezes" />;
   }
 
 
-  console.log("User jogosultsag_azon:", user.jogosultsag_azon);
+  /*console.log("User jogosultsag_azon:", user.jogosultsag_azon);*/
 
 
   if (user.jogosultsag_azon === 4) {

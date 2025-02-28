@@ -118,7 +118,7 @@ export default function UsersManagement() {
           <div className="table-container">
             {loading ? (
                       <div className="center">
-                      <span class="loader">Betöltés</span> 
+                      <span className="loader">Betöltés</span> 
                     </div>
             ) : (
               <Table striped bordered hover responsive variant="dark">

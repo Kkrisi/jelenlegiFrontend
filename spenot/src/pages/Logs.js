@@ -50,7 +50,7 @@ export default function Logs() {
           <div className="table-container">
             {loading ? (
                 <div className="center">
-                <span class="loader">Még tölt...</span>
+                <span className="loader">Még tölt...</span> {/* átrakva classname-re*/}
               </div>
             ) : (
               <Table striped bordered hover responsive variant="dark">

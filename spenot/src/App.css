@@ -78,107 +78,6 @@
 
 
 
-/*-----------------------------------   admin page   -----------------------------------*/
-
-.adminpage * {
-  box-sizing: border-box;
-  margin: 0;
-  padding: 0;
-  font-family: Arial, sans-serif;
-}
-
-.adminpage {
-  background: linear-gradient(-45deg, #ee7752, #e73c7e, #23a6d5, #23d5ab);
-  background-size: 300% 300%;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  height: 100vh;
-}
-
-.adminpage .container {
-  width: 1200px;
-  display: flex;
-  flex-wrap: wrap;
-  justify-content: space-between;
-  /*background-color: rgb(213, 248, 248);*/
-  background-color: #3D3D3D;
-  padding: 20px;
-  border-radius: 10px;
-  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
-  /*box-shadow: rgba(50, 50, 93, 0.25) 0px 50px 100px -20px, rgba(0, 0, 0, 0.3) 0px 30px 60px -30px, rgba(10, 37, 64, 0.35) 0px -2px 6px 0px inset;*/
-  /*box-shadow: rgba(0, 0, 0, 0.25) 0px 54px 55px, rgba(0, 0, 0, 0.12) 0px -12px 30px, rgba(0, 0, 0, 0.12) 0px 4px 6px, rgba(0, 0, 0, 0.17) 0px 12px 13px, rgba(0, 0, 0, 0.09) 0px -3px 5px;*/
-  border: 3px solid gray;
-}
-
-
-
-
-.adminpage .section {
-  width: 30%;
-  background-color: lightblue;
-  padding: 20px;
-  margin-bottom: 20px;
-  border-radius: 8px;
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-}
-
-.adminpage h2 {
-  text-align: center;
-  margin-bottom: 20px;
-}
-
-.adminpage .kuldes {
-  background-color: cadetblue;
-  color: white;
-  padding: 12px 15px;
-  font-size: 16px;
-  border-radius: 5px;
-  cursor: pointer;
-  transition: all 0.3s ease;
-  display: block;
-  width: 100%;
-  margin-bottom: 10px;
-  border: none;
-  text-align: center;
-}
-
-.adminpage .kuldes:hover {
-  background-color: orangered;
-  transform: scale(1.05);
-}
-
-
-
-
-.adminpage .oldal2 {
-  position: absolute; /* Position it absolutely */
-
-  display: block;
-  padding: 10px 15px;
-  background-color: cadetblue;
-  color: white;
-  text-decoration: none;
-  border-radius: 5px;
-  font-size: 16px;
-  transition: background-color 0.3s ease, transform 0.2s ease;
-}
-
-.adminpage .oldal2:hover {
-  background-color: orangered;
-  transform: scale(1.05);
-}
-
-
-
-
-
-
-
-
-
-
-
 
 
 
@@ -1207,3 +1106,40 @@
 
 
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+/*-----------------------------------   navigációs sáv   -----------------------------------*/
+.navigacio {
+  background-color: #3D3D3D;
+  color: white;
+}
+
+.navigacio a {
+  color: white;
+}
+
+.navigacio a:hover {
+  color: #e74c3c;
+  font-size: 1.3em;
+  transition: all 0.5s ease;
+}
+
+.navigacio button {
+  color: white;
+}

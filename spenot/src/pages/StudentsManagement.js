@@ -121,7 +121,7 @@ export default function StudentsManagement() {
             {/* Ha még töltjük az adatokat, akkor jelenítse meg a "Még tölt" üzenetet */}
             {loading ? (
               <div className="center">
-                <span class="loader">Még tölt...</span>
+                <span className="loader">Még tölt...</span>
               </div>
             ) : (
 

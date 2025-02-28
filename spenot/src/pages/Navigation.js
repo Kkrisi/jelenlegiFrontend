@@ -22,7 +22,7 @@ export default function Navigation() {
 
 
     return (
-        <nav className="navbar navbar-expand-sm bg-light">
+        <nav className="navigacio navbar navbar-expand-sm">
             <div className="container-fluid">
                 <ul className="navbar-nav">
                     <li className="navbar-item">
@@ -51,14 +51,6 @@ export default function Navigation() {
 
                     {user ? (
                         <>
-                            {user.jogosultsag_azon === 2 && (
-                                <li className="navbar-item">
-                                    <Link className="nav-link" to="/admin">
-                                        Admin Oldal
-                                    </Link>
-                                </li>
-                            )}
-
                             {user.jogosultsag_azon === 2 && (
                                 <li className="navbar-item">
                                     <Link className="nav-link" to="/felhKezeles">
