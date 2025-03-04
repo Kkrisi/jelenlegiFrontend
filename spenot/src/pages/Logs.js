@@ -42,7 +42,7 @@ export default function Logs() {
           <div className='szures'>
             <div className="szuresek">
               <button  id="legutoljarapenzugy" onClick={() => handleClick("/api/ki-mikor-kapott-legutoljara-penzugyi-dokumentumot")}>
-                Legutoljára pénzügyi dokumentum
+                Legutoljára kiküldött emailek
               </button>
             </div>
             {/* Add more buttons as needed */}

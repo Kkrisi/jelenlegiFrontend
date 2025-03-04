@@ -2,33 +2,54 @@ import { myAxios } from "./axios";
 
 
 
+
 const csrf = () => myAxios.get("/sanctum/csrf-cookie");
 
-
 export const getEmails = async (fileDetails) => {
-  await csrf();
-
-
-  try {
-    const response = await myAxios.post("/api/get-emails", { fileDetails });
-    
-    const dataList = response.data.data; // az API válasza egy tömbben érkezik, és ez objektumokat tartalmaz
-    
-    /* A kiiratáshoz, írjam át hogy csak a lényeget odbja ki*/
-    const dataMap = dataList.reduce((map, item) => {       // a tomboket egy objektummá alakitjuk, a d_azon lesz kulcs, a belso objektum nem változik
-        map[item.d_azon] = { nev: item.nev, email: item.email };
-        return map;
-    }, {});
-
-
-    fileDetails.forEach(({ kod, fileName }) => {
+    // CSRF token lekérése (ez szükséges az API hívásokhoz)
+    await csrf();
+  
+    try {
+      // API hívás, amely visszaadja a fájlokhoz tartozó adatokat (pl. név, email)
+      const response = await myAxios.post("/api/get-emails", { fileDetails });
+      
+      // Az API válasza egy tömb, ami az egyes adatokat tartalmazza
+      const dataList = response.data.data;
+  
+      // Ezt a tömböt egy objektummá alakítjuk, ahol a kulcsok a kódok
+      const dataMap = {};
+      dataList.forEach(item => {
+        dataMap[item.d_azon] = { nev: item.nev, email: item.email };
+      });
+  
+      // Számlálók a sikeres és sikertelen találatokhoz
+      let sikeresCount = 0;
+      let sikertelenCount = 0;
+      let sikertelenAdatok = []; // A sikertelen adatok tárolása
+      let sikeresAdatok = []; // A sikeres adatok tárolása
+  
+      // A fájlokat végigiteráljuk és ellenőrizzük, hogy van-e hozzá email cím
+      fileDetails.forEach(({ kod, fileName }) => {
         if (dataMap[kod]) {
-            console.log(`Kód: ${kod} (Fájl: ${fileName}) -> Név: ${dataMap[kod].nev}, E-mail: ${dataMap[kod].email}`);
+          // Ha van email cím, sikeres
+          sikeresCount++;
+          sikeresAdatok.push({ fileName, kod });
         } else {
-            console.log(`Kód: ${kod} (Fájl: ${fileName}) -> Nincs találat az adatbázisban.`);
+          // Ha nincs email cím, sikertelen
+          sikertelenCount++;
+          sikertelenAdatok.push({ fileName, kod });
+          
+          // Logoljuk a hibás adatokat
+          console.log(`Kód: ${kod} (Fájl: ${fileName}) -> Nincs találat az adatbázisban.`);
         }
       });
+  
+      // Visszaadjuk a sikeres és sikertelen találatok számát, valamint a sikertelen adatokat
+      return { sikeresCount, sikertelenCount, sikertelenAdatok, sikeresAdatok };
+  
     } catch (error) {
-        console.error("Hiba történt az adatok lekérésekor:", error);
+      console.error("Hiba történt az adatok lekérésekor:", error);
     }
-};
+  };
+  
+  

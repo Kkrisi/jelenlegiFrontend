@@ -59,7 +59,7 @@ export default function UploadDatabase() {
     setShowModal(false);
 
     setIsLoading(false);
-    alert("Sikeres mentés az adatbázisba!");
+    //alert("Sikeres mentés az adatbázisba!");
   };
 
 

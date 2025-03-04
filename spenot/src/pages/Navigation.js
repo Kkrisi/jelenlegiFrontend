@@ -18,6 +18,12 @@ export default function Navigation() {
         navigate("/bejelentkezes");
     };
 
+    /*const handleLogout = async () => {
+        await logout();  // Várjuk meg a kijelentkezést
+        navigate("/bejelentkezes"); // Csak utána navigálunk
+    };*/
+    
+
 
 
 
@@ -60,7 +66,7 @@ export default function Navigation() {
                             )}
 
                             <li className="navbar-item">
-                                <button className="nav-link" onClick={handleLogout}>
+                                <button className="nav-link kijelentkezes" onClick={handleLogout}>
                                     Kijelentkezés
                                 </button>
                             </li>
@@ -74,5 +80,6 @@ export default function Navigation() {
                 <p>Személy: {user === null ? "Nincs bejelentkezett felhasználó!" : user.name}</p>
             </div>
         </nav>
+        
     );
 }

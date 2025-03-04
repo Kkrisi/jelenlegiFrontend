@@ -29,6 +29,13 @@ export default function Login() {
 
     } catch (err) {
       console.error(err);
+      /*console.error("Hiba a bejelentkezés során", err.message);
+      // Felhasználói hibaüzenet
+      if (err.response && err.response.status === 422) {
+        alert("Hibás bejelentkezési adatok!");
+      } else {
+        alert("Valami hiba történt. Kérlek próbáld újra.");
+      }*/
     } finally {
       setLoading(false); // Betöltési állapot visszaállítása
     }
@@ -53,6 +60,7 @@ export default function Login() {
                 value={email}
                 placeholder="Email cím"
                 name="email"
+                autoComplete="email"
                 required
                 onChange={(e) => {
                   setEmail(e.target.value);
@@ -73,6 +81,7 @@ export default function Login() {
                 className="form-control"
                 placeholder="Jelszó"
                 name="password"
+                autoComplete="current-password"
                 required
                 onChange={(e) => {
                   setPassword(e.target.value);

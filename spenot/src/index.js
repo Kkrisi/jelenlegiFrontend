@@ -29,5 +29,16 @@ root.render(
 // npm install react-bootstrap bootstrap
 // npm install axios
 // npm install react-router-dom
+// npm install js-cookie
 
 
+
+/*
+ további fejlesztések
+
+ - a logs- oldalra szűrő hogy diákra és dátumra is rá tudjunk keresni
+ - csoport szerinti listázása
+
+
+
+ */

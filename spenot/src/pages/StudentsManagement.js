@@ -17,6 +17,8 @@ export default function StudentsManagement() {
   const [showModal, setShowModal] = useState(false);
   const [isSaving, setIsSaving] = useState(false);
 
+  const [searchQuery, setSearchQuery] = useState(""); 
+
 
 
 
@@ -108,85 +110,100 @@ export default function StudentsManagement() {
 
 
 
+  const handleSearchChange = (e) => {
+    setSearchQuery(e.target.value); 
+  };
+
+  /*A kódban a filteredUsers a users tömböt szűri le annak alapján, 
+  hogy van-e olyan adat a felhasználók között, amely tartalmazza a keresett szót (searchQuery*/
+  const filteredUsers = users.filter(user => {
+    return Object.values(user).some(value => 
+      value && value.toString().toLowerCase().includes(searchQuery.toLowerCase())
+    );
+  });
 
 
+  
 
   return (
     <div className="studentsmanagement">
       <main>
         <article>
-          <h1>Diák kezelés</h1>
-          <div className="table-container">
+        <h1>Diákok kezelés</h1>
 
+          {/* Keresőmező */}
+          <div className="search-container">
+            <Form.Control
+              type="text"
+              placeholder="Keresés..."
+              value={searchQuery}
+              onChange={handleSearchChange}
+            />
+          </div>
+
+          <div className="table-container">
             {/* Ha még töltjük az adatokat, akkor jelenítse meg a "Még tölt" üzenetet */}
             {loading ? (
               <div className="center">
                 <span className="loader">Még tölt...</span>
               </div>
             ) : (
-
-
-
-              <Table striped bordered hover responsive variant="dark">
-                <thead>
-                  <tr>
-                    <th>d_azon</th>
-                    <th>Név</th>
-                    <th>Email</th>
-                    <th>SzülNév</th>
-                    <th>SzülHely</th>
-                    <th>SzülIdő</th>
-                    <th>AnyjaNeve</th>
-                    <th>Tajszám</th>
-                    <th>Adószám</th>
-                    <th>GondviselőNeve</th>
-                    <th>Telefonszám</th>
-                    <th>IskolaAzon</th>
-                    <th>GyakhelyAzon</th>
-                    <th>Megjegyzés</th>
-                  </tr>
-                </thead>
-
-                {/*Dinamikus táblázat generálása*/}
-                <tbody>
-                  {users.map((user) => (  // a users tömbön végigmegy a map() függvény, és minden user objektumhoz létrehoz egy <tr> (sor) elemet
-                    <tr key={user.d_azon}>
-
-                      {/*Az aktuális user objektum összes kulcsán (nev, tajszam, stb.) végigmegy, és minden kulcsból egy <td> (cellát) hoz létre.
-                      A cella dupla kattintásra (onDoubleClick) meghívja a handleEdit(user, field) függvényt.*/}
-                      {Object.keys(user).map((field) => (   // a field egy string ami lehet a "nev", "tajszam", stb
-                        <td key={field} onDoubleClick={() => handleEdit(user, field)}>
-
-                          {/*Ez a rész azt ellenőrzi, hogy a cella szerkesztési módban van-e:
-                        Ha igen:
-                        Egy <input> mezőt jelenít meg a cellában.
-                        A beírt érték (value) az editingUser[editingField] (a szerkesztett adat).
-                        onChange={handleChange} → frissíti az értéket a gépelés során.*/}
-                          {editingUser?.d_azon === user.d_azon && editingField === field ? (
-                            <input
-                              type="text"
-                              value={editingUser[editingField] || ""}  // Használj condition-t a value frissítésére
-                              onChange={handleChange}
-                              onKeyDown={handleKeyDown}
-                              autoFocus
-                            />
-                          ) : (
-                            // ha nem szerkesztünk akkor egyszerűen a user[field] értéket (pl. a név vagy TAJ-szám) jeleníti meg
-                            user[field]
-                          )}
-                        </td>
+              <>
+                {filteredUsers.length > 0 ? (
+                  <Table striped bordered hover responsive variant="dark">
+                    <thead className="sticky-top">
+                      <tr>
+                        <th>d_azon</th>
+                        <th>Név</th>
+                        <th>Email</th>
+                        <th>Születési név</th>
+                        <th>Születési hely</th>
+                        <th>Születési idő</th>
+                        <th>Anyja neve</th>
+                        <th>TAJ szám</th>
+                        <th>Adó szám</th>
+                        <th>Gondviselő neve</th>
+                        <th>Telefonszám</th>
+                        <th>Csoport_azon</th>
+                        <th>Osztály</th>
+                        <th>ÁKK csoport</th>
+                        <th>Iskola azonosító</th>
+                        <th>Gyakhely azonosító</th>
+                        <th>Megjegyzés</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      {filteredUsers.map((user) => (
+                        <tr key={user.d_azon}>
+                          {[
+                            'd_azon', 'nev', 'email', 'szul_nev', 'születesi_hely', 'születesi_ido',
+                            'anyaja_neve', 'taj_szam', 'ado_szam', 'gondviselo_nev', 'telefonszam',
+                            'csoport_azon', 'isk_osztály', 'akk_csoport',
+                            'iskola_azon', 'gyakhely_azon', 'megjegyzes'
+                          ].map((field) => (
+                            <td key={field} onDoubleClick={() => handleEdit(user, field)}>
+                              {editingUser?.d_azon === user.d_azon && editingField === field ? (
+                                <input
+                                  type="text"
+                                  value={editingUser[editingField] || ""}
+                                  onChange={handleChange}
+                                  onKeyDown={handleKeyDown}
+                                  autoFocus
+                                />
+                              ) : (
+                                user[field]
+                              )}
+                            </td>
+                          ))}
+                        </tr>
                       ))}
-                    </tr>
-                  ))}
-                </tbody>
-
-
-              </Table>
-
-
-
+                    </tbody>
+                  </Table>
+                ) : (
+                  <p>Nincs találat</p> 
+                )}
+              </>
             )}
-
           </div>
         </article>
       </main>

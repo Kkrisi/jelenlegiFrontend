@@ -22,6 +22,14 @@ export default function EmailSend() {
   const [isSaving, setIsSaving] = useState(false);
 
 
+  // email cím adatok lekérésekor -> gombhoz
+  const [foundEmailsCount, setFoundEmailsCount] = useState(0);
+  const [notFoundEmailsCount, setNotFoundEmailsCount] = useState(0);
+
+  const [foundEmails, setFoundEmails] = useState([]);// a siekresen elkudotteke
+  const [notFoundEmails, setNotFoundEmails] = useState([]); // a sikertelenul elkuldottekete tároljuk
+
+
 
 
 
@@ -33,6 +41,16 @@ export default function EmailSend() {
   const handleButtonClick = () => {
     fileInputRef.current.value = "";  // töröljük a korábbi fájlokat
     fileInputRef.current.click();   // fájlválasztó megnyitása
+
+    // szöveg kiirások törlése
+    setFileCount(0);
+    setRelocatedFileCount(0);
+    setGetEmailsCount(0);
+    setSelectedFiles([]);
+    setFoundEmailsCount(0);
+    setNotFoundEmailsCount(0);
+    setNotFoundEmails([]);
+    setSentEmailsCount(0);
   }
 
 
@@ -69,6 +87,7 @@ export default function EmailSend() {
         }
       }
     } else { 
+      alert("Nincs kiválasztott fájl.");
       console.log("Nincs kiválasztott fájl.");
     }
   };
@@ -84,35 +103,54 @@ export default function EmailSend() {
 
     // -------------------------------------------- Hozzátartozó email keresés kezdete -------------------------------
     const handleAttachEmail = async () => {
+      if (selectedFiles.length > 0) {
 
-      // 1. A kiválasztott fájlokat tömbbé alakítjuk
-      const fileDetails = Array.from(selectedFiles)  // átalakítjuk a FileList-t egy tömbbé
-      .map(file => {
-        const kod = feldolgozFajlNev(file);
-        return {kod, fileName: file.name};
-      })
-      .filter(file => file.kod);  // csak azokat a fájlokat tartjuk meg, amiknek van kódja
-
-
-      if (fileDetails.length === 0) {
+        // 1. A kiválasztott fájlokat tömbbé alakítjuk
+        const fileDetails = Array.from(selectedFiles)  // átalakítjuk a FileList-t egy tömbbé
+          .map(file => {
+            const kod = feldolgozFajlNev(file);
+            return { kod, fileName: file.name };
+          })
+          .filter(file => file.kod);  // csak azokat a fájlokat tartjuk meg, amiknek van kódja
+      
+        if (fileDetails.length === 0) {
           console.warn("Nincs egyetlen kód sem a kiválasztott fájlokban.");
           return;
-      }
+        }
       
-      try {
+        try {
           setIsSaving(true);
           setShowModal(true);
-        await getEmails(fileDetails);
-        //console.log("Sikeres email cím megszerzés!");
-        setGetEmailsCount(prevCount => prevCount + 1);
+      
+          // Emailek lekérése
+          const { sikeresCount, sikertelenCount, sikertelenAdatok, sikeresAdatok } = await getEmails(fileDetails);
+      
+          // Kiírjuk a sikeres és sikertelen találatok számát
+          console.log(`Sikeres: ${sikeresCount}, Sikertelen: ${sikertelenCount}`);
+      
+          // A sikertelen adatokat és sikeres adatokat is tároljuk
+          setNotFoundEmails(sikertelenAdatok);
+          setFoundEmails(sikeresAdatok);  // Ha van sikeres adat, tárold el
+      
+          // Frissítjük a találatok számát
+          setFoundEmailsCount(sikeresCount); 
+          setNotFoundEmailsCount(sikertelenCount);
+      
+          setGetEmailsCount(prevCount => prevCount + 1);
           setIsSaving(false);
           setShowModal(false);
-      } catch (error) {
-        console.error("Hiba az email cím megszerzésekor:", error);
+        } catch (error) {
+          console.error("Hiba az email cím megszerzésekor:", error);
           setIsSaving(false);
           setShowModal(false);
+        }
+      } else { 
+        alert("Nincs kiválasztott fájl.");
+        console.log("Nincs kiválasztott fájl.");
       }
     };
+    
+    
     
     
 
@@ -144,19 +182,31 @@ export default function EmailSend() {
 
 
   // -------------------------------------------- Email küldése kezdete ------------------------------------------------
+  const [sentEmailsCount, setSentEmailsCount] = useState(0);
+
   const handleSendEmails = async () => {
+    if (selectedFiles.length > 0) {
       try {
-          setIsSaving(true);
-          setShowModal(true);
+        setIsSaving(true);
+        setShowModal(true);
+
         const response = await myAxios.post("/api/send-email");
         console.log("Email küldés eredménye:", response.data);
-          setIsSaving(false);
-          setShowModal(false);
-    } catch (error) {
+
+        // Sikeresen elküldött emailek számának mentése
+        setSentEmailsCount(response.data.sent_count || 0);
+
+        setIsSaving(false);
+        setShowModal(false);
+      } catch (error) {
         console.error("Hiba történt az email küldésekor:", error);
         alert("Hiba történt az e-mailek küldésekor.");
-          setIsSaving(false);
-          setShowModal(false);
+        setIsSaving(false);
+        setShowModal(false);
+      }
+    } else { 
+      alert("Nincs kiválasztott fájl.");
+      console.log("Nincs kiválasztott fájl.");
     }
   };
   // -------------------------------------------- Email küldése vége ---------------------------------------------------
@@ -201,7 +251,7 @@ export default function EmailSend() {
           <div>
 
             {/*<button type="button" id="fajlkivalasztas" onClick={() => { handleButtonClick(); showPopup(); }} >Fájl kiválasztása</button>*/}
-            <button type="button" id="fajlkivalasztas" onClick={handleButtonClick} >Fájl kiválasztása</button>
+            <button type="button" id="fajlkivalasztas" onClick={handleButtonClick} >1. Fájl kiválasztása</button>
               <input type="file"
               ref={fileInputRef}
               style={{ display: "none" }}
@@ -209,15 +259,13 @@ export default function EmailSend() {
               multiple
               onChange={handleFileChange} />
 
-            <button type="button" id="athelyezes" onClick={handleMoveFiles} >Áthelyezés</button>
+            <button type="button" id="athelyezes" onClick={handleMoveFiles} >2. Áthelyezés</button>
 
-            <button type="button" id="kuldes" onClick={handleAttachEmail} >Küldés /email párt keres</button>
-            <br />
+            <button type="button" id="kuldes" onClick={handleAttachEmail} >3. Küldés /email párt keres</button>
 
-            <button type="button" id="emailSend" onClick={handleSendEmails} >Email küldése</button>
+            <button style={{ marginRight: '100px' }} type="button" id="emailSend" onClick={handleSendEmails} >4. Email küldése</button>
 
-            <br />
-            <button type="button" id="pdftorles" onClick={handleRemovePdfs}>Pdf-ek törlése</button>
+            <button type="button" id="pdftorles" onClick={handleRemovePdfs}>5. Pdf-ek törlése</button>
 
           </div>
 
@@ -230,26 +278,48 @@ export default function EmailSend() {
                   {fileCount > 0 ? `${fileCount} fájlt sikeresen kiválasztottunk ✅` : "Nincs fájl kiválasztva"}
                 </p>
 
-            <p>Áthelyezés: </p>
-                <p className="megjelenoAdatok" id="athelyezesGomb">
-                  {selectedFiles > 0 && relocatedFileCount === selectedFiles.length
-                      ? `${relocatedFileCount} fájlt sikeresen áthelyeztünk ✅`
-                      : relocatedFileCount > 0
-                      ? `${relocatedFileCount} fájl áthelyezve`
-                      : ""}
-                </p>
+
+                <p>Áthelyezés:</p>
+            <p className="megjelenoAdatok" id="athelyezesGomb">
+              {selectedFiles.length > 0 && relocatedFileCount > 0
+                ? `${relocatedFileCount} fájl áthelyezve${relocatedFileCount === selectedFiles.length ? " sikeresen ✅" : ""}`
+                : ""}
+            </p>
+
 
 
             <p>Emailcím megszerzése: </p>
-              <p className="megjelenoAdatok" id="kuldesGomb">
-                  {selectedFiles.length > 0 && getEmailsCount === 1 ? `Email cím sikeresen megszerezve ✅` : ""}
-              </p>
+            <p className="megjelenoAdatok" id="kuldesGomb">
+              {selectedFiles.length > 0 && foundEmailsCount + notFoundEmailsCount > 0
+                ? `${foundEmailsCount} email cím sikeresen megszerzett, ${notFoundEmailsCount} nem található.`
+                : ""}
+            </p>
+
+            {/* Sikertelen adatok kiírása */}
+            {notFoundEmails.length > 0 && (
+              <div className="megjelenoAdatok">
+                <p>Sikertelen találatok:</p>
+                <div className="scrollable-container">
+                  <ul>
+                    {notFoundEmails.map(({ fileName }, index) => (
+                      <li key={index}>{fileName}</li>
+                    ))}
+                  </ul>
+                </div>
+              </div>
+            )}
+
+
 
 
             {/*<p>Json fájl állapota: </p>
             <p className="megjelenoAdatok" id="jsonAllapotGomb"></p>*/}
             <p>Emailek állapota: </p>
-            <p className="megjelenoAdatok" id="emailAllapotGomb"></p>
+            <p className="megjelenoAdatok" id="emailAllapotGomb">
+              {sentEmailsCount > 0
+                ? `${sentEmailsCount} email sikeresen elküldve ✅`
+                : ""}
+            </p>
 
 
             <p>Törölt pdf-ek: </p>

@@ -5,9 +5,10 @@ import { useEffect } from "react";
 export default function ProtectedRoute({ roleRequired }) {
   const { user, loading } = useAuthContext();
 
-  if (loading) {
+  /*if (loading) {
     return <div>Oldal frissítése...</div>; // ide egy kulon frissites oldalt beszurni css-el?
-  }
+          // return <LoadingScreen />;
+  }*/
 
   /*useEffect(() => {
     if (user && user.jogosultsag_azon === 4) {

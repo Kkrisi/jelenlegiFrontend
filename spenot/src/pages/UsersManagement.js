@@ -12,6 +12,8 @@ export default function UsersManagement() {
   const [showModal, setShowModal] = useState(false);
   const [isSaving, setIsSaving] = useState(false);
 
+
+
   useEffect(() => {
     myAxios.get("/api/felhasznalok")
       .then(response => {
@@ -70,10 +72,35 @@ export default function UsersManagement() {
     }));
   };
 
+
+
+
+
+
   const handleDelete = async (userId) => {
-    myAxios.delete(`/api/felhasznalok/${userId}`);
-    console.log(`${userId} kitörölve`)
-  }
+    setShowModal(true);
+    setIsSaving(true);
+  
+    try {
+      await myAxios.delete(`/api/felhasznalok/${userId}`);
+      console.log(`${userId} kitörölve`);
+  
+      // frissítsük az állapotot a felhasználók törlésével, hogy ne jelenjen meg az akit már kitöröltunk
+      setUsers(users.filter(user => user.id !== userId));
+  
+      setIsSaving(false);
+      setShowModal(false);
+    } catch (error) {
+      console.error('Hiba a törlésnél:', error);
+      setIsSaving(false);
+      setShowModal(false);
+    }
+  };
+
+
+
+
+
 
   const handleKeyDown = (e) => {
     if (e.key === "Enter") {
@@ -114,7 +141,7 @@ export default function UsersManagement() {
     <div className="usersmanagement">
       <main>
         <article>
-          <h1>Felhasználó kezelés</h1>
+          <h1>Felhasználók kezelés</h1>
           <div className="table-container">
             {loading ? (
                       <div className="center">
@@ -133,47 +160,47 @@ export default function UsersManagement() {
                   </tr>
                 </thead>
                 <tbody>
+
+                  {/*megadjuk, hogy mely mezőket szeretnénk megjeleníteni. 
+                  A jogosultsag_azon mező már nem lesz része a renderelt táblázatnak, 
+                  csak a rádiógombok jelennek meg a jogosultságok kezelésére.*/}
                   {users.map((user) => (
                     <tr key={user.id}>
-                      {Object.keys(user).map((field) => (
-                        field !== "jogosultsag_azon" && (
-                          <td key={field} onDoubleClick={() => handleEdit(user, field)}>
-                            {editingUser?.id === user.id && editingField === field ? (
-                              <input
-                                type="text"
-                                value={editingUser[editingField] || ""}
-                                onChange={handleChange}
-                                onKeyDown={handleKeyDown}
-                                autoFocus
-                              />
-                            ) : (
-                              user[field]
-                            )}
-                          </td>
-                        )
-                      ))}
+                      <td onDoubleClick={() => handleEdit(user, "id")}>{user.id}</td>
+                      <td onDoubleClick={() => handleEdit(user, "name")}>{user.name}</td>
+                      <td onDoubleClick={() => handleEdit(user, "email")}>{user.email}</td>
+                      <td onDoubleClick={() => handleEdit(user, "password")}>{user.password}</td>
                       <td>
-                        <Form.Check
-                          type="radio"
-                          label="Admin"
-                          name={`user-${user.id}-role`}
-                          checked={user.jogosultsag_azon === 2}
-                          onChange={() => handleRadioButtonChange(user.id, 2)}
-                        />
-                        <Form.Check
-                          type="radio"
-                          label="Felhasználó"
-                          name={`user-${user.id}-role`}
-                          checked={user.jogosultsag_azon === 1}
-                          onChange={() => handleRadioButtonChange(user.id, 1)}
-                        />
-                        <Form.Check
-                          type="radio"
-                          label="Nem engedélyezett"
-                          name={`user-${user.id}-role`}
-                          checked={user.jogosultsag_azon === 4}
-                          onChange={() => handleRadioButtonChange(user.id, 4)}
-                        />
+                        
+                      <Form.Check
+                        type="radio"
+                        label="Admin"
+                        id={`user-${user.id}-role-admin`} 
+                        name={`user-${user.id}-role`}     
+                        checked={user.jogosultsag_azon === 2}
+                        onChange={() => handleRadioButtonChange(user.id, 2)}
+                        inline
+                      />
+                      <br />
+                      <Form.Check
+                        type="radio"
+                        label="Felhasználó"
+                        id={`user-${user.id}-role-user`} 
+                        name={`user-${user.id}-role`}     
+                        checked={user.jogosultsag_azon === 1}
+                        onChange={() => handleRadioButtonChange(user.id, 1)}
+                        inline
+                      />
+                      <br />
+                      <Form.Check
+                        type="radio"
+                        label="Nem engedélyezett"
+                        id={`user-${user.id}-role-guest`} 
+                        name={`user-${user.id}-role`}     
+                        checked={user.jogosultsag_azon === 4}
+                        onChange={() => handleRadioButtonChange(user.id, 4)}
+                        inline
+                      />
                       </td>
 
                       <td>
@@ -198,12 +225,13 @@ export default function UsersManagement() {
 
       <Modal show={showModal} onHide={() => setShowModal(false)}>
         <Modal.Header closeButton>
-          <Modal.Title>Mentés folyamatban... 🚀</Modal.Title>
+          <Modal.Title>Változtatás folyamatban... 🚀</Modal.Title>
         </Modal.Header>
         <Modal.Body>
-          <p>Az adatok mentése folyamatban van. Kérlek, várj egy pillanatot.</p>
+          <p>Az adatok változtatása folyamatban van. Kérlek, várj egy pillanatot.</p>
         </Modal.Body>
       </Modal>
+
     </div>
   );
 }
