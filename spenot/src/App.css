@@ -1055,6 +1055,13 @@ text-align: center;
 }
 
 
+.nszInput{
+  color: black;
+}
+
+.nevSzures{
+   margin-top: 15px;
+}
 
 .logspage .table-container {
   overflow-x: auto;
