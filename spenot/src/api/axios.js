@@ -15,7 +15,7 @@ export const myAxios = axios.create({
 
 
 /*
-// 🔹 REQUEST INTERCEPTOR: Tokenek hozzáadása minden kéréshez
+// Tokenek hozzáadása minden kéréshez
 myAxios.interceptors.request.use(
   (config) => {
     // CSRF token lekérése a cookie-ból
@@ -28,7 +28,7 @@ myAxios.interceptors.request.use(
       config.headers["X-XSRF-TOKEN"] = decodeURIComponent(csrfToken);
     }
 
-    // 🔹 Hozzáadjuk az Authorization fejlécet, ha van tárolt authToken
+    // Hozzáadjuk az Authorization fejlécet, ha van tárolt authToken
     const authToken = Cookies.get("authToken");
     if (authToken) {
       config.headers.Authorization = `Bearer ${authToken}`;
@@ -42,7 +42,7 @@ myAxios.interceptors.request.use(
   }
 );
 
-// 🔹 RESPONSE INTERCEPTOR: 401-es válasz esetén automatikus kijelentkeztetés
+//  401-es válasz esetén automatikus kijelentkeztetés
 myAxios.interceptors.response.use(
   (response) => response,
   (error) => {
@@ -74,7 +74,6 @@ myAxios.interceptors.request.use(
     return config;
   },
   (error) => {
-    // Hiba esetén írjuk ki a hibát, vagy végezzünk hibakezelést
     console.error("Request interceptor error:", error);
     return Promise.reject(error);
   }

@@ -43,7 +43,7 @@ export default function App() {
   return (
     <Routes>
       {/* Vendégek számára elérhető oldalak */}
-      {!user ? (
+      {(!user || user.jogosultsag_azon === 4) ? (
         <>
           <Route path="/" element={<Login />} />
           <Route path="/bejelentkezes" element={<Login />} />
@@ -80,31 +80,3 @@ export default function App() {
 }
 
 
-/*
-
-<Routes>
-      <Route path="/" element={<Login />} />
-      <Route path="/bejelentkezes" element={<Login />} />
-      <Route path="/regisztracio" element={<Register />} />
-      <Route path="/elfelejtJelszo" element={<ForgotPassword />} />
-      <Route path="/password-reset/:token" element={<ResetPassword />} />
-  
-      <Route element={<ProtectedRoute />}>
-        <Route element={<Layout />}>
-          <Route path="/emailKuldes" element={<EmailSend />} />
-          <Route path="/naplozas" element={<Logs />} />
-          <Route path="/diakKezeles" element={<StudentsManagement />} />
-          <Route path="/abFeltoltes" element={<UploadDatabase />} />
-        </Route>
-      </Route>
-  
-      <Route element={<ProtectedRoute roleRequired={2} />}>
-        <Route element={<Layout />}>
-          <Route path="/felhKezeles" element={<UsersManagement />} />
-        </Route>
-      </Route>
-
-      <Route path="/permissiondenied" element={<PermissionDenied />} />
-    </Routes>
-
-*/

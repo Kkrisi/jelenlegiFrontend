@@ -56,7 +56,7 @@ export const AuthProvider = ({ children }) => {
     } catch (error) {
       console.error("Error fetching user data:", error);
       setUser(null); // Ha hiba van, a felhasználó null lesz
-      Cookies.remove("authToken"); // Hibás token esetén töröljük a cookie-t
+      //Cookies.remove("authToken"); // Hibás token esetén töröljük a cookie-t
     } finally {
       setLoading(false); // Az API válasz után mindig false lesz
     }
@@ -135,13 +135,14 @@ export const AuthProvider = ({ children }) => {
 
 
 
-  /*useEffect(() => {
-    //console.log("user__kiiras:", user);
-    getUser();
-  }, []);*/
-
-
   useEffect(() => {
+    if(!user){
+      getUser();
+    }
+  }, []);
+
+
+  /*useEffect(() => {
     const fetchData = async () => {
       try {
         await csrf(); // CSRF süti beállítása
@@ -155,7 +156,7 @@ export const AuthProvider = ({ children }) => {
     };
   
     fetchData(); // Meghívjuk az adatlekérést az első renderkor
-  }, []); // FONTOS: Üres dependency array, hogy csak az első rendernél fusson le!
+  }, []); // FONTOS: Üres dependency array, hogy csak az első rendernél fusson le!*/
   
   
   

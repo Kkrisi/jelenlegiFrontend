@@ -26,8 +26,7 @@ export default function StudentsManagement() {
 
 
 
-  // adatbazisbol dolgozok lekérése axios-al, majd a useState-ban elraktározzuk,
-  //  a [] azt jelenti hogy csak egyszer fut le, amikor az oldal betöltödik
+  {/*--------------------------------------------- Adatlekérés kezdete ------------------------------------------------*/}
   useEffect(() => {
     myAxios.get("/api/dolgozok")
       .then(response => {
@@ -39,6 +38,7 @@ export default function StudentsManagement() {
         setLoading(false);
       });
   }, []);
+  {/*--------------------------------------------- Adatlekérés vége ------------------------------------------------*/}
 
 
 
@@ -51,29 +51,34 @@ export default function StudentsManagement() {
 
 
 
-  // szerkesztésnél, user egy objektum, field az objektum egyik tulajdonság neve pl tajszám
+
+  //--------------------------------------------- Szerkesztés logika kezdete ------------------------------------------------
   const handleEdit = (user, field) => {
+    // szerkesztésnél, user egy objektum, field az objektum egyik tulajdonság neve pl tajszám
     setEditingUser({ ...user });
     setEditingField(field);
   };
+  //--------------------------------------------- Szerkesztés logika vége ------------------------------------------------
 
 
 
 
-  // az input mező változása
+  //--------------------------------------------- Adatváltozás kezdete ------------------------------------------------
   const handleChange = (e) => {
     setEditingUser((prevUser) => ({
       ...prevUser,
-      [editingField]: e.target.value, // A megfelelő mezőt frissítjük
+      [editingField]: e.target.value, // az adott kijelolt mezot frissitjuk
     }));
   };
+  //--------------------------------------------- Adatváltozás vége ------------------------------------------------
 
 
 
 
 
-  // Enter lenyomásakor mentés, escape megnyomásakor kilépés változatlanul hagyva
+  //--------------------------------------------- Gombnyomások kezdete ------------------------------------------------
   const handleKeyDown = (e) => {
+    // ! Enter lenyomásakor mentés, escape megnyomásakor kilépés változatlanul hagyva
     if (e.key === "Enter") {
       handleSave();
     } else if (e.key === "Escape") {
@@ -81,11 +86,12 @@ export default function StudentsManagement() {
       setEditingField("");  // töröljük a szerkesztett mezőt
     }
   };
+  //--------------------------------------------- Gombnyomások vége ------------------------------------------------
 
 
 
 
-
+  //--------------------------------------------- Szerkesztés mentése kezdete ------------------------------------------------
   const handleSave = () => {
     setIsSaving(true);
     setShowModal(true);
@@ -107,20 +113,32 @@ export default function StudentsManagement() {
         setShowModal(false);
       });
   };
+  //--------------------------------------------- Szerkesztés mentése vége ------------------------------------------------
 
 
 
+
+
+  //--------------------------------------------- Kereső mező kezdete ------------------------------------------------
   const handleSearchChange = (e) => {
     setSearchQuery(e.target.value); 
   };
 
-  /*A kódban a filteredUsers a users tömböt szűri le annak alapján, 
-  hogy van-e olyan adat a felhasználók között, amely tartalmazza a keresett szót (searchQuery*/
+
+
   const filteredUsers = users.filter(user => {
-    return Object.values(user).some(value => 
-      value && value.toString().toLowerCase().includes(searchQuery.toLowerCase())
-    );
+    for (let key in user) {
+      // a key az adott mező, pl név, születésihely, tajszám, suli
+      let value = user[key];
+      
+      if (value && value.toString().toLowerCase().includes(searchQuery.toLowerCase())) {
+        // ha tartalmazza a személy adata a keresett szót akkor hozzá adja a szűrt listához, ha nem akkor false
+        return true;
+      }
+    }
+    return false;
   });
+  //--------------------------------------------- Kereső mező vége ------------------------------------------------
 
 
   
@@ -131,7 +149,6 @@ export default function StudentsManagement() {
         <article>
         <h1>Diákok kezelés</h1>
 
-          {/* Keresőmező */}
           <div className="search-container">
             <Form.Control
               type="text"
@@ -142,7 +159,7 @@ export default function StudentsManagement() {
           </div>
 
           <div className="table-container">
-            {/* Ha még töltjük az adatokat, akkor jelenítse meg a "Még tölt" üzenetet */}
+
             {loading ? (
               <div className="center">
                 <span className="loader">Még tölt...</span>
@@ -172,9 +189,14 @@ export default function StudentsManagement() {
                         <th>Megjegyzés</th>
                       </tr>
                     </thead>
+
+
                     <tbody>
+                      {/*vegigmegyunk a szurt embereken és minden diak d_azonjanak egy uj tr-t (sor) hozunk létre*/}
                       {filteredUsers.map((user) => (
                         <tr key={user.d_azon}>
+
+                          {/*vegigmegyunk a diak adatain és mindegyik kap kulon td-t (cella)*/}
                           {[
                             'd_azon', 'nev', 'email', 'szul_nev', 'születesi_hely', 'születesi_ido',
                             'anyaja_neve', 'taj_szam', 'ado_szam', 'gondviselo_nev', 'telefonszam',
@@ -182,6 +204,9 @@ export default function StudentsManagement() {
                             'iskola_azon', 'gyakhely_azon', 'megjegyzes'
                           ].map((field) => (
                             <td key={field} onDoubleClick={() => handleEdit(user, field)}>
+
+                              {/*ha kattintottunk a mezőre, akkor szerkesztésbe vagyunk és egy input mező jelenik meg az aktuális beírt adattal
+                              ha nem vagyunk szerkesztésbe, akkor csak a sima adatot mutatja*/}
                               {editingUser?.d_azon === user.d_azon && editingField === field ? (
                                 <input
                                   type="text"
@@ -198,6 +223,8 @@ export default function StudentsManagement() {
                         </tr>
                       ))}
                     </tbody>
+
+                    
                   </Table>
                 ) : (
                   <p>Nincs találat</p> 
