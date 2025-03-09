@@ -235,6 +235,16 @@ export default function EmailSend() {
 
 
 
+  // -------------------------------------------- Választott eredmény mutatása kezdete --------------------------------------------
+  const handlePClick = async () => {
+        {Array.from(selectedFiles).map((file, index) => (
+          <li key={index}>{file.name}</li>
+        ))}
+  };
+  // -------------------------------------------- Választott eredmény mutatása vége --------------------------------------------
+
+
+
 
 
 
@@ -274,17 +284,9 @@ export default function EmailSend() {
           <div className="bottom">
             <div className="bottom-left">
               <p>1. Fájl kiválasztása: </p>
-                  <p className="megjelenoAdatok" id="fajlkivalasztasGomb">
+                  <p className="megjelenoAdatok" id="fajlkivalasztasGomb"  onClick={handlePClick}>
                     {fileCount > 0 ? `${fileCount} fájlt sikeresen kiválasztottunk ✅` : "Nincs fájl kiválasztva"}
                   </p>
-
-                  {/*<div className="scrollable-container">
-                    <ul>
-                      {Array.from(selectedFiles).map((file, index) => (
-                        <li key={index}>{file.name}</li>
-                      ))}
-                    </ul>
-                  </div>*/}
                   <br />
 
 
@@ -346,9 +348,7 @@ export default function EmailSend() {
 
                 <div className="scrollable-container">
                   <ul>
-                    {Array.from(selectedFiles).map((file, index) => (
-                      <li key={index}>{file.name}</li>
-                    ))}
+
                   </ul>
                 </div>
 

@@ -93,6 +93,7 @@ html, body {
   display: block;
   padding: 10px;
 }
+/*  border: 1px solid #ccc;*/
 
 .scrollable-container ul {
   margin: 0;
@@ -100,11 +101,32 @@ html, body {
   list-style-type: none;
 }
 
+.scrollable-container li {
+  padding: 8px 0; /* Felső és alsó padding, hogy szép legyen */
+  border-bottom: 1px solid #ddd; /* Vízszintes vonal a listaelemek között */
+}
+
+.scrollable-container li:last-child {
+  border-bottom: none; /* Az utolsó elemnél ne legyen alatta vízszintes vonal */
+}
+
+
+.result-container {
+  display: flex;
+  gap: 20px;
+}
 
 
 
+.megjelenoAdatok {
+  display: flex;
+  gap: 20px;
+}
 
-
+.hibaContainer, .letezokContainer {
+  flex: 1;
+  min-width: 300px;
+}
 
 
 

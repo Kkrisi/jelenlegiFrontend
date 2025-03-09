@@ -22,6 +22,8 @@ export default function UploadDatabase() {
   const [uploadErrorMessage, setUploadErrorMessage] = useState("");
   const [successCount, setSuccessCount] = useState(0);
   const [errorCount, setErrorCount] = useState(0);
+  const [errorMessages, setErrorMessages] = useState([]);
+
 
 
   
@@ -35,6 +37,7 @@ export default function UploadDatabase() {
     setWorkerCount(0);
     setExistingDolgozokFromInput([]);
     setUploadSuccessMessage("");
+    setErrorCount(0);
 
     const file = event.target.files[0];
     if (!file) return;
@@ -184,9 +187,10 @@ const csvToJson = (csv) => {
 
 
   
-      //------------------- 20-asával küldés ---------------------
+      //------------------- 20-asával küldés, megfogjuk a hibaüzenetet ha van ---------------------
       let success = 0;
       let error = 0;
+      let errors = [];
       const chunkSize = 20;
   
       for (let i = 0; i < newDolgozok.length; i += chunkSize) {
@@ -196,20 +200,25 @@ const csvToJson = (csv) => {
           await sendToServer(chunk);
           success += chunk.length;
         } catch (err) {
-          console.error("Hiba történt egy csomag feltöltésekor:", err);
+          console.error("Hiba történt egy csomag feltöltésekor ❌:", err);
           error += chunk.length;
+
+          errors.push(err);
         }
       }
-      // ----------------------------------------------------------
+      setErrorMessages(errors);
+      // ------------------------------------------------------------------------------------------
   
       
       setSuccessCount(success);
       setErrorCount(error);
   
-      if (error === 0) {
+      if (success > 0 && error === 0) {
         setUploadSuccessMessage(`Sikeres feltöltés! Összesen ${success} új személy lett feltöltve. ✅`);
+      } else if (success > 0 && error > 0) {
+        setUploadErrorMessage(`Részleges siker! ${success} rekord sikeresen feltöltve, de ${error} sikertelen volt. ⚠️`);
       } else {
-        setUploadErrorMessage(`Hiba történt a feltöltés során. Összesen ${error} adat nem lett feltöltve. ❌`);
+        setUploadErrorMessage("Hiba történt a feltöltés során, egyetlen rekord sem lett feltöltve. ❌");
       }
     } catch (error) {
       setUploadErrorMessage("Hiba történt a feltöltés során! ❌");
@@ -281,17 +290,6 @@ const fetchExistingDolgozok = async () => {
             onChange={handleFileChange}
           />
 
-          {/*<div className="email-list">
-            <textarea
-              id="jsonOutput"
-              rows="15"
-              cols="80"
-              placeholder="Írj ide JSON adatot..."
-              value={jsonOutput}
-              onChange={(e) => setJsonOutput(e.target.value)}
-            ></textarea>
-          </div>*/}
-
           <button className="send-btn kuldes" onClick={handleSend} disabled={isLoading}>
             2. Adatbázisba feltöltés
           </button>
@@ -304,30 +302,51 @@ const fetchExistingDolgozok = async () => {
 
           <p>1. Választott fájl:</p>
               <p className="megjelenoAdatok">
-                  {jsonOutput !== "" ? `"${fileName}" fájl kiválasztva ✅` : "Nincs csv fájl kiválasztva"}<br />
+                  {jsonOutput !== "" ? `"${fileName}" ✅` : "Nincs csv fájl kiválasztva"}<br />
                   {jsonOutput !== "" ? `Diákok száma benne: ${workerCount}` : ""}
               </p>
               <br />
 
 
-          <p>2. Feltöltés eredménye: </p>
-          <div className="megjelenoAdatok">
-              {uploadSuccessMessage !== "" ? `${uploadSuccessMessage}` : ""}
-              {errorCount !== 0 ? `Hibák száma: ${errorCount}` : ""}
+              <p>2. Feltöltés eredménye: </p>
 
-              {existingDolgozokFromInput.length > 0 ? `Ők már léteznek az adatbázisban: ${existingDolgozokFromInput.length}` : ""}
-          </div>
-              {existingDolgozokFromInput.length > 0 && (
-                <div className="scrollable-container">
-                  <ul>
-                      {existingDolgozokFromInput.map(({ nev, email, d_azon }, index) => (
-                        <li key={index}>
-                          {nev} - {email} - {d_azon}
-                        </li>
-                      ))}
-                  </ul>
-                </div>
-              )}
+              <div className="megjelenoAdatok">
+                {uploadSuccessMessage && (
+                  <div className="success-message">
+                    <p>{uploadSuccessMessage}</p>
+                    <br />
+                  </div>
+                )}
+
+                {errorCount > 0 && (
+                  <div className="hibaContainer">
+                    <p>Hibák száma: {errorCount}</p>
+                    <div className="scrollable-container">
+                      <ul>
+                        {errorMessages.map((error, index) => (
+                          <li key={index}>{error.message}</li>
+                        ))}
+                      </ul>
+                    </div>
+                  </div>
+                )}
+
+                {existingDolgozokFromInput.length > 0 && (
+                  <div className="letezokContainer">
+                    <p>Ők már léteznek az adatbázisban: {existingDolgozokFromInput.length}</p>
+                    <div className="scrollable-container">
+                      <ul>
+                        {existingDolgozokFromInput.map(({ nev, email, d_azon }, index) => (
+                          <li key={index}>
+                            {nev} - {email} - {d_azon}
+                          </li>
+                        ))}
+                      </ul>
+                    </div>
+                  </div>
+                )}
+              </div>
+
 
 
         </div>

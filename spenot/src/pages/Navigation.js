@@ -77,7 +77,7 @@ export default function Navigation() {
                         </>
                     )}
                 </ul>
-                <p>Személy: {user === null ? "Nincs bejelentkezett felhasználó!" : user.name}</p>
+                <p>Személy: {user === null ? "Nincs bejelentkezett felhasználó!" :  <strong>{user.name}</strong>}</p>
             </div>
         </nav>
         
