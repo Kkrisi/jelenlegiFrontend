@@ -51,6 +51,7 @@ export default function EmailSend() {
     setNotFoundEmailsCount(0);
     setNotFoundEmails([]);
     setSentEmailsCount(0);
+    setActiveLog({ title: "", data: [] });
   }
 
 
@@ -236,10 +237,11 @@ export default function EmailSend() {
 
 
   // -------------------------------------------- Választott eredmény mutatása kezdete --------------------------------------------
-  const handlePClick = async () => {
-        {Array.from(selectedFiles).map((file, index) => (
-          <li key={index}>{file.name}</li>
-        ))}
+  const [activeLog, setActiveLog] = useState({ title: "", data: [] });
+
+  // Függvény a kattintott p-elemhez tartozó adatok frissítésére
+  const handlePClick = (title, data) => {
+    setActiveLog({ title, data });
   };
   // -------------------------------------------- Választott eredmény mutatása vége --------------------------------------------
 
@@ -278,83 +280,103 @@ export default function EmailSend() {
 
           </div>
 
-          <br />
-          <br />
 
           <div className="bottom">
+            {/* BAL OLDAL */}
             <div className="bottom-left">
-              <p>1. Fájl kiválasztása: </p>
-                  <p className="megjelenoAdatok" id="fajlkivalasztasGomb"  onClick={handlePClick}>
-                    {fileCount > 0 ? `${fileCount} fájlt sikeresen kiválasztottunk ✅` : "Nincs fájl kiválasztva"}
-                  </p>
-                  <br />
+              <p>1. Fájl kiválasztása:</p>
+              <p
+                className="megjelenoAdatok"
+                id="fajlkivalasztasGomb"
+                onClick={() =>
+                  handlePClick(
+                    "Kiválasztott fájlok",
+                    Array.from(selectedFiles).map((file) => file.name)
+                  )
+                }
+              >
+                {fileCount > 0
+                  ? `${fileCount} fájlt sikeresen kiválasztottunk ✅`
+                  : "Nincs fájl kiválasztva"}
+              </p>
+              <br />
 
-
-                  <p>2. Áthelyezés:</p>
-              <p className="megjelenoAdatok" id="athelyezesGomb">
+              <p>2. Áthelyezés:</p>
+              <p
+                className="megjelenoAdatok"
+                id="athelyezesGomb"
+                onClick={() =>
+                  handlePClick(
+                    "Áthelyezett fájlok",
+                    selectedFiles.length > 0 && relocatedFileCount > 0
+                      ? [`${relocatedFileCount} fájl áthelyezve`]
+                      : []
+                  )
+                }
+              >
                 {selectedFiles.length > 0 && relocatedFileCount > 0
-                  ? `${relocatedFileCount} fájl áthelyezve${relocatedFileCount === selectedFiles.length ? " sikeresen ✅" : ""}`
+                  ? `${relocatedFileCount} fájl áthelyezve ✅`
                   : ""}
               </p>
               <br />
 
-
-
-              <p>3. Emailcím megszerzése: </p>
-              <p className="megjelenoAdatok" id="kuldesGomb">
+              <p>3. Emailcím megszerzése:</p>
+              <p
+                className="megjelenoAdatok"
+                id="kuldesGomb"
+                onClick={() =>
+                  handlePClick(
+                    "Email címek megszerzése",
+                    selectedFiles.length > 0 && foundEmailsCount + notFoundEmailsCount > 0
+                      ? [`${foundEmailsCount} email cím sikeresen megszerzett`, `${notFoundEmailsCount} nem található`]
+                      : []
+                  )
+                }
+              >
                 {selectedFiles.length > 0 && foundEmailsCount + notFoundEmailsCount > 0
-                  ? `${foundEmailsCount} email cím sikeresen megszerzett, ${notFoundEmailsCount} nem található.`
+                  ? `${foundEmailsCount} email cím sikeresen megszerzett ✅, ${notFoundEmailsCount} nem található.`
                   : ""}
               </p>
               <br />
 
-              {/* Sikertelen adatok kiírása */}
-              {notFoundEmails.length > 0 && (
-                <div className="megjelenoAdatok">
-                  <p>Sikertelen találatok:</p>
-                  <div className="scrollable-container">
-                    <ul>
-                      {notFoundEmails.map(({ fileName }, index) => (
-                        <li key={index}>{fileName}</li>
-                      ))}
-                    </ul>
-                  </div>
-                </div>
-              )}
-
-
-
-
-              {/*<p>Json fájl állapota: </p>
-              <p className="megjelenoAdatok" id="jsonAllapotGomb"></p>*/}
-              <p>4. Emailek állapota: </p>
-              <p className="megjelenoAdatok" id="emailAllapotGomb">
-                {sentEmailsCount > 0
-                  ? `${sentEmailsCount} email sikeresen elküldve ✅`
-                  : ""}
+              <p>4. Emailek állapota:</p>
+              <p
+                className="megjelenoAdatok"
+                id="emailAllapotGomb"
+                onClick={() =>
+                  handlePClick(
+                    "Elküldött emailek",
+                    sentEmailsCount > 0 ? [`${sentEmailsCount} email sikeresen elküldve`] : []
+                  )
+                }
+              >
+                {sentEmailsCount > 0 ? `${sentEmailsCount} email sikeresen elküldve ✅` : ""}
               </p>
               <br />
 
+              <p>5. Törölt pdf-ek:</p>
+              <p>
 
-              <p>5. Törölt pdf-ek: </p>
-              <p className="megjelenoAdatok" id="toroltpdfekGomb"></p>
+              </p>
             </div>
-            
 
-
-
-
+            {/* JOBB OLDAL */}
             <div className="bottom-right">
-
-                <div className="scrollable-container">
-                  <ul>
-
-                  </ul>
-                </div>
-
+              <div className="scrollable-container">
+                <h3>{activeLog.title}</h3>
+                <ul>
+                  {activeLog.data.map((item, index) => (
+                    <li key={index}>{item}</li>
+                  ))}
+                </ul>
+              </div>
             </div>
-            
           </div>
+
+          <br />
+          <br />
+
+          
 
 
         </article>
@@ -376,3 +398,85 @@ export default function EmailSend() {
 }
 
 
+
+
+
+
+/*
+
+
+<div className="bottom">
+    <div className="bottom-left">
+      <p>1. Fájl kiválasztása: </p>
+          <p className="megjelenoAdatok" id="fajlkivalasztasGomb"  onClick={handlePClick}>
+            {fileCount > 0 ? `${fileCount} fájlt sikeresen kiválasztottunk ✅` : "Nincs fájl kiválasztva"}
+          </p>
+          <br />
+
+
+          <p>2. Áthelyezés:</p>
+      <p className="megjelenoAdatok" id="athelyezesGomb">
+        {selectedFiles.length > 0 && relocatedFileCount > 0
+          ? `${relocatedFileCount} fájl áthelyezve${relocatedFileCount === selectedFiles.length ? " sikeresen ✅" : ""}`
+          : ""}
+      </p>
+      <br />
+
+
+
+      <p>3. Emailcím megszerzése: </p>
+      <p className="megjelenoAdatok" id="kuldesGomb">
+        {selectedFiles.length > 0 && foundEmailsCount + notFoundEmailsCount > 0
+          ? `${foundEmailsCount} email cím sikeresen megszerzett, ${notFoundEmailsCount} nem található.`
+          : ""}
+      </p>
+      <br />
+
+      
+      {notFoundEmails.length > 0 && (
+        <div className="megjelenoAdatok">
+          <p>Sikertelen találatok:</p>
+          <div className="scrollable-container">
+            <ul>
+              {notFoundEmails.map(({ fileName }, index) => (
+                <li key={index}>{fileName}</li>
+              ))}
+            </ul>
+          </div>
+        </div>
+      )}
+
+
+
+
+      <p>4. Emailek állapota: </p>
+      <p className="megjelenoAdatok" id="emailAllapotGomb">
+        {sentEmailsCount > 0
+          ? `${sentEmailsCount} email sikeresen elküldve ✅`
+          : ""}
+      </p>
+      <br />
+
+
+      <p>5. Törölt pdf-ek: </p>
+      <p className="megjelenoAdatok" id="toroltpdfekGomb"></p>
+    </div>
+    
+
+
+
+
+    <div className="bottom-right">
+
+      <div className="scrollable-container">
+        <ul>
+
+        </ul>
+      </div>
+
+    </div>
+    
+  </div>
+
+
+*/

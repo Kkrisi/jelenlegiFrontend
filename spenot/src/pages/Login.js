@@ -116,7 +116,7 @@ export default function Login() {
       )}
 
       <div className="right-corner">
-        Szalézi Ágazati <br /> Képzőközpont
+        <img src="favicon2.ico" alt="School Icon"/>
       </div>
     </div>
   );

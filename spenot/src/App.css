@@ -67,11 +67,6 @@ html, body {
 }
 
 
-.megjelenoAdatok {
-  font-weight: bold;
-}
-
-
 .emailsendpage h1 {
   background-color: lightslategrey;
   padding: 10px 20px; 
@@ -102,12 +97,12 @@ html, body {
 }
 
 .scrollable-container li {
-  padding: 8px 0; /* Felső és alsó padding, hogy szép legyen */
-  border-bottom: 1px solid #ddd; /* Vízszintes vonal a listaelemek között */
+  padding: 8px 0;
+  border-bottom: 1px solid #ddd; 
 }
 
 .scrollable-container li:last-child {
-  border-bottom: none; /* Az utolsó elemnél ne legyen alatta vízszintes vonal */
+  border-bottom: none; 
 }
 
 
@@ -121,6 +116,7 @@ html, body {
 .megjelenoAdatok {
   display: flex;
   gap: 20px;
+  font-weight: bold;
 }
 
 .hibaContainer, .letezokContainer {
@@ -132,9 +128,34 @@ html, body {
 
 
 
+.bottom {
+  display: flex; 
+  gap: 20px; 
+  padding: 20px;
+}
+
+.bottom p {
+  cursor: pointer;
+}
+
+.bottom-left {
+  width: 43%; 
+}
 
 
-/* reszponzivitas miatt*/
+
+
+
+
+
+
+
+
+
+
+
+
+
 @media (max-width: 1200px) {
   .emailsendpage article {
     width: 100%;
@@ -170,7 +191,21 @@ html, body {
     padding: 8px 10px;
   }
 
+  .bottom {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    font-weight: bold;
+  }
+
+  .bottom-left {
+    border-bottom: 2px dashed white;
+    width: 100%; 
+    padding-bottom: 30px;
+  }
+
 }
+
 
 @media (max-width: 480px) {
   .emailsendpage article {
@@ -305,7 +340,19 @@ html, body {
   text-decoration: underline;
 }
 
+.right-corner {
+  position: absolute;
+  top: 10px;
+  right: 10px; 
+  background-color: rgba(255, 255, 255, 0.8);
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+  border-radius: 5px;
+  padding: 10px;
+}
 
+.right-corner img {
+  width: 450px;
+}
 
 
 
@@ -470,18 +517,7 @@ html, body {
   color: whitesmoke;
 }
 
-.right-corner {
-  position: absolute;
-  top: 10px;
-  right: 10px; 
-  text-align: right; 
-  font-size: 1.2rem; 
-  font-weight: bold; 
-  background-color: rgba(255, 255, 255, 0.8); 
-  padding: 5px 10px; 
-  border-radius: 5px;
-  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
-}
+
 
 
 
@@ -528,10 +564,12 @@ html, body {
   border: 3px solid gray;
   color: white;
   padding: 20px;
+  margin: 20px;
 }
 
 
 .uploaddatabasepage h1 {
+  font-size: 2vw;
   background-color: lightslategrey;
   padding: 10px 20px; 
   margin: 0 32%;
@@ -574,46 +612,100 @@ html, body {
 
 
 
-/* Reszponzív beállítások */
-@media (max-width: 991px) {
+
+@media (max-width: 1024px) { 
   .uploaddatabasepage .container {
     flex-direction: column;
     height: auto;
   }
 
-  .uploaddatabasepage .email-section{
+  .uploaddatabasepage .email-section {
     flex: 1;
     border-right: none;
-    border-bottom: 1px solid #000;
-  }
-
-  .uploaddatabasepage .email-section {
-    border-bottom: 1px solid gray;
+    padding-bottom: 30%;
   }
 
   .uploaddatabasepage .browse-btn,
   .uploaddatabasepage .send-btn {
-    width: 80%;
+    width: 25%;
   }
 }
 
-@media (max-width: 767px) {
-
+@media (max-width: 768px) { 
   .uploaddatabasepage .browse-btn,
   .uploaddatabasepage .send-btn {
-    width: 90%;
+    width: 30%;
+    font-size: 2vw;
+  }
+
+  .uploaddatabasepage h2 {
+    font-size: 20px;
   }
 }
 
-@media (max-width: 575px) {
+@media (max-width: 576px) {
+  html, body {
+    overflow-y: auto;
+    min-height: 100vh;
+  }
 
   .uploaddatabasepage .browse-btn,
   .uploaddatabasepage .send-btn {
-    width: 100%;
+    width: 30%;
+    font-size: 2.4vw;
   }
 
   .uploaddatabasepage h2 {
     font-size: 18px;
+  }
+
+  .uploaddatabasepage .container {
+    padding: 10px;
+    overflow-y: auto;
+    min-height: 70vh;
+    padding-bottom: 20px;
+  }
+
+  .uploaddatabasepage article {
+    min-height: 10vh;
+    overflow-y: auto;
+  }
+
+  .uploaddatabasepage h1 {
+    font-size: 4vw;
+  }
+
+  .megjelenoAdatok {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    font-weight: bold;
+  }
+
+  .hibaContainer {
+    border-bottom: 1px solid white;
+  }
+}
+
+@media (max-width: 375px) {  
+  .uploaddatabasepage h2 {
+    font-size: 16px;
+  }
+
+  .uploaddatabasepage .browse-btn,
+  .uploaddatabasepage .send-btn {
+    font-size: 14px;
+    padding: 8px;
+    width: 40%;
+    font-size: 4vw;
+  }
+
+  .uploaddatabasepage h1 {
+    padding: 10px 5px; 
+  }
+
+  .megjelenoAdatok {
+    font-size: 4vw;
   }
 }
 
@@ -1072,61 +1164,68 @@ text-align: center;
 .navigacio {
   background-color: #3D3D3D;
   color: white;
+  padding: 10px 0; 
 }
 
-
-.navigacio a {
+.navigacio a, 
+.navigacio button {
   color: white;
-  padding: 20px 20px;
+  padding: 15px 20px; 
   cursor: pointer;
   transition: background-color 0.3s ease, transform 0.2s ease;
   border-radius: 5px;
-  margin-right: 40px;
+  margin: 5px; 
+  text-align: center;
+  display: inline-block;
 }
 
-.navigacio a:hover {
+.navigacio a:hover, 
+.navigacio button:hover {
   color: white;
-  transform: scale(1.1);
   text-shadow: 2px 2px 5px rgba(231, 76, 60, 0.5); 
   background-color: #e74c3c;
   transform: scale(1.1);
 }
 
-.navigacio a:visited {
+.navigacio a:visited, 
+.navigacio button:visited {
   color: white; 
 }
 
-
-/*ezek a kijelentkezes gombra érvényesek*/
-.navigacio button {
-  color: white;
-  padding: 20px 20px;
-  cursor: pointer;
-  transition: background-color 0.3s ease, transform 0.2s ease;
-  border-radius: 5px;
-  margin-right: 40px;
-}
-
-.navigacio button:hover {
-  color: white;
-  transform: scale(1.1);
-  text-shadow: 2px 2px 5px rgba(231, 76, 60, 0.5);
-  background-color: #e74c3c;
-  transform: scale(1.1);
-}
-
-.navigacio button:visited {
-  color: white;
-}
-
-
-
 .navbar-nav {
   display: flex;
-    justify-content: center;
-    width: 100%; 
+  justify-content: center;
+  width: 100%;
+  flex-wrap: wrap;
 }
 
+
+@media (max-width: 768px) { 
+  .navigacio {
+    text-align: center;
+  }
+
+  .navigacio a, 
+  .navigacio button {
+    display: block; 
+    width: 90%;
+    margin: 5px auto; 
+  }
+
+  .navbar-nav {
+    flex-direction: column; 
+    align-items: center;
+  }
+}
+
+@media (max-width: 480px) { 
+  .navigacio a, 
+  .navigacio button {
+    width: 100%;
+    font-size: 14px;
+    padding: 12px;
+  }
+}
 
 
 

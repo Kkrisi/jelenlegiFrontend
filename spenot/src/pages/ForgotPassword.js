@@ -1,9 +1,16 @@
 import React, { useState, useEffect } from 'react';
 import { myAxios } from '../api/axios';
+import { Modal } from 'react-bootstrap';
+
+
 
 export default function ForgotPassword() {
     const [email, setEmail] = useState('');
     const [message, setMessage] = useState('');
+
+    const [showModal, setShowModal] = useState(false);
+
+    
 
     useEffect(() => {
         // Laravel CSRF cookie inicializálása
@@ -13,11 +20,14 @@ export default function ForgotPassword() {
 
     const handleSubmit = async (e) => {
         e.preventDefault();
+        setShowModal(true);
         try {
             const response = await myAxios.post('/api/forgot-password', { email });
             setMessage(response.data.message);
+            setShowModal(false);
         } catch (error) {
             setMessage(error.response?.data?.message || 'Hiba történt.');
+            setShowModal(false);
         }
     };
 
@@ -25,7 +35,7 @@ export default function ForgotPassword() {
         <div className="loginpage d-flex justify-content-center align-items-center vh-100 bg-light">
             <div className="login-container p-4 rounded shadow">
                 <h2 className="text-center">Elfelejtett jelszó esetén</h2>
-                <p id="forgotText">Kiküldünk egy emailt önnek amiben kap egy új átmeneti jelszót</p>
+                <p id="forgotText">Kiküldünk önnek egy emailt, ami segít helyreállítani.</p>
                 <br />
                 <form id="forgotpasswordForm" onSubmit={handleSubmit}>
                     <div className="input-group mb-3">
@@ -51,8 +61,20 @@ export default function ForgotPassword() {
             </div>
 
             <div className="right-corner">
-                Szalézi Ágazati <br /> Képzőközpont
+                <img src="favicon2.ico" alt="School Icon"/>
             </div>
+
+
+            <Modal show={showModal} onHide={() => setShowModal(false)}>
+                <Modal.Header closeButton>
+                    <Modal.Title>Küldés folyamatban... 🚀</Modal.Title>
+                </Modal.Header>
+                <Modal.Body>
+                    <p>Kérlek, várj egy pillanatot.</p>
+                </Modal.Body>
+            </Modal>
+
+
         </div>
     );
 }

@@ -216,7 +216,7 @@ const csvToJson = (csv) => {
       if (success > 0 && error === 0) {
         setUploadSuccessMessage(`Sikeres feltöltés! Összesen ${success} új személy lett feltöltve. ✅`);
       } else if (success > 0 && error > 0) {
-        setUploadErrorMessage(`Részleges siker! ${success} rekord sikeresen feltöltve, de ${error} sikertelen volt. ⚠️`);
+        setUploadErrorMessage(`Részleges siker! ${success} rekord sikeresen feltöltve, de ${error} sikertelen volt. ✅❌`);
       } else {
         setUploadErrorMessage("Hiba történt a feltöltés során, egyetlen rekord sem lett feltöltve. ❌");
       }

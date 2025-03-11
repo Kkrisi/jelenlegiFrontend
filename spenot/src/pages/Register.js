@@ -1,5 +1,8 @@
 import React, { useState } from "react";
 import { myAxios } from '../api/axios';
+import { Modal } from 'react-bootstrap';
+
+
 
 export default function Register() {
     const [name, setName] = useState("");
@@ -8,8 +11,9 @@ export default function Register() {
     const [confirmPassword, setPasswordConfirmation] = useState("");
     const [errors, setErrors] = useState(""); 
 
+      const [showModal, setShowModal] = useState(false);
+
     const getCsrfToken = () => {
-        // Extract the CSRF token from the cookie
         return document.cookie.split(';')
             .find(cookie => cookie.trim().startsWith('XSRF-TOKEN='))
             ?.split('=')[1];
@@ -17,6 +21,9 @@ export default function Register() {
 
     const handleSubmit = async (e) => {
         e.preventDefault();
+
+
+            setShowModal(true);
         
         const adat = {
             name: name,
@@ -26,24 +33,26 @@ export default function Register() {
             jogosultsag_azon: 4,
         };
 
-        // Get CSRF token and set it in the request headers
+
         const csrfToken = getCsrfToken();
 
         try {
             const response = await myAxios.post("/register", adat, {
                 headers: {
-                    'X-XSRF-TOKEN': csrfToken,  // Include CSRF token in header
+                    'X-XSRF-TOKEN': csrfToken,
                 }
             });
-            console.log("Lyúhúúú! Műgödig");  // Log this when the registration is successful
-            alert("Sikeres regisztráció!")
+            console.log("Lyúhúúú! Műgödig");
+                setShowModal(false);
+            alert("Sikeres regisztráció!\nPár napon belül megkapod az engedélyt.")
             window.location.href = "/"        
         
         } catch (error) {
             if (error.response && error.response.data.errors) {
-                setErrors(error.response.data.errors); // Save validation errors
+                setErrors(error.response.data.errors);
             }
             console.log(error);
+            alert(error);
         }
     };
 
@@ -129,8 +138,20 @@ export default function Register() {
             </div>
 
             <div className="right-corner">
-                Szalézi Ágazati <br /> Képzőközpont
+                <img src="favicon2.ico" alt="School Icon"/>
             </div>
+
+
+            <Modal show={showModal} onHide={() => setShowModal(false)}>
+                <Modal.Header closeButton>
+                <Modal.Title>Regisztráció folyamatban... 🚀</Modal.Title>
+                </Modal.Header>
+                <Modal.Body>
+                <p>Kérlek, várj egy pillanatot.</p>
+                </Modal.Body>
+            </Modal>
+
+
         </div>
     );
 }
