@@ -1,9 +1,10 @@
 import React, { useState, useEffect } from 'react';
 import { Table, Button, Form, Modal } from 'react-bootstrap';
 import '../App.css';
-import { myAxios } from '../api/axios';
+import { useAsyncRequest } from '../contexts/AsyncRequestContext';  // Importáljuk az AsyncRequestContext-ből származó hook-ot
 
 export default function Logs() {
+  const { get } = useAsyncRequest();  // Kihívjuk a get metódust a context-ből
   const [letters, setLetters] = useState([]);
   const [loading, setLoading] = useState(true);
   
@@ -12,22 +13,23 @@ export default function Logs() {
   const [searchTermPdf, setSearchTermPdf] = useState("");
 
   useEffect(() => {
-    myAxios.get("/api/levelek")
-      .then(response => {
-        setLetters(response.data);
+    // Az API hívás az AsyncRequestContext-ből jön
+    get("/api/levelek")
+      .then(responseData => {
+        setLetters(responseData);  // Az adatokat a válaszból kapjuk
         setLoading(false);
       })
       .catch(error => {
         console.error('Hiba az adatok betöltésekor:', error);
         setLoading(false);
       });
-  }, []);
+  }, [get]);  // A get metódust a hook-ból biztosítjuk, így azt is figyelembe vesszük a dependency listában.
 
   const handleClick = (endpoint) => {
     setLoading(true);
-    myAxios.get(endpoint)
-      .then(response => {
-        setLetters(response.data);
+    get(endpoint)  // Használjuk a contextből kapott get metódust
+      .then(responseData => {
+        setLetters(responseData);  // Az adatokat a válaszból kapjuk
         setLoading(false);
       })
       .catch(error => {
@@ -83,7 +85,7 @@ export default function Logs() {
                 <span className="loader">Még tölt...</span>
               </div>
             ) : (
-              <Table striped bordered hover responsive variant="dark">
+              <Table striped bordered hover responsive variant="dark" id='tableLogs'>
                 <thead>
                   <tr>
                     <th>Név</th>
