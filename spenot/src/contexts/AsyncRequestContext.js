@@ -1,27 +1,62 @@
-// Kódújraszervezése
-// Levégére, annyit, hogy async hívásokat  külön contextbe kezelje,hogy paraméteresen lehessen megadni, pl. useContext... (/api/levelek)
-// és csak azokat a Contextet használjuk aszinkron hívásra , hogy ne kelljen mindig újból megírni a GET/PUT/POST/DELETE parancsokat használni
+import React, { createContext, useContext } from "react";
+import { myAxios } from "../api/axios";
 
-// const AsyncRequestContext = createContext();
+// Az AsyncRequestContext meghatározása callback-ek nélkül
+const AsyncRequestContext = createContext();
 
+export const AsyncRequestProvider = ({ children }) => {
+  // GET kérés
+  const get = (url) => {
+    return myAxios.get(url)
+      .then(response => response.data)
+      .catch(error => {
+        console.error("Hiba GET kérés közben:", error);
+        throw error;
+      });
+  };
 
-// export const AuthProvider = ({ children }) => {
+  // POST kérés
+  const post = (url, data) => {
+    return myAxios.post(url, data)
+      .then(response => response.data)
+      .catch(error => {
+        console.error("Hiba POST kérés közben:", error);
+        throw error;
+      });
+  };
 
+  // PUT kérés
+  const put = (url, data) => {
+    return myAxios.put(url, data)
+      .then(response => response.data)
+      .catch(error => {
+        console.error("Hiba PUT kérés közben:", error);
+        throw error;
+      });
+  };
 
-//     useEffect(() => {
-//         myAxios.get("/api/dolgozok")
-//           .then(response => {
-//             setUsers(response.data);
-//             setLoading(false);
-//           })
-//           .catch(error => {
-//             console.error('Hiba az adatok betöltésekor:', error);
-//             setLoading(false);
-//           });
-//       }, []);
+  // DELETE kérés
+  const del = (url) => {
+    return myAxios.delete(url)
+      .then(response => response.data)
+      .catch(error => {
+        console.error("Hiba DELETE kérés közben:", error);
+        throw error;
+      });
+  };
 
+  return (
+    <AsyncRequestContext.Provider value={{ get, post, put, delete: del }}>
+      {children}
+    </AsyncRequestContext.Provider>
+  );
+};
 
-//  }
-//  export default function useAuthContext() {
-//     return useContext(AsyncRequestContext);
-//   }
+// A hook a context eléréséhez
+export const useAsyncRequest = () => {
+  const context = useContext(AsyncRequestContext);
+  if (!context) {
+    throw new Error("useAsyncRequest must be used within an AsyncRequestProvider");
+  }
+  return context;
+};

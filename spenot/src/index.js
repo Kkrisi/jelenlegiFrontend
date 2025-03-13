@@ -5,6 +5,7 @@ import App from './App';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import { BrowserRouter } from "react-router-dom"; 
 import { AuthProvider } from "./contexts/AuthContext"; 
+import { AsyncRequestProvider } from './contexts/AsyncRequestContext';
 
 
 
@@ -18,7 +19,9 @@ root.render(
 
     <BrowserRouter>
       <AuthProvider>
-        <App />
+        <AsyncRequestProvider>
+          <App />
+        </AsyncRequestProvider>
       </AuthProvider>
     </BrowserRouter>
 

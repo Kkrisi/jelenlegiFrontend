@@ -1171,6 +1171,8 @@ text-align: center;
   }
 }
 
+
+
 @media (max-width: 768px) {
   .resetpasswordpage {
     padding: 5%;
@@ -1191,6 +1193,7 @@ text-align: center;
     padding: 8px;
   }
 
+  
   #resetBtn {
     width: 60%;
     font-size: 14px;
@@ -1203,7 +1206,7 @@ text-align: center;
     padding: 10px;
     height: auto;
   }
-
+  
   .resetpasswordpage h2 {
     font-size: 18px;
   }
@@ -1334,7 +1337,31 @@ text-align: center;
 
 
 
+@media (max-width: 800px) {
+  .szures{
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+  }
+}
+@media (max-width: 600px) {
+  
+  .logspage table{
+    max-width: 100%;
+  }
+  
+  .szures{
+    display: grid;
+    grid-template-columns: 1fr;
+    text-align: center;
+  }
+  
+  #tableLogs{
+    width: 25%;
+  }    
 
+
+
+}
 
 
 
