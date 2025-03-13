@@ -351,7 +351,7 @@ html, body {
 }
 
 .right-corner img {
-  width: 450px;
+  width: 45px;
 }
 
 
@@ -517,9 +517,18 @@ html, body {
   color: whitesmoke;
 }
 
+.elfelejtettValasz {
+  font-weight: bold;
+  color: greenyellow;
+}
 
-
-
+.varakozoSzoveg {
+  color: cadetblue;
+  text-decoration: none;
+  font-size: 14px;
+  display: block;
+  margin: 5px 0;
+}
 
 
 
@@ -911,6 +920,10 @@ html, body {
   text-align: center;
 }
 
+.usersmanagement #Kereses {
+  width: 25%;
+}
+
 
 
 
@@ -987,9 +1000,9 @@ html, body {
 
 .studentsmanagement table thead {
   position: sticky;
-  top: 0; /* Ez a sor biztosítja, hogy a thead a táblázat tetején maradjon */
-  background-color: #343a40; /* Az alap sötét háttérszín, hogy illeszkedjen a táblázat dizájnjához */
-  z-index: 1; /* Biztosítja, hogy a fejléc a többi tartalom felett maradjon */
+  top: 0; 
+  background-color: #343a40; 
+  z-index: 1; 
 }
 
 
@@ -1033,7 +1046,77 @@ text-align: center;
 
 /* ------------------------------------ reset password  -----------------------------*/
 
-#resetBtn{
+.resetpasswordpage * {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+  font-family: 'Arial', sans-serif;
+  color: black;
+}
+  
+.resetpasswordpage {
+  background: linear-gradient(-45deg, #ee7752, #e73c7e, #23a6d5, #23d5ab);
+  background-size: 300% 300%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding-bottom: 6%;
+  height: 100vh;
+}
+  
+.resetpasswordpage article {
+  width: 30%;
+  height: 50%;
+  background-color: #3D3D3D;
+  display: flex;
+  flex-direction: column;
+  border-radius: 10px;
+  border: 3px solid gray;
+  box-shadow: 4px 4px 8px rgba(0, 0, 0, 0.3);
+  padding: 20px;
+  padding-left: 40px;
+  overflow: hidden
+}
+
+
+.resetpasswordpage .input-group {
+  display: flex;
+  flex-direction: column;
+   align-items: center;
+}
+
+.resetpasswordpage .input-group input {
+  width: 100%;
+  padding: 10px;
+  background: none;
+  border: 1px solid #4f5b7a;
+  border-radius: 5px;
+  color: white;
+  outline: none;
+}
+
+.resetpasswordpage input::placeholder {
+  color: cadetblue;
+  font-style: italic;
+  transition: color 0.3s ease;
+}
+
+.resetpasswordpage input:focus::placeholder {
+  color: transparent;
+}
+
+
+
+.resetpasswordpage p {
+  color: white;
+  text-align: center;
+  padding-bottom: 30%;
+  padding-top: 70%;
+}
+
+
+
+#resetBtn {
   background-color: #5f9ea0;
   color: #ffffff;
   padding: 12px 15px;
@@ -1045,8 +1128,115 @@ text-align: center;
   box-shadow: 3px 3px 6px rgba(0, 0, 0, 0.15);
   border: none;
   font-weight: bold;
-
+  width: 60%;
 }
+
+#resetBtn:hover {
+  background-color: #e74c3c;
+  transform: translateY(-2px) scale(1.1);
+  box-shadow: 4px 4px 8px rgba(0, 0, 0, 0.2);
+}
+
+#resetBtn:active {
+  transform: scale(0.92);
+}
+
+.resetpasswordpage h2 {
+  background-color: lightslategrey;
+  padding: 10px 20px; 
+  margin: 0 auto;
+  margin-bottom: 5%;
+  border-radius: 15px; 
+  color: white;
+  text-align: center;
+}
+
+.resetpasswordpage span {
+  color: white;
+  padding: 4% 0% 4% 0%;
+}
+
+
+
+
+
+@media (max-width: 1200px) {
+  .resetpasswordpage article {
+    width: 40%; /* Nagyobb kijelzőkön kicsit szélesebb */
+    height: 55%;
+  }
+
+  #resetBtn {
+    width: 50%; /* Nagyobb gomb */
+  }
+}
+
+@media (max-width: 768px) {
+  .resetpasswordpage {
+    padding: 5%;
+  }
+
+  .resetpasswordpage article {
+    width: 60%;
+    height: auto;
+    padding: 15px;
+  }
+
+  .resetpasswordpage h2 {
+    font-size: 20px;
+  }
+
+  .resetpasswordpage .input-group input {
+    width: 90%; /* Mobilon ne legyen teljes szélességű */
+    padding: 8px;
+  }
+
+  #resetBtn {
+    width: 60%;
+    font-size: 14px;
+  }
+}
+
+@media (max-width: 480px) {
+  .resetpasswordpage article {
+    width: 90%; /* Mobilon szinte teljes szélesség */
+    padding: 10px;
+    height: auto;
+  }
+
+  .resetpasswordpage h2 {
+    font-size: 18px;
+  }
+
+  .resetpasswordpage .input-group input {
+    width: 100%;
+    font-size: 14px;
+  }
+
+  #resetBtn {
+    width: 80%;
+    font-size: 14px;
+    padding: 10px;
+  }
+
+  .resetpasswordpage p {
+    font-size: 14px;
+    padding-bottom: 10%;
+    padding-top: 10%;
+  }
+}
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 

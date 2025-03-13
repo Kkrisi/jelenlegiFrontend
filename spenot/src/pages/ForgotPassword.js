@@ -20,13 +20,25 @@ export default function ForgotPassword() {
 
     const handleSubmit = async (e) => {
         e.preventDefault();
+        setMessage("");
+
+        const emailRegex = /^(?=.*\..{2,}).+$/;     // kell benne lennie egy pontnak, és utánna kötelező 2 karakter, a többit ellenorzi a form
+        if (!emailRegex.test(email)) {
+            alert("Kérlek, adj meg egy érvényes email címet!\nLegyen a végén pont és 2 karakter utánna!");
+            return;
+        }
+
         setShowModal(true);
         try {
             const response = await myAxios.post('/api/forgot-password', { email });
             setMessage(response.data.message);
             setShowModal(false);
         } catch (error) {
-            setMessage(error.response?.data?.message || 'Hiba történt.');
+            if (error.response?.data?.message) {
+                setMessage(error.response.data.message);
+            } else {
+                setMessage('Hiba történt a kérés feldolgozása közben.');
+            }
             setShowModal(false);
         }
     };
@@ -53,10 +65,11 @@ export default function ForgotPassword() {
                         <button type="submit" className="btn btn-primary w-100">Küldés</button>
                     </div>
                 </form>
-                {message && <p className="text-center mt-3">{message}</p>}
+                {message && <p className="text-center mt-3 elfelejtettValasz">{message}</p>}    
                 <div className="links text-center mt-3">
                     <p>Nem érkezett meg?</p>
-                    <a href="#" className="d-block">Email újraküldése</a>
+                    <p className='varakozoSzoveg'>Várj 5 percet és próbálkozz újra.</p>
+                    {/*<a href="#" className="d-block">Email újraküldése</a>*/}
                 </div>
             </div>
 

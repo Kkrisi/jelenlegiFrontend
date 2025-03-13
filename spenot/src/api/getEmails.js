@@ -21,26 +21,21 @@ export const getEmails = async (fileDetails) => {
   
       let sikeresCount = 0;
       let sikertelenCount = 0;
-      let sikertelenAdatok = []; // A sikertelen adatok tárolása
-      let sikeresAdatok = []; // A sikeres adatok tárolása
+      let sikertelenAdatok = [];
+      let sikeresAdatok = [];
   
-      // A fájlokat végigiteráljuk és ellenőrizzük, hogy van-e hozzá email cím
       fileDetails.forEach(({ kod, fileName }) => {
         if (dataMap[kod]) {
-          // Ha van email cím, sikeres
           sikeresCount++;
-          sikeresAdatok.push({ fileName, kod });
+          sikeresAdatok.push({ fileName, kod, email: dataMap[kod].email });
         } else {
-          // Ha nincs email cím, sikertelen
           sikertelenCount++;
           sikertelenAdatok.push({ fileName, kod });
           
-          // Logoljuk a hibás adatokat
           console.log(`Kód: ${kod} (Fájl: ${fileName}) -> Nincs találat az adatbázisban.`);
         }
       });
   
-      // Visszaadjuk a sikeres és sikertelen találatok számát, valamint a sikertelen adatokat
       return { sikeresCount, sikertelenCount, sikertelenAdatok, sikeresAdatok };
   
     } catch (error) {

@@ -110,6 +110,7 @@ export default function EmailSend() {
         const fileDetails = Array.from(selectedFiles)  // átalakítjuk a FileList-t egy tömbbé
           .map(file => {
             const kod = feldolgozFajlNev(file);
+            //console.log({ kod, fileName: file.name });
             return { kod, fileName: file.name };
           })
           .filter(file => file.kod);  // csak azokat a fájlokat tartjuk meg, amiknek van kódja
@@ -131,6 +132,7 @@ export default function EmailSend() {
           // eltaroljuk a sikeres és sikertelen email találatokat is
           setNotFoundEmails(sikertelenAdatok);
           setFoundEmails(sikeresAdatok); 
+          console.log("sikeresAdatok:",sikeresAdatok)
       
           // ha sikerult megegy akkor frissitjuk
           setFoundEmailsCount(sikeresCount); 
@@ -192,6 +194,16 @@ export default function EmailSend() {
 
         const response = await myAxios.post("/api/send-email");
         console.log("Email küldés eredménye:", response.data);
+
+
+
+        const successfulEmails = response.data.successful_emails || [];
+
+        if (successfulEmails.length > 0) {
+          setFoundEmails(successfulEmails);  
+        }
+
+
 
         // sikeresen elkuldott emailok szama
         setSentEmailsCount(response.data.sent_count || 0);
@@ -309,8 +321,9 @@ export default function EmailSend() {
                   handlePClick(
                     "Áthelyezett fájlok",
                     selectedFiles.length > 0 && relocatedFileCount > 0
-                      ? [`${relocatedFileCount} fájl áthelyezve`]
-                      : []
+                      ?
+                        Array.from(selectedFiles).map((file) => file.name)
+                    : []
                   )
                 }
               >
@@ -327,14 +340,15 @@ export default function EmailSend() {
                 onClick={() =>
                   handlePClick(
                     "Email címek megszerzése",
-                    selectedFiles.length > 0 && foundEmailsCount + notFoundEmailsCount > 0
-                      ? [`${foundEmailsCount} email cím sikeresen megszerzett`, `${notFoundEmailsCount} nem található`]
-                      : []
+                    selectedFiles.length > 0 && (foundEmailsCount || notFoundEmailsCount)
+                    ?
+                      foundEmails.map(({ fileName, kod, email }) => `${fileName} - ${kod} - ${email}`)
+                    : []    
                   )
                 }
               >
                 {selectedFiles.length > 0 && foundEmailsCount + notFoundEmailsCount > 0
-                  ? `${foundEmailsCount} email cím sikeresen megszerzett ✅, ${notFoundEmailsCount} nem található.`
+                  ? `${foundEmailsCount} email cím sikeresen megszerzett, ${notFoundEmailsCount} nem található.`
                   : ""}
               </p>
               <br />
@@ -346,16 +360,31 @@ export default function EmailSend() {
                 onClick={() =>
                   handlePClick(
                     "Elküldött emailek",
-                    sentEmailsCount > 0 ? [`${sentEmailsCount} email sikeresen elküldve`] : []
+                    sentEmailsCount > 0
+                      ? foundEmails.map((emailData, index) => (
+                          <li key={index}> {emailData.email} </li>
+                        ))
+                      : (<li>Nincsenek sikeresen elküldött emailek.</li>)
                   )
                 }
               >
-                {sentEmailsCount > 0 ? `${sentEmailsCount} email sikeresen elküldve ✅` : ""}
+                {sentEmailsCount > 0
+                  ? `${sentEmailsCount} email sikeresen elküldve ✅`
+                  : ""}
               </p>
               <br />
 
               <p>5. Törölt pdf-ek:</p>
-              <p>
+              <p
+                className="megjelenoAdatok"
+                id="pdftorlesGomb"
+                onClick={() =>
+                  handlePClick(
+                    "Törölt Pdf-ek",
+         
+                  )
+                }
+              >
 
               </p>
             </div>

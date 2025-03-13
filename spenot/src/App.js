@@ -29,6 +29,7 @@ export default function App() {
 
 
   // amig toltodik az oldal
+  //console.log("user App.js:", user)
   if (loading) {
     return (
       <div className='loading-body'>

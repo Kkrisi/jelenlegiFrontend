@@ -1,6 +1,8 @@
 import React, { useState } from "react";
 import { myAxios } from '../api/axios';
 import { Modal } from 'react-bootstrap';
+import { useNavigate } from "react-router-dom";
+import useAuthContext from "../contexts/AuthContext";
 
 
 
@@ -11,7 +13,11 @@ export default function Register() {
     const [confirmPassword, setPasswordConfirmation] = useState("");
     const [errors, setErrors] = useState(""); 
 
-      const [showModal, setShowModal] = useState(false);
+    const [showModal, setShowModal] = useState(false);
+
+
+    const { logout } = useAuthContext();
+    const navigate = useNavigate();
 
     const getCsrfToken = () => {
         return document.cookie.split(';')
@@ -22,8 +28,16 @@ export default function Register() {
     const handleSubmit = async (e) => {
         e.preventDefault();
 
+        //const emailRegex = /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;      // nem érzékeli hogy itt kell pont...
+        //const emailRegex = /^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?(?:\.[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?)*$/;
+        const emailRegex = /^(?=.*\..{2,}).+$/;     // kell benne lennie egy pontnak, és utánna kötelező 2 karakter, a többit ellenorzi a form
+        if (!emailRegex.test(email)) {
+            alert("Kérlek, adj meg egy érvényes email címet!\nLegyen a végén pont és 2 karakter utánna!");
+            return;
+        }
 
-            setShowModal(true);
+
+        setShowModal(true);
         
         const adat = {
             name: name,
@@ -43,16 +57,22 @@ export default function Register() {
                 }
             });
             console.log("Lyúhúúú! Műgödig");
-                setShowModal(false);
+            setShowModal(false);
             alert("Sikeres regisztráció!\nPár napon belül megkapod az engedélyt.")
-            window.location.href = "/"        
+            //window.location.href = "/"  
+            logout();
+            navigate("/bejelentkezes");
         
         } catch (error) {
             if (error.response && error.response.data.errors) {
                 setErrors(error.response.data.errors);
+
+                if (error.response.data.errors.email) {
+                    setShowModal(false);
+                    alert("Ez az email cím már foglalt!");
+                }
             }
-            console.log(error);
-            alert(error);
+            console.log("error: ", error);
         }
     };
 

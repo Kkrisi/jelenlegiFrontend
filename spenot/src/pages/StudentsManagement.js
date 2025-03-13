@@ -15,7 +15,6 @@ export default function StudentsManagement() {
   const [loading, setLoading] = useState(true);
 
   const [showModal, setShowModal] = useState(false);
-  const [isSaving, setIsSaving] = useState(false);
 
   const [searchQuery, setSearchQuery] = useState(""); 
 
@@ -63,6 +62,9 @@ export default function StudentsManagement() {
 
 
 
+
+  
+
   //--------------------------------------------- Adatváltozás kezdete ------------------------------------------------
   const handleChange = (e) => {
     setEditingUser((prevUser) => ({
@@ -71,6 +73,9 @@ export default function StudentsManagement() {
     }));
   };
   //--------------------------------------------- Adatváltozás vége ------------------------------------------------
+
+
+
 
 
 
@@ -91,9 +96,12 @@ export default function StudentsManagement() {
 
 
 
+
+
+
+
   //--------------------------------------------- Szerkesztés mentése kezdete ------------------------------------------------
   const handleSave = () => {
-    setIsSaving(true);
     setShowModal(true);
 
     myAxios.put(`/api/dolgozok/${editingUser.d_azon}`, editingUser)
@@ -104,16 +112,17 @@ export default function StudentsManagement() {
 
         setEditingUser(null);
         setEditingField("");
-        setIsSaving(false);
         setShowModal(false);
       })
       .catch(error => {
         console.error('Hiba a mentésnél:', error);
-        setIsSaving(false);
         setShowModal(false);
       });
   };
   //--------------------------------------------- Szerkesztés mentése vége ------------------------------------------------
+
+
+
 
 
 
@@ -139,6 +148,34 @@ export default function StudentsManagement() {
     return false;
   });
   //--------------------------------------------- Kereső mező vége ------------------------------------------------
+
+
+
+
+
+
+
+
+
+
+  //--------------------------------------------- Dolgozó törlése kezdete ------------------------------------------------
+  const handleDelete = (d_azon) => {
+    if (window.confirm("Biztosan törölni szeretnéd ezt a diákot?")) {
+      myAxios.delete(`/api/dolgozok/${d_azon}`)
+        .then(() => {
+          // a tablazatot frissitjuk
+          setUsers(users.filter(user => user.d_azon !== d_azon));  
+        })
+        .catch(error => {
+          console.error("Hiba a törlés közben:", error);
+        });
+    }
+  };
+  //--------------------------------------------- Dolgozó törlése vége ------------------------------------------------
+  
+  
+
+
 
 
   
@@ -220,6 +257,11 @@ export default function StudentsManagement() {
                               )}
                             </td>
                           ))}
+
+                          <td>
+                            <Button variant="danger" onClick={() => handleDelete(user.d_azon)}>🗑️ Törlés</Button>
+                          </td>
+
                         </tr>
                       ))}
                     </tbody>
