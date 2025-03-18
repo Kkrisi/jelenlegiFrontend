@@ -9,13 +9,12 @@ import { myAxios } from '../api/axios';
 
 
 export default function StudentsManagement() {
+  
   const [users, setUsers] = useState([]);
   const [editingUser, setEditingUser] = useState(null);
   const [editingField, setEditingField] = useState("");
   const [loading, setLoading] = useState(true);
-
   const [showModal, setShowModal] = useState(false);
-
   const [searchQuery, setSearchQuery] = useState(""); 
 
 

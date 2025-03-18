@@ -1,14 +1,15 @@
 import React, { useEffect, useState } from "react";
-import { sendToServer } from "../api/sendToServer";
 import "bootstrap/dist/css/bootstrap.min.css";
 import { Modal } from 'react-bootstrap';
 import { myAxios } from '../api/axios';
+import useButtonContext from "../contexts/ButtonContext";
 
 
 
 
 export default function UploadDatabase() {
 
+  const { sendToServer } = useButtonContext();
   const [jsonOutput, setJsonOutput] = useState("");
   const [fileName, setFileName] = useState("");
   const [workerCount, setWorkerCount] = useState(0);
@@ -60,6 +61,7 @@ export default function UploadDatabase() {
         setUploadErrorMessage("A fájl üres vagy érvénytelen adatszerkezetű. ❌");
         return;
     }
+
 
 
     // ------------------------ Ellenőrizzük a oszlopcímeket és hogy mindegyikhez tartozik adat ------------------------------

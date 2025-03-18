@@ -6,6 +6,7 @@ import 'bootstrap/dist/css/bootstrap.min.css';
 import { BrowserRouter } from "react-router-dom"; 
 import { AuthProvider } from "./contexts/AuthContext"; 
 import { AsyncRequestProvider } from './contexts/AsyncRequestContext';
+import { ButtonProvider } from './contexts/ButtonContext';
 
 
 
@@ -18,11 +19,15 @@ root.render(
   <React.StrictMode>
 
     <BrowserRouter>
-      <AuthProvider>
-        <AsyncRequestProvider>
-          <App />
-        </AsyncRequestProvider>
-      </AuthProvider>
+
+        <ButtonProvider>
+          <AuthProvider>
+            <AsyncRequestProvider>
+              <App />
+            </AsyncRequestProvider>
+          </AuthProvider>
+        </ButtonProvider>
+
     </BrowserRouter>
 
   </React.StrictMode>

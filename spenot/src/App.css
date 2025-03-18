@@ -62,6 +62,10 @@ html, body {
   font-weight: bold;
 }
 
+input {   /*fajlkivalasztas gombhoz*/
+  display: none;
+}
+
 #emailSend:hover, #pdftorles:hover, #fajlkivalasztas:hover, #athelyezes:hover, #kuldes:hover {
   background-color: #e74c3c;
   transform: translateY(-2px) scale(1.1);
@@ -285,6 +289,7 @@ html, body {
   width: 400px;
   color: white;
   text-align: center;
+  margin: 10%;
 }
 
 .loginpage .login-container h2 {
@@ -594,7 +599,7 @@ html, body {
   border: 3px solid gray;
   color: white;
   padding: 20px;
-  margin: 20px;
+  margin: 5%;
 }
 
 
@@ -644,9 +649,10 @@ html, body {
 
 
 @media (max-width: 1024px) { 
+
   .uploaddatabasepage .container {
     flex-direction: column;
-    height: auto;
+    height: 75%;
   }
 
   .uploaddatabasepage .email-section {
@@ -662,6 +668,10 @@ html, body {
 }
 
 @media (max-width: 768px) { 
+  html, body {
+    overflow-y: auto;
+  }
+
   .uploaddatabasepage .browse-btn,
   .uploaddatabasepage .send-btn {
     width: 30%;
@@ -676,7 +686,6 @@ html, body {
 @media (max-width: 576px) {
   html, body {
     overflow-y: auto;
-    min-height: 100vh;
   }
 
   .uploaddatabasepage .browse-btn,
@@ -691,8 +700,6 @@ html, body {
 
   .uploaddatabasepage .container {
     padding: 10px;
-    overflow-y: auto;
-    min-height: 70vh;
     padding-bottom: 20px;
   }
 
@@ -715,6 +722,7 @@ html, body {
   .hibaContainer {
     border-bottom: 1px solid white;
   }
+
 }
 
 @media (max-width: 375px) {  
@@ -737,6 +745,7 @@ html, body {
   .megjelenoAdatok {
     font-size: 4vw;
   }
+
 }
 
 
@@ -902,7 +911,6 @@ html, body {
   display: flex;
   justify-content: center;
   align-items: center;
-  padding-bottom: 6%;
   height: 100vh;
 }
 
@@ -916,7 +924,8 @@ html, body {
   border: 3px solid gray;
   box-shadow: 4px 4px 8px rgba(0, 0, 0, 0.3);
   padding: 20px;
-  overflow: hidden; /* Prevent overflow on smaller screens */
+  overflow: hidden;
+  margin: 0% 1% 10% 1%;
 }
 
 
@@ -948,6 +957,48 @@ html, body {
 
 
 
+
+
+
+
+@media (max-width: 1200px) {
+  .usersmanagement article {
+    width: auto;
+    margin-bottom: 15%;
+    margin-top: 10%;
+  }
+
+  .usersmanagement {
+    overflow: scroll;
+  }
+}
+
+
+
+@media (max-width: 768px) {
+  .usersmanagement article {
+    margin: 15% 1% 40% 1%;
+  }
+
+  .usersmanagement #Kereses {
+    width: 40%;
+  }
+}
+
+@media (max-width: 480px) {
+  .usersmanagement article {
+    margin: 10%;
+  }
+
+  .usersmanagement h1 {
+    font-size: 5vw;
+  }
+
+  .usersmanagement #Kereses {
+    font-size: 3vw;
+    width: 100%;
+  }
+}
 
 
 
@@ -989,8 +1040,7 @@ html, body {
 }
   
 .studentsmanagement article {
-  
-  width: 1600px;
+  width: auto;
   height: 610px;
   background-color: #3D3D3D;
   display: flex;
@@ -999,30 +1049,15 @@ html, body {
   border: 3px solid gray;
   box-shadow: 4px 4px 8px rgba(0, 0, 0, 0.3);
   padding: 20px;
-  overflow: hidden
+  overflow: hidden;
+  margin: 0% 10% 0% 10%;
 }
   
-
-
-
-
 .studentsmanagement .search-container {
   max-width: 300px; 
   margin-left: 10px;
   margin-bottom: 20px;
 }
-
-
-
-
-
-
-
-
-
-
-
-
 
 .studentsmanagement table thead {
   position: sticky;
@@ -1031,17 +1066,9 @@ html, body {
   z-index: 1; 
 }
 
-
-
-
 .studentsmanagement .table-container {
   overflow-x: auto;
 }
-
-
-
- 
-
 
 #kuldes:active {
   transform: scale(0.92);
@@ -1060,6 +1087,26 @@ border-radius: 15px;
 color: white;
 text-align: center;
 }
+
+
+
+
+@media (max-width: 1200px) {
+  .studentsmanagement article {
+    margin: 0% 5% 0% 5%;
+  }
+}
+
+@media (max-width: 768px) {
+
+}
+
+
+@media (max-width: 480px) {
+
+}
+
+
 
 
 
@@ -1092,7 +1139,7 @@ text-align: center;
   
 .resetpasswordpage article {
   width: 30%;
-  height: 50%;
+  height: 55%;
   background-color: #3D3D3D;
   display: flex;
   flex-direction: column;
@@ -1188,12 +1235,12 @@ text-align: center;
 
 @media (max-width: 1200px) {
   .resetpasswordpage article {
-    width: 40%; /* Nagyobb kijelzőkön kicsit szélesebb */
-    height: 55%;
+    width: 40%;
+    height: auto
   }
 
   #resetBtn {
-    width: 50%; /* Nagyobb gomb */
+    width: 50%; 
   }
 }
 
@@ -1215,7 +1262,7 @@ text-align: center;
   }
 
   .resetpasswordpage .input-group input {
-    width: 90%; /* Mobilon ne legyen teljes szélességű */
+    width: 90%;
     padding: 8px;
   }
 
@@ -1228,7 +1275,7 @@ text-align: center;
 
 @media (max-width: 480px) {
   .resetpasswordpage article {
-    width: 90%; /* Mobilon szinte teljes szélesség */
+    width: 90%;
     padding: 10px;
     height: auto;
   }
@@ -1370,6 +1417,11 @@ text-align: center;
     display: grid;
     grid-template-columns: 1fr 1fr;
   }
+
+  
+.logspage article {
+  margin: 0% 1% 0% 1%;
+}
 }
 @media (max-width: 600px) {
   
@@ -1386,8 +1438,6 @@ text-align: center;
   #tableLogs{
     width: 25%;
   }    
-
-
 
 }
 
@@ -1409,7 +1459,7 @@ text-align: center;
 .navigacio {
   background-color: #3D3D3D;
   color: white;
-  padding: 10px 0; 
+  padding: 10px 0;  
 }
 
 .navigacio a, 

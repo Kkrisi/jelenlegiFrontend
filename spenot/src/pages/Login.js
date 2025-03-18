@@ -9,13 +9,13 @@ import useAuthContext from "../contexts/AuthContext";
 export default function Login() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const [loading, setLoading] = useState(false); // Hibás vessző javítva
+  const [loading, setLoading] = useState(false); 
   const navigate = useNavigate();
   const { loginReg, errors } = useAuthContext();
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    setLoading(true); // Hibás szintaxis javítva
+    setLoading(true);
 
     const adat = {
       email: email,
@@ -24,23 +24,17 @@ export default function Login() {
 
 
     try {
-      // Felhasználó bejelentkeztetése
       await loginReg(adat, "/login");
-
     } catch (err) {
       console.error(err);
-      /*console.error("Hiba a bejelentkezés során", err.message);
-      // Felhasználói hibaüzenet
-      if (err.response && err.response.status === 422) {
-        alert("Hibás bejelentkezési adatok!");
-      } else {
-        alert("Valami hiba történt. Kérlek próbáld újra.");
-      }*/
     } finally {
-      setLoading(false); // Betöltési állapot visszaállítása
+      setLoading(false);
     }
   };
 
+
+
+  
   return (
     <div className="loginpage d-flex justify-content-center align-items-center vh-100 bg-light">
       {loading ? ( // Feltételes megjelenítés

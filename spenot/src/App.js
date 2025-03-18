@@ -2,7 +2,7 @@ import './App.css';
 import Login from './pages/Login';
 import ForgotPassword from './pages/ForgotPassword';
 import Register from './pages/Register';
-import { BrowserRouter, Navigate, Route, Routes } from "react-router-dom";
+import { Navigate, Route, Routes } from "react-router-dom";
 import EmailSend from './pages/EmailSend';
 import UploadDatabase from './pages/UploadDatabase';
 import ResetPassword from './pages/ResetPassword';
@@ -11,22 +11,12 @@ import StudentsManagement from './pages/StudentsManagement';
 import Logs from './pages/Logs';
 import PermissionDenied from './pages/PermissionDenied';
 import Layout from './layouts/Layout';
-//import ProtectedRoute from './components/ProtectedRoute';
 import useAuthContext from './contexts/AuthContext';
 
 
 
 export default function App() {
   const { user, loading } = useAuthContext();
-
-  // Ha nincs bejelentkezett felhasználó, akkor nem jelenik meg a loading
-  //console.log("lodaing és user", loading, user)
-  /*if (loading && user !== null) {
-    // Ha még töltődnek az adatok, mutathatunk egy loader-t
-    return <div>Oldal betöltése... ⚙🛠🔄</div>;
-  }*/
-
-
 
   // amig toltodik az oldal
   //console.log("user App.js:", user)

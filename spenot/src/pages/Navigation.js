@@ -18,12 +18,6 @@ export default function Navigation() {
         navigate("/bejelentkezes");
     };
 
-    /*const handleLogout = async () => {
-        await logout();  // Várjuk meg a kijelentkezést
-        navigate("/bejelentkezes"); // Csak utána navigálunk
-    };*/
-    
-
 
 
 
