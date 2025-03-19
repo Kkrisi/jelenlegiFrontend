@@ -62,7 +62,7 @@ html, body {
   font-weight: bold;
 }
 
-input {   /*fajlkivalasztas gombhoz*/
+.emailsendpage input {   /*fajlkivalasztas gombhoz*/
   display: none;
 }
 
@@ -1397,7 +1397,7 @@ text-align: center;
 
 
 .nszInput{
-  color: black;
+  color: white;
 }
 
 .nevSzures{
