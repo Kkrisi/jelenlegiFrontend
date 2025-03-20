@@ -10,10 +10,8 @@ export default function EmailSend() {
 
   const { relocateFiles, getEmails, deletePdfs } = useButtonContext();
   const fileInputRef = useRef(null);
-  //const [fileCount,setFileCount] = useState(0);
   const [selectedFiles, setSelectedFiles] = useState([]);   // ez FileList objektum, nem pedig tömb
   const [relocatedFileCount, setRelocatedFileCount] = useState(0);
-  //const [getEmailsCount, setGetEmailsCount] = useState(0);
 
   const [showModal, setShowModal] = useState(false);
 
@@ -38,11 +36,11 @@ export default function EmailSend() {
     fileInputRef.current.click();   // fájlválasztó megnyitása
 
     // szöveg kiirások törlése
-    //setFileCount(0);
     setRelocatedFileCount(0);
     setLoadingDelete(false);
-    //setGetEmailsCount(0);
+    setCurrentFiles([]);
     setSelectedFiles([]);
+    setFoundEmails([]);
     setFoundEmailsCount(0);
     setNotFoundEmailsCount(0);
     setNotFoundEmails([]);
@@ -54,7 +52,6 @@ export default function EmailSend() {
   const handleFileChange = (event) => {
     const files = event.target.files;
     setSelectedFiles(files);
-    //setFileCount(files.length);
     console.log(`${files.length} fájl lett kiválasztva.`);
   }
 
@@ -129,7 +126,7 @@ export default function EmailSend() {
           setFoundEmailsCount(sikeresCount); 
           setNotFoundEmailsCount(sikertelenCount);
       
-          //setGetEmailsCount(prevCount => prevCount + 1);
+
           setShowModal(false);
         } catch (error) {
           console.error("Hiba az email cím megszerzésekor:", error);
@@ -177,20 +174,13 @@ export default function EmailSend() {
 
   const handleSendEmails = async () => {
     if (selectedFiles.length > 0) {
-      if (foundEmailsCount || foundEmailsCount !== 0) {   // azért kell mindenketto, mondjuk ha a foundEmC. = null,undefinied,NaN,""
+      //if (foundEmailsCount || foundEmailsCount !== 0) {
+      if (foundEmailsCount > 0) {
         try {
           setShowModal(true);
 
           const response = await myAxios.post("/api/send-email");
           console.log("Email küldés eredménye:", response.data);
-
-
-
-          const successfulEmails = response.data.successful_emails || [];
-
-          if (successfulEmails.length > 0) {
-            setFoundEmails(successfulEmails);  
-          }
 
 
 
@@ -221,6 +211,10 @@ export default function EmailSend() {
 
 
 
+
+
+
+
   // -------------------------------------------- Eltárolt Pdfk törlése kezdete -----------------------------------------
   const [loadingDelete, setLoadingDelete] = useState(false);
   const [deletedFilesCount, setDeletedFilesCount] = useState(0);
@@ -243,6 +237,8 @@ export default function EmailSend() {
       }
   };
   // -------------------------------------------- Eltárolt Pdfk törlése vége --------------------------------------------
+
+
 
 
 
@@ -309,7 +305,7 @@ export default function EmailSend() {
 
             <button type="button" id="athelyezes" onClick={handleMoveFiles} >2. Áthelyezés</button>
 
-            <button type="button" id="kuldes" onClick={handleAttachEmail} >3. Küldés /email párt keres</button>
+            <button type="button" id="kuldes" onClick={handleAttachEmail} >3. Email párt keres</button>
 
             <button style={{ marginRight: '100px' }} type="button" id="emailSend" onClick={handleSendEmails} >4. Email küldése</button>
 
@@ -341,7 +337,7 @@ export default function EmailSend() {
               <p className="megjelenoAdatok" id="athelyezesGomb" onClick={
                 async () => {
                   await showCurrentFiles();
-                  handlePClick("Jelenleg fájlok az áthelyezett mappában:", currentFiles);
+                  handlePClick(currentFiles.length === 0 ? "Betöltés...(kattints még1x)" : "Jelenleg fájlok az áthelyezett mappában:", currentFiles.length === 0 ? [] : currentFiles);
                 }}
               >
                 {selectedFiles.length > 0 && relocatedFileCount > 0 ? `${relocatedFileCount} fájl áthelyezve ✅` : ""}
@@ -353,7 +349,7 @@ export default function EmailSend() {
 
               <p>3. Emailcím megszerzése:</p>
               <p className="megjelenoAdatok" id="kuldesGomb" onClick={() =>
-                  handlePClick("Email címek megszerzése",
+                  handlePClick(foundEmailsCount === 0 ? "Nincs email találat." : "Megszerzett email címek:",
                     selectedFiles.length > 0 && (foundEmailsCount || notFoundEmailsCount)
                     ? foundEmails.map(({ kod, email }) => `${kod} - ${email}`) : [])}
               >
@@ -371,14 +367,13 @@ export default function EmailSend() {
               <p className="megjelenoAdatok" id="emailAllapotGomb" onClick={() =>
                   handlePClick("Elküldött emailek",
                     sentEmailsCount > 0 ? foundEmails.map((emailData, index) => (
-                          <li key={index}> {emailData.email} </li>
+                          <span key={index}> {emailData.email} </span>   // hydration probléma a <li>-k miatt
                         ))
                       : []
                   )
                 }
               >
                 {sentEmailsCount > 0 ? `${sentEmailsCount} email sikeresen elküldve ✅` : ""}
-                {/*{!foundEmailsCount || foundEmailsCount === 0 ? "Nem volt email küldés. ❌" : "" ? sentEmailsCount > 0 ? `${sentEmailsCount} email sikeresen elküldve ✅` : ""}*/}
               </p>
               <br />
 
@@ -391,7 +386,6 @@ export default function EmailSend() {
               <p>5. Törölt pdf-ek:</p>
               <p className="megjelenoAdatok" id="pdftorlesGomb" onClick={async () => {
                   await showCurrentFiles();
-                  {/*handlePClick("Törlés után a mappa tartalma:", currentFiles);*/}
                   handlePClick(currentFiles.length === 0 ? "Minden fájl törölve." : "Törlés után a mappa tartalma:", currentFiles.length === 0 ? [] : currentFiles);
                 }}
               >
@@ -404,7 +398,7 @@ export default function EmailSend() {
 
 
 
-            {/* JOBB OLDAL */}
+            {/* legördülő sáv jobb oldalt */}
             <div className="bottom-right">
               <div className="scrollable-container">
                 <h3>{activeLog.title}</h3>

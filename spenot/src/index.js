@@ -13,17 +13,17 @@ import { ButtonProvider } from './contexts/ButtonContext';
 
 
 
-const root = ReactDOM.createRoot(document.getElementById("root"));
+const root = ReactDOM.createRoot(document.getElementById("root"));  // program belépési pontja
 root.render(
 
-  <React.StrictMode>
+  <React.StrictMode>  {/*fejlesztesi mod, kapnuk infot a problémakrol*/}
 
-    <BrowserRouter>
+    <BrowserRouter>   {/*útvonal kezelés: dinamikusan*/}
 
-        <ButtonProvider>
+        <ButtonProvider>    {/*ezek kulonbozo kompenensek amik kontextusokat biztositanak a többi komponensnek*/}
           <AuthProvider>
             <AsyncRequestProvider>
-              <App />
+              <App />     {/*ezt látja a felhasználó*/}
             </AsyncRequestProvider>
           </AuthProvider>
         </ButtonProvider>
@@ -40,13 +40,3 @@ root.render(
 // npm install js-cookie
 
 
-
-/*
- további fejlesztések
-
- - a logs- oldalra szűrő hogy diákra és dátumra is rá tudjunk keresni
- - csoport szerinti listázása
-
-
-
- */
