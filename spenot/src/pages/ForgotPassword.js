@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { myAxios } from '../api/axios';
-import { Modal } from 'react-bootstrap';
+import useButtonContext from '../contexts/ButtonContext';
 
 
 
@@ -8,7 +8,7 @@ export default function ForgotPassword() {
     const [email, setEmail] = useState('');
     const [message, setMessage] = useState('');
 
-    const [showModal, setShowModal] = useState(false);
+    const { setShowModal } = useButtonContext();
 
     
 
@@ -76,18 +76,6 @@ export default function ForgotPassword() {
             <div className="right-corner">
                 <img src="favicon2.ico" alt="School Icon"/>
             </div>
-
-
-            <Modal show={showModal} onHide={() => setShowModal(false)}>
-                <Modal.Header closeButton>
-                    <Modal.Title>Küldés folyamatban... 🚀</Modal.Title>
-                </Modal.Header>
-                <Modal.Body>
-                    <p>Kérlek, várj egy pillanatot.</p>
-                </Modal.Body>
-            </Modal>
-
-
         </div>
     );
 }

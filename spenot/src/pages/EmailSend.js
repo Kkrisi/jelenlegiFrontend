@@ -1,26 +1,26 @@
 import React, { useRef, useState } from "react";
 import '../App.css';
-import { myAxios } from "../api/axios";
-import { Modal } from 'react-bootstrap';
 import useButtonContext from "../contexts/ButtonContext";
 
 
 
 export default function EmailSend() {
 
-  const { relocateFiles, getEmails, deletePdfs } = useButtonContext();
+  const { deletePdfs, getEmails, foundEmails, setFoundEmails, foundEmailsCount,
+    setFoundEmailsCount, notFoundEmails, setNotFoundEmails, notFoundEmailsCount,
+     setNotFoundEmailsCount, relocateFiles, relocatedFileCount, setRelocatedFileCount,
+      sendToServer, sendEmails, sentEmailsCount, selectedFiles, setSelectedFiles, setSentEmailsCount,
+      setLoadingDelete, setDeletedFilesCount, loadingDelete, deletedFilesCount,
+      currentFiles, setCurrentFiles, showCurrentFiles } = useButtonContext();
+
   const fileInputRef = useRef(null);
-  const [selectedFiles, setSelectedFiles] = useState([]);   // ez FileList objektum, nem pedig tömb
-  const [relocatedFileCount, setRelocatedFileCount] = useState(0);
+  //const [selectedFiles, setSelectedFiles] = useState([]);   // ez FileList objektum, nem pedig tömb
+  //const [relocatedFileCount, setRelocatedFileCount] = useState(0);
 
-  const [showModal, setShowModal] = useState(false);
+  //const [showModal, setShowModal] = useState(false);
 
 
-  const [foundEmailsCount, setFoundEmailsCount] = useState(0);
-  const [notFoundEmailsCount, setNotFoundEmailsCount] = useState(0);
-
-  const [foundEmails, setFoundEmails] = useState([]);
-  const [notFoundEmails, setNotFoundEmails] = useState([]);
+  
 
 
 
@@ -60,7 +60,7 @@ export default function EmailSend() {
 
 
   // -------------------------------------------- Fájl áthelyezés kezdete -----------------------------------------
-  const handleMoveFiles = async () => {
+  /*const handleMoveFiles = async () => {
     if (selectedFiles.length > 0) {
       // fájlok egyesével küldése
       for (const file of selectedFiles) {
@@ -81,6 +81,18 @@ export default function EmailSend() {
       alert("Nincs kiválasztott fájl.");
       console.log("Nincs kiválasztott fájl.");
     }
+  };*/
+
+
+  const handleMoveFiles = async () => {
+    if (selectedFiles.length === 0) {
+      alert("Nincs kiválasztott fájl.");
+      return;
+    }
+
+    for (const file of selectedFiles) {
+      await relocateFiles(file);
+    }
   };
   // -------------------------------------------- Fájl áthelyezés vége --------------------------------------------
 
@@ -92,8 +104,11 @@ export default function EmailSend() {
 
 
 
+
+
+
     // -------------------------------------------- Hozzátartozó email keresés kezdete -------------------------------
-    const handleAttachEmail = async () => {
+    /*const handleAttachEmail = async () => {
       if (selectedFiles.length > 0) {
 
         // a kivalaszott fajlokat tombé alakitjuk
@@ -136,7 +151,30 @@ export default function EmailSend() {
         alert("Nincs kiválasztott fájl.");
         console.log("Nincs kiválasztott fájl.");
       }
+    };*/
+
+    const handleAttachEmail = async () => {
+      if (selectedFiles.length === 0) {
+        alert("Nincs kiválasztott fájl.");
+        return;
+      }
+    
+      // a kivalaszott fajlokat egy kozos tombbe rakjuk, és egyesével kiszurjuk és a tömbhoz adjuk a kod-jukat
+      const fileDetails = Array.from(selectedFiles) // átalakítjuk a FileList-t egy tömbbé
+        .map(file => {
+          const kod = feldolgozFajlNev(file);
+          return { kod, fileName: file.name };
+        })
+        .filter(file => file.kod); // csak azokat a fájlokat tartjuk meg, amiknek van kódja
+    
+      if (fileDetails.length === 0) {
+        console.warn("Nincs egyetlen kód sem a kiválasztott fájlokban.");
+        return;
+      }
+    
+      await getEmails(fileDetails);
     };
+  
     
     
     
@@ -145,7 +183,7 @@ export default function EmailSend() {
 
 
 
-    const feldolgozFajlNev = (file) => {
+    /*const feldolgozFajlNev = (file) => {
         const fileName = file.name;
         const feldolgozottFajl = fileName.split(" ");
         let kod = "";
@@ -158,7 +196,15 @@ export default function EmailSend() {
         }
     
         return kod;
+    };*/
+
+    
+    const feldolgozFajlNev = (file) => {
+      // '\( \)' egy nyito es egy zaro zarojelet keres, [^)] zarojelet kiveve barmi lehet, + legalabb egy karakter, () csoportba rakja
+      const match = file.name.match(/\(([^)]+)\)/); 
+      return match ? match[1] : "";
     };
+    
     // -------------------------------------------- Hozzátartozó email keresés vége ------------------------------------
 
     
@@ -169,10 +215,17 @@ export default function EmailSend() {
 
 
 
-  // -------------------------------------------- Email küldése kezdete ------------------------------------------------
-  const [sentEmailsCount, setSentEmailsCount] = useState(0);
 
-  const handleSendEmails = async () => {
+
+
+
+
+
+
+  // -------------------------------------------- Email küldése kezdete ------------------------------------------------
+  //const [sentEmailsCount, setSentEmailsCount] = useState(0);
+
+  /*const handleSendEmails = async () => {
     if (selectedFiles.length > 0) {
       //if (foundEmailsCount || foundEmailsCount !== 0) {
       if (foundEmailsCount > 0) {
@@ -202,7 +255,22 @@ export default function EmailSend() {
       alert("Nincs kiválasztott fájl.");
       console.log("Nincs kiválasztott fájl.");
     }
-  };
+  };*/ 
+  
+  const handleSendEmails = async () => {
+    if (selectedFiles.length === 0) {
+        alert("Nincs kiválasztott fájl.");
+        return;
+    }
+
+    if (foundEmailsCount === 0) {
+        console.warn("Nem találtunk email címeket.");
+        return;
+    }
+
+    await sendEmails();
+};
+
   // -------------------------------------------- Email küldése vége ---------------------------------------------------
 
 
@@ -216,10 +284,10 @@ export default function EmailSend() {
 
 
   // -------------------------------------------- Eltárolt Pdfk törlése kezdete -----------------------------------------
-  const [loadingDelete, setLoadingDelete] = useState(false);
-  const [deletedFilesCount, setDeletedFilesCount] = useState(0);
+  //const [loadingDelete, setLoadingDelete] = useState(false);
+  //const [deletedFilesCount, setDeletedFilesCount] = useState(0);
   
-  const handleRemovePdfs = async () => {
+  /*const handleRemovePdfs = async () => {
       try {
           setShowModal(true);
         const response = await deletePdfs();
@@ -235,7 +303,12 @@ export default function EmailSend() {
         console.error("Hiba törléskor:", error);
           setShowModal(false);
       }
+  };*/
+
+  const handleRemovePdfs = async () => {
+    await deletePdfs();
   };
+
   // -------------------------------------------- Eltárolt Pdfk törlése vége --------------------------------------------
 
 
@@ -249,7 +322,6 @@ export default function EmailSend() {
   // -------------------------------------------- Választott eredmény mutatása kezdete -----------------------------------------
   const [activeLog, setActiveLog] = useState({ title: "", data: [] });
 
-  // Függvény a kattintott p-elemhez tartozó adatok frissítésére
   const handlePClick = (title, data) => {
     setActiveLog({ title, data });
   };
@@ -263,7 +335,7 @@ export default function EmailSend() {
 
 
 
-
+  /*
   // ------------------------------------- Jelenleg áthelyezett mappában levő fájlok kezdete -----------------------------------
   const [currentFiles, setCurrentFiles] = useState([]);
 
@@ -277,7 +349,7 @@ export default function EmailSend() {
     }
   }
   // ------------------------------------- Jelenleg áthelyezett mappában levő fájlok vége --------------------------------------
-
+  */
 
 
 
@@ -426,14 +498,14 @@ export default function EmailSend() {
       </main>
       
 
-      <Modal show={showModal} onHide={() => setShowModal(false)}>
+      {/*<Modal show={showModal} onHide={() => setShowModal(false)}>
           <Modal.Header closeButton>
             <Modal.Title>Dolgozunk rajta... 🚀</Modal.Title>
           </Modal.Header>
           <Modal.Body>
             <p>Az adatok feldolgozása folyamatban van. Kérlek, várj egy pillanatot.</p>
           </Modal.Body>
-      </Modal>
+      </Modal>*/}
 
 
     </div>

@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from "react";
 import "bootstrap/dist/css/bootstrap.min.css";
-import { Modal } from 'react-bootstrap';
 import { myAxios } from '../api/axios';
 import useButtonContext from "../contexts/ButtonContext";
 
@@ -15,8 +14,7 @@ export default function UploadDatabase() {
   const [workerCount, setWorkerCount] = useState(0);
   const [duplicateWorkers, setDuplicateWorkers] = useState([]);
 
-  const [isLoading, setIsLoading] = useState(false);
-  const [showModal, setShowModal] = useState(false);
+  const { setShowModal } = useButtonContext();
 
   const [uploadSuccessMessage, setUploadSuccessMessage] = useState("");
   const [uploadErrorMessage, setUploadErrorMessage] = useState("");
@@ -44,7 +42,6 @@ export default function UploadDatabase() {
 
 
     if (!file.name.endsWith('.csv')) {
-        //setUploadErrorMessage("Hibás fájlformátum! Kérjük, válasszon CSV fájlt. ❌");
         handleUploadResult(false, "Hibás fájlformátum! Kérjük, válasszon CSV fájlt. ❌");
         return;
     }
@@ -58,7 +55,6 @@ export default function UploadDatabase() {
 
 
     if (!json || json.length === 0) {
-        //setUploadErrorMessage("A fájl üres vagy érvénytelen adatszerkezetű. ❌");
         handleUploadResult(false, "A fájl üres vagy érvénytelen adatszerkezetű. ❌");
         return;
     }
@@ -80,7 +76,6 @@ export default function UploadDatabase() {
     */
 
     if (missingKeys.length > 0) {
-        //setUploadErrorMessage(`Hiányzó oszlopok a CSV fájlban: ${missingKeys.join(", ")} ❌`);
         handleUploadResult(false, `Hiányzó oszlopok a CSV fájlban: ${missingKeys.join(", ")} ❌`);
         return;
     }
@@ -91,7 +86,6 @@ export default function UploadDatabase() {
     );
 
     if (invalidRows.length > 0) {
-        //setUploadErrorMessage(`Hibás adatok találhatók a CSV fájlban! Ellenőrizd a kitöltetlen mezőket. Pl: Email-hez nincs email cím ❌`);
         handleUploadResult(false, `Hibás adatok találhatók a CSV fájlban! Ellenőrizd a kitöltetlen mezőket. Pl: Email-hez nincs email cím ❌`);
         return;
     }
@@ -158,21 +152,23 @@ const csvToJson = (csv) => {
 
 
 
+
+
+
+
+
   // -------------------------------------------- Adatbázisba küldés és hibakezelés kezdete --------------------------------------------
-  const handleSend = async () => {
+  /*const handleSend = async () => {
     if (!jsonOutput || jsonOutput.trim() === "") {
-      //setUploadErrorMessage("A fájl üres vagy nem tartalmaz adatokat. ❌");
       handleUploadResult(false, "A fájl üres vagy nem tartalmaz adatokat. ❌");
       return;
     }
   
     setShowModal(true);
-    setIsLoading(true);
    
     try {
       const jsonData = JSON.parse(jsonOutput);
       if (!Array.isArray(jsonData) || jsonData.length === 0) {
-        //setUploadErrorMessage("A fájl formátuma érvénytelen, nem tartalmaz megfelelő adatokat. ❌");
         handleUploadResult(false, "A fájl formátuma érvénytelen, nem tartalmaz megfelelő adatokat. ❌");
         return;
       }
@@ -200,9 +196,7 @@ const csvToJson = (csv) => {
 
   
       if (newDolgozok.length === 0) {
-        setIsLoading(false);
         setShowModal(false);
-        //setUploadErrorMessage("Minden dolgozó már létezik az adatbázisban.");
         handleUploadResult(false, "Minden dolgozó már létezik az adatbázisban.");
         return;
       }
@@ -238,24 +232,112 @@ const csvToJson = (csv) => {
       setErrorCount(error);
   
       if (success > 0 && error === 0) {
-        //setUploadSuccessMessage(`Sikeres feltöltés! Összesen ${success} új személy lett feltöltve. ✅`);
         handleUploadResult(true, `Sikeres feltöltés! Összesen ${success} új személy lett feltöltve. ✅`);
       } else if (success > 0 && error > 0) {
-        //setUploadErrorMessage(`Részleges siker! ${success} rekord sikeresen feltöltve, de ${error} sikertelen volt. ✅❌`);
         handleUploadResult(false, `Részleges siker! ${success} rekord sikeresen feltöltve, de ${error} sikertelen volt. ✅❌`);
       } else {
-        //setUploadErrorMessage("Hiba történt a feltöltés során, egyetlen rekord sem lett feltöltve. ❌");
         handleUploadResult(false, "Hiba történt a feltöltés során, egyetlen rekord sem lett feltöltve. ❌");
       }
     } catch (error) {
-      //setUploadErrorMessage("Hiba történt a feltöltés során! ❌");
       handleUploadResult(false, "Hiba történt a feltöltés során! ❌");
     } finally {
-      setIsLoading(false);
       setShowModal(false);
     }
-  };  
-// -------------------------------------------- Adatbázisba küldés és hibakezelés vége --------------------------------------------
+  };  */
+
+
+  const handleSend = async () => {
+    if (!jsonOutput || jsonOutput.trim() === "") {
+      handleUploadResult(false, "A fájl üres vagy nem tartalmaz adatokat. ❌");
+      return;
+    }
+
+    setShowModal(true);
+
+    try {
+      const jsonData = JSON.parse(jsonOutput);
+      if (!Array.isArray(jsonData) || jsonData.length === 0) {
+        handleUploadResult(false, "A fájl formátuma érvénytelen, nem tartalmaz megfelelő adatokat. ❌");
+        return;
+      }
+
+
+      const normalizedJsonData = jsonData.map(d => ({
+        ...d,
+        d_azon: Number(d.d_azon.replace(/"/g, ''))  // d_azon számra alakítása
+      }));
+
+
+      // ------------------- Lépés 1: Még fel nem töltött dolgozók szűrése -------------------
+      const existingDolgozok = await fetchExistingDolgozok();
+      const existingIds = new Set(existingDolgozok.map(d => d.d_azon));
+
+      // Szűrd ki a duplikált dolgozókat
+      const duplicateWorkers = normalizedJsonData.filter(d => existingIds.has(d.d_azon));
+      console.log("Már létező dolgozók: ", duplicateWorkers);
+      setDuplicateWorkers(duplicateWorkers);  // Ezt továbbra is megjeleníthetjük UI-ban
+
+      // Szűrd ki az új dolgozókat, akik még nem léteznek
+      const newDolgozok = normalizedJsonData.filter(d => !existingIds.has(d.d_azon));
+      console.log("Új dolgozók: ", newDolgozok);
+
+      // Ha nincs új dolgozó, akkor nem történik feltöltés
+      if (newDolgozok.length === 0) {
+        setShowModal(false);
+        handleUploadResult(false, "Minden dolgozó már létezik az adatbázisban.");
+        return;
+      }
+
+
+      // ------------------- Lépés 2: Feltöltés 20-asával -------------------
+      let success = 0;
+      let error = 0;
+      let errors = [];
+      const chunkSize = 20;
+
+      for (let i = 0; i < newDolgozok.length; i += chunkSize) {
+        const chunk = newDolgozok.slice(i, i + chunkSize);
+        
+        try {
+          await sendToServer(chunk);  // Csak az új dolgozók kerülnek feltöltésre
+          success += chunk.length;
+        } catch (err) {
+          console.error("Hiba történt egy csomag feltöltésekor ❌:", err);
+          error += chunk.length;
+          errors.push(err);
+        }
+      }
+
+      setErrorMessages(errors);
+
+      
+      // ------------------- Lépés 3: Üzenet -------------------
+      setSuccessCount(success);
+      setErrorCount(error);
+
+      if (success > 0 && error === 0) {
+        handleUploadResult(true, `Sikeres feltöltés! Összesen ${success} új személy lett feltöltve. ✅`);
+      } else if (success > 0 && error > 0) {
+        handleUploadResult(false, `Részleges siker! ${success} rekord sikeresen feltöltve, de ${error} sikertelen volt. ✅❌`);
+      } else {
+        handleUploadResult(false, "Hiba történt a feltöltés során, egyetlen rekord sem lett feltöltve. ❌");
+      }
+    } catch (error) {
+      handleUploadResult(false, "Hiba történt a feltöltés során! ❌");
+    } finally {
+      setShowModal(false);
+    }
+  };
+  // -------------------------------------------- Adatbázisba küldés és hibakezelés vége --------------------------------------------
+
+
+
+
+
+
+
+
+
 
 
 
@@ -270,7 +352,6 @@ const fetchExistingDolgozok = async () => {
     const response = await myAxios.get("/api/dolgozok");
     return response.data;
   } catch (error) {
-    //setUploadErrorMessage("Hiba a dolgozók lekérésekor ❌:", error);
     console.log("error message:", error.message);
     handleUploadResult(false, "Hiba a dolgozók lekérésekor ❌:", error);
     return [];
@@ -323,7 +404,6 @@ const handleUploadResult = (success, message) => {
     <div className="uploaddatabasepage">
       <div className="container">
 
-        {/* Feltöltés szekció */}
         <div className="email-section">
           <h1>Új diákok felvitele</h1>
           <button
@@ -340,7 +420,7 @@ const handleUploadResult = (success, message) => {
             onChange={handleCsvUpload}
           />
 
-          <button className="send-btn kuldes" onClick={handleSend} disabled={showModal}>
+          <button className="send-btn kuldes" onClick={handleSend}>
             2. Adatbázisba feltöltés
           </button>
           
@@ -401,18 +481,6 @@ const handleUploadResult = (success, message) => {
 
         </div>
       </div>
-
-
-
-      <Modal show={showModal} onHide={() => setShowModal(false)}>   {/* show egy változo, és a showModal-t alapbol false-ra tesszük, az határozza meg hogy látjuk e*/}
-        <Modal.Header closeButton>
-          <Modal.Title>Feltöltés folyamatban... 🚀</Modal.Title>
-        </Modal.Header>
-        <Modal.Body>
-          <p>Az adatok feltöltése folyamatban van. Kérlek, várj egy pillanatot.</p>
-        </Modal.Body>
-      </Modal>
-          
     </div>
   );
 }

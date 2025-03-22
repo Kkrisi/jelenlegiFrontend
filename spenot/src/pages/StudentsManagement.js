@@ -1,8 +1,9 @@
 
 import React, { useState, useEffect } from 'react';
-import { Table, Button, Form, Modal } from 'react-bootstrap';
+import { Table, Button, Form } from 'react-bootstrap';
 import '../App.css';
 import { myAxios } from '../api/axios';
+import useButtonContext from '../contexts/ButtonContext';
 
 
 
@@ -14,7 +15,7 @@ export default function StudentsManagement() {
   const [editingUser, setEditingUser] = useState(null);
   const [editingField, setEditingField] = useState("");
   const [loading, setLoading] = useState(true);
-  const [showModal, setShowModal] = useState(false);
+  const { setShowModal } = useButtonContext();
   const [searchQuery, setSearchQuery] = useState(""); 
 
 
@@ -275,18 +276,6 @@ export default function StudentsManagement() {
           </div>
         </article>
       </main>
-
-
-      <Modal show={showModal} onHide={() => setShowModal(false)}>
-        <Modal.Header closeButton>
-          <Modal.Title>Mentés folyamatban... 🚀</Modal.Title>
-        </Modal.Header>
-        <Modal.Body>
-          <p>Az adatok mentése folyamatban van. Kérlek, várj egy pillanatot.</p>
-        </Modal.Body>
-      </Modal>
-
-
     </div>
   );
 }

@@ -1,8 +1,8 @@
 import React, { useState } from "react";
 import { myAxios } from '../api/axios';
-import { Modal } from 'react-bootstrap';
 import { useNavigate } from "react-router-dom";
 import useAuthContext from "../contexts/AuthContext";
+import useButtonContext from "../contexts/ButtonContext";
 
 
 
@@ -13,7 +13,7 @@ export default function Register() {
     const [confirmPassword, setPasswordConfirmation] = useState("");
     const [errors, setErrors] = useState(""); 
 
-    const [showModal, setShowModal] = useState(false);
+    const { setShowModal } = useButtonContext();
 
 
     const { logout } = useAuthContext();
@@ -160,14 +160,14 @@ export default function Register() {
             </div>
 
 
-            <Modal show={showModal} onHide={() => setShowModal(false)}>
+            {/*<Modal show={showModal} onHide={() => setShowModal(false)}>
                 <Modal.Header closeButton>
                 <Modal.Title>Regisztráció folyamatban... 🚀</Modal.Title>
                 </Modal.Header>
                 <Modal.Body>
                 <p>Kérlek, várj egy pillanatot.</p>
                 </Modal.Body>
-            </Modal>
+            </Modal>*/}
 
 
         </div>

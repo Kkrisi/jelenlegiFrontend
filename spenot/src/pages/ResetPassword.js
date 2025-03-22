@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { useNavigate, useParams, useSearchParams } from 'react-router-dom';
 import { myAxios } from '../api/axios';
 import { useEffect } from 'react';
-import { Modal } from 'react-bootstrap';
+import useButtonContext from '../contexts/ButtonContext';
 
 
 
@@ -15,7 +15,7 @@ const ResetPassword = () => {
     const [confirmPassword, setConfirmPassword] = useState('');
     const [message, setMessage] = useState('');
 
-    const [showModal, setShowModal] = useState(false);
+    const { setShowModal } = useButtonContext();
     const navigate = useNavigate();
 
 
@@ -88,16 +88,6 @@ const ResetPassword = () => {
                 </form>
                 {message && <p>{message}</p>}
             </article>
-
-             <Modal show={showModal} onHide={() => setShowModal(false)}>
-                <Modal.Header closeButton>
-                    <Modal.Title>Visszaállítás folyamatban... 🚀</Modal.Title>
-                </Modal.Header>
-                <Modal.Body>
-                    <p>Kérlek, várj egy pillanatot.</p>
-                </Modal.Body>
-            </Modal>
-
         </div>
     );
 };

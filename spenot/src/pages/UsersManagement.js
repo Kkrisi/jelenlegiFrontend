@@ -1,7 +1,8 @@
 import React, { useState, useEffect } from 'react';
-import { Table, Button, Modal, DropdownButton, Dropdown, Form } from 'react-bootstrap';
+import { Table, Button, Form } from 'react-bootstrap';
 import '../App.css';
 import { myAxios } from '../api/axios';
+import useButtonContext from '../contexts/ButtonContext';
 
 export default function UsersManagement() {
   const [users, setUsers] = useState([]);
@@ -9,8 +10,7 @@ export default function UsersManagement() {
   const [editingField, setEditingField] = useState("");
   const [loading, setLoading] = useState(true);
   
-  const [showModal, setShowModal] = useState(false);
-  const [isSaving, setIsSaving] = useState(false);
+  const { setShowModal } = useButtonContext();
   
   // Keresés
   const [searchQuery, setSearchQuery] = useState('');
@@ -48,7 +48,6 @@ export default function UsersManagement() {
     
     console.log('Changes made:', updatedUserData);
     
-    setIsSaving(true);
     setShowModal(true);
     
     myAxios.put(`/api/felhasznalok/${userId}`, updatedUserData)
@@ -56,12 +55,10 @@ export default function UsersManagement() {
         setUsers(users.map(user => user.id === userId ? updatedUserData : user));
         setEditingUser(null);
         setEditingField("");
-        setIsSaving(false);
         setShowModal(false);
       })
       .catch(error => {
         console.error('Hiba a mentésnél:', error);
-        setIsSaving(false);
         setShowModal(false);
       });
   };
@@ -75,7 +72,6 @@ export default function UsersManagement() {
 
   const handleDelete = async (userId) => {
     setShowModal(true);
-    setIsSaving(true);
 
     try {
       await myAxios.delete(`/api/felhasznalok/${userId}`);
@@ -84,11 +80,9 @@ export default function UsersManagement() {
       // frissítsük az állapotot a felhasználók törlésével, hogy ne jelenjen meg az akit már kitöröltunk
       setUsers(users.filter(user => user.id !== userId));
 
-      setIsSaving(false);
       setShowModal(false);
     } catch (error) {
       console.error('Hiba a törlésnél:', error);
-      setIsSaving(false);
       setShowModal(false);
     }
   };
@@ -110,7 +104,6 @@ export default function UsersManagement() {
 
     console.log('Changes made:', updatedUser);
 
-    setIsSaving(true);
     setShowModal(true);
 
     myAxios.put(`/api/felhasznalok/${editingUser.id}`, updatedUser)
@@ -118,12 +111,10 @@ export default function UsersManagement() {
         setUsers(users.map(user => user.id === editingUser.id ? updatedUser : user));
         setEditingUser(null);
         setEditingField("");
-        setIsSaving(false);
         setShowModal(false);
       })
       .catch(error => {
         console.error('Hiba a mentésnél:', error);
-        setIsSaving(false);
         setShowModal(false);
       });
   };
@@ -231,16 +222,6 @@ export default function UsersManagement() {
           </div>
         </article>
       </main>
-
-      <Modal show={showModal} onHide={() => setShowModal(false)}>
-        <Modal.Header closeButton>
-          <Modal.Title>Változtatás folyamatban... 🚀</Modal.Title>
-        </Modal.Header>
-        <Modal.Body>
-          <p>Az adatok változtatása folyamatban van. Kérlek, várj egy pillanatot.</p>
-        </Modal.Body>
-      </Modal>
-
     </div>
   );
 }
