@@ -5,7 +5,7 @@ import App from './App';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import { BrowserRouter } from "react-router-dom"; 
 import { AuthProvider } from "./contexts/AuthContext"; 
-import { AsyncRequestProvider } from './contexts/AsyncRequestContext';
+import { LogsProvider } from './contexts/LogsContext';
 import { ButtonProvider } from './contexts/ButtonContext';
 
 
@@ -21,11 +21,11 @@ root.render(
     <BrowserRouter>   {/*útvonal kezelés: dinamikusan*/}
 
         <ButtonProvider>    {/*ezek kulonbozo kompenensek amik kontextusokat biztositanak a többi komponensnek*/}
-          <AuthProvider>
-            <AsyncRequestProvider>
-              <App />     {/*ezt látja a felhasználó*/}
-            </AsyncRequestProvider>
-          </AuthProvider>
+              <AuthProvider>
+                <LogsProvider>
+                      <App />     {/*ezt látja a felhasználó*/}
+                </LogsProvider>
+              </AuthProvider>
         </ButtonProvider>
 
     </BrowserRouter>
