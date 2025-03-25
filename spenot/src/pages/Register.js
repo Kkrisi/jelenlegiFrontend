@@ -42,7 +42,7 @@ export default function Register() {
             email: email,
             password: password,
             password_confirmation: confirmPassword, 
-            jogosultsag_azon: 4,
+            jogosultsag_azon: 3,
         };
 
 
@@ -55,7 +55,6 @@ export default function Register() {
                 }
             });
             console.log("Lyúhúúú! Műgödig");
-            setShowModal(false);
             alert("Sikeres regisztráció!\nPár napon belül megkapod az engedélyt.")
             //window.location.href = "/"  
             logout();
@@ -66,11 +65,12 @@ export default function Register() {
                 setErrors(error.response.data.errors);
 
                 if (error.response.data.errors.email) {
-                    setShowModal(false);
                     alert("Ez az email cím már foglalt!");
                 }
             }
             console.log("error: ", error);
+        } finally {
+            setShowModal(false);
         }
     };
 
@@ -78,6 +78,8 @@ export default function Register() {
         <div className="loginpage d-flex justify-content-center align-items-center vh-100 bg-light">
             <div className="login-container p-4 rounded shadow">
                 <h2 className="text-center">Regisztráció</h2>
+
+                <p className="regszoveg">A felh.névben csakbetűk és szóköz szerepelhet</p>
 
                 <form onSubmit={handleSubmit}>
                     <div className="input-group mb-3">
@@ -111,6 +113,8 @@ export default function Register() {
                     <div>
                         {errors.email && <span className="text-danger">{errors.email[0]}</span>}
                     </div>
+
+                    <p className="regszoveg">Kötelező: 1 nagybetű, 1 kisbetű, 1 szám, egy spec. karakter</p>
 
                     <div className="input-group mb-3">
                         <input

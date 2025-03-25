@@ -51,7 +51,7 @@ export default function Navigation() {
 
                     {user ? (
                         <>
-                            {user.jogosultsag_azon === 2 && (
+                            {user.jogosultsag_azon === 1 && (
                                 <li className="navbar-item">
                                     <Link className="nav-link" to="/felhKezeles">
                                         Felhasználók kezelése

@@ -1,4 +1,4 @@
-import React, { useRef, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import '../App.css';
 import useButtonContext from "../contexts/ButtonContext";
 
@@ -47,6 +47,9 @@ export default function EmailSend() {
     setSentEmailsCount(0);
     setActiveLog({ title: "", data: [] });
   }
+
+
+  
 
 
   const handleFileChange = (event) => {
@@ -353,6 +356,22 @@ export default function EmailSend() {
 
 
 
+
+
+
+  // volt hogy oldal vagy felhasznalo váltás utan ottmaradtak a p-tagbe az üzenetek
+  useEffect(() => {
+    setRelocatedFileCount(0);
+    setLoadingDelete(false);
+    setCurrentFiles([]);
+    setSelectedFiles([]);
+    setFoundEmails([]);
+    setFoundEmailsCount(0);
+    setNotFoundEmailsCount(0);
+    setNotFoundEmails([]);
+    setSentEmailsCount(0);
+    setActiveLog({ title: "", data: [] });
+  }, []);
 
 
 

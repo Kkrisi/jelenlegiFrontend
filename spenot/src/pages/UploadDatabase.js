@@ -246,7 +246,19 @@ const csvToJson = (csv) => {
   };  */
 
 
-  const handleSend = async () => {
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+    /*  másik probalkozas   */
+
+  /*const handleSend = async () => {
     if (!jsonOutput || jsonOutput.trim() === "") {
       handleUploadResult(false, "A fájl üres vagy nem tartalmaz adatokat. ❌");
       return;
@@ -322,6 +334,61 @@ const csvToJson = (csv) => {
       } else {
         handleUploadResult(false, "Hiba történt a feltöltés során, egyetlen rekord sem lett feltöltve. ❌");
       }
+    } catch (error) {
+      handleUploadResult(false, "Hiba történt a feltöltés során! ❌");
+    } finally {
+      setShowModal(false);
+    }
+  };
+  */
+
+
+
+
+
+  const handleSend = async () => { 
+    if (!jsonOutput || jsonOutput.trim() === "") {
+      handleUploadResult(false, "A fájl üres vagy nem tartalmaz adatokat. ❌");
+      return;
+    }
+
+    setShowModal(true);
+
+    try {
+      const jsonData = JSON.parse(jsonOutput);
+      if (!Array.isArray(jsonData) || jsonData.length === 0) {
+        handleUploadResult(false, "A fájl formátuma érvénytelen, nem tartalmaz megfelelő adatokat. ❌");
+        return;
+      }
+
+      const normalizedJsonData = jsonData.map(d => ({
+        ...d,
+        d_azon: Number(d.d_azon.replace(/"/g, ''))
+      }));
+
+      
+      // ------------------- Még fel nem töltött dolgozók szűrése -------------------
+      const existingDolgozok = await fetchExistingDolgozok();
+      const existingIds = new Set(existingDolgozok.map(d => d.d_azon));
+      
+      const duplicateWorkers = normalizedJsonData.filter(d => existingIds.has(d.d_azon));
+      console.log("Már létező dolgozók: ", duplicateWorkers);
+      setDuplicateWorkers(duplicateWorkers);
+
+      const newDolgozok = normalizedJsonData.filter(d => !existingIds.has(d.d_azon));
+      console.log("Új dolgozók: ", newDolgozok);
+      // -----------------------------------------------------------------------------
+
+
+      if (newDolgozok.length === 0) {
+        setShowModal(false);
+        handleUploadResult(false, "Minden dolgozó már létezik az adatbázisban.");
+        return;
+      }
+
+      const result = await sendToServer(newDolgozok);
+      
+      handleUploadResult(result.success > 0, result.message);
     } catch (error) {
       handleUploadResult(false, "Hiba történt a feltöltés során! ❌");
     } finally {

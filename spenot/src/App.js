@@ -34,7 +34,7 @@ export default function App() {
   return (
     <Routes>
       {/* Vendégek számára elérhető oldalak */}
-      {(!user || user.jogosultsag_azon === 4) ? (
+      {(!user || user.jogosultsag_azon === 3) ? (
         <>
           <Route path="/" element={<Login />} />
           <Route path="/bejelentkezes" element={<Login />} />
@@ -53,7 +53,7 @@ export default function App() {
           <Route path="/abFeltoltes" element={<UploadDatabase />} />
 
           {/* Csak admin számára elérhető oldal */}
-          {user.jogosultsag_azon === 2 ? (
+          {user.jogosultsag_azon === 1 ? (
             <Route path="/felhKezeles" element={<UsersManagement />} />
           ) : (
             <Route path="/felhKezeles" element={<Navigate to="/permissiondenied" />} />

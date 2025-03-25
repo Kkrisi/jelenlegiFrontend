@@ -55,6 +55,7 @@ export const ButtonProvider = ({ children }) => {
         return null;
     } finally {
       setShowModal(false);
+      setLoadingDelete(true);
     }
   };
   // -------------------------------------------- Eltárolt Pdfk törlése vége -----------------------------------------
@@ -253,6 +254,10 @@ export const ButtonProvider = ({ children }) => {
     }
   };*/
 
+
+  /* másik probalkozas */
+
+  /*
   const sendToServer = async (chunks) => {
     await csrf();
 
@@ -272,6 +277,42 @@ export const ButtonProvider = ({ children }) => {
     }
   
     return { success, error, errors };
+  }; */
+
+
+
+
+  const sendToServer = async (newDolgozok) => {
+    await csrf();
+    
+    //------------------- 20-asával küldés ---------------------
+    let success = 0;
+    let error = 0;
+    let errors = [];
+    const chunkSize = 20;
+
+    for (let i = 0; i < newDolgozok.length; i += chunkSize) {
+        const chunk = newDolgozok.slice(i, i + chunkSize);
+        try {
+            await myAxios.post("/api/save-json-to-database", { json: JSON.stringify(chunk) });
+            success += chunk.length;
+        } catch (err) {
+            console.error("Hiba történt egy csomag feltöltésekor ❌:", err);
+            error += chunk.length;
+            errors.push(err.response?.data?.message || "Ismeretlen hiba");
+        }
+    }
+    
+    let message = "";
+    if (success > 0 && error === 0) {
+        message = `Sikeres feltöltés! Összesen ${success} új személy lett feltöltve. ✅`;
+    } else if (success > 0 && error > 0) {
+        message = `Részleges siker! ${success} rekord sikeresen feltöltve, de ${error} sikertelen volt. ✅❌`;
+    } else {
+        message = "Hiba történt a feltöltés során, egyetlen rekord sem lett feltöltve. ❌";
+    }
+
+    return { success, error, message, errors };
   };
   // -------------------------------------------- Adatbázisba küldés és hibakezelés vége --------------------------------------------
   

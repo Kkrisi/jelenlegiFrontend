@@ -177,8 +177,8 @@ export default function UsersManagement() {
                               label="Admin"
                               id={`user-${user.id}-role-admin`}
                               name={`user-${user.id}-role`}
-                              checked={user.jogosultsag_azon === 2}
-                              onChange={() => handleRadioButtonChange(user.id, 2)}
+                              checked={user.jogosultsag_azon === 1}
+                              onChange={() => handleRadioButtonChange(user.id, 1)}
                               inline
                             />
                             <br />
@@ -187,8 +187,8 @@ export default function UsersManagement() {
                               label="Felhasználó"
                               id={`user-${user.id}-role-user`}
                               name={`user-${user.id}-role`}
-                              checked={user.jogosultsag_azon === 1}
-                              onChange={() => handleRadioButtonChange(user.id, 1)}
+                              checked={user.jogosultsag_azon === 2}
+                              onChange={() => handleRadioButtonChange(user.id, 2)}
                               inline
                             />
                             <br />
@@ -197,8 +197,8 @@ export default function UsersManagement() {
                               label="Nem engedélyezett"
                               id={`user-${user.id}-role-guest`}
                               name={`user-${user.id}-role`}
-                              checked={user.jogosultsag_azon === 4}
-                              onChange={() => handleRadioButtonChange(user.id, 4)}
+                              checked={user.jogosultsag_azon === 3}
+                              onChange={() => handleRadioButtonChange(user.id, 3)}
                               inline
                             />
                           </>
@@ -206,9 +206,9 @@ export default function UsersManagement() {
                       </td>
 
                       <td>
-                        {(user.id === 1 || user.jogosultsag_azon === 2) && (<p>Admin nem törölhető!</p>)}
+                        {(user.id === 1 || user.jogosultsag_azon === 1) && (<p>Admin nem törölhető!</p>)}
 
-                        {(user.id > 1 && user.jogosultsag_azon != 2) && ( //többi admin törlését megakadályozza
+                        {(user.id > 1 && user.jogosultsag_azon != 1) && ( //többi admin törlését megakadályozza
                           <Button variant="danger" onClick={() => handleDelete(user.id)}>
                             Felhasználó törlése
                           </Button>
