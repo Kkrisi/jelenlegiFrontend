@@ -7,6 +7,7 @@ import { BrowserRouter } from "react-router-dom";
 import { AuthProvider } from "./contexts/AuthContext"; 
 import { LogsProvider } from './contexts/LogsContext';
 import { ButtonProvider } from './contexts/ButtonContext';
+import { ForgotPasswordProvider } from './contexts/ForgotPasswordContext';
 
 
 
@@ -22,9 +23,11 @@ root.render(
 
         <ButtonProvider>    {/*ezek kulonbozo kompenensek amik kontextusokat biztositanak a többi komponensnek*/}
               <AuthProvider>
-                <LogsProvider>
-                      <App />     {/*ezt látja a felhasználó*/}
-                </LogsProvider>
+                <ForgotPasswordProvider>
+                  <LogsProvider>
+                        <App />     {/*ezt látja a felhasználó*/}
+                  </LogsProvider>
+                </ForgotPasswordProvider>
               </AuthProvider>
         </ButtonProvider>
 
